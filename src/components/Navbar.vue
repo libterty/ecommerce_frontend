@@ -25,10 +25,14 @@
           </b-nav-form>
           <b-navbar-nav>
             <b-nav-item href="#">
-                email
+              <i class="material-icons">
+                <small>email</small>
+              </i>
             </b-nav-item>
             <b-nav-item href="#">
-                user
+              <i class="material-icons">
+                <small>person</small>
+              </i>
             </b-nav-item>
           </b-navbar-nav>
         </b-navbar-nav>
