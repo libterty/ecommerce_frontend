@@ -18,17 +18,21 @@
     </div>
     <br />
     <HomeCarousel :initCarousels="initCarousels" />
+    <br />
+    <HomeGrid :initProducts="initProducts" />
   </b-container>
 </template>
 
 <script>
 import HomeCarousel from '../components/HomeCarousel.vue';
+import HomeGrid from '../components/HomeGrid';
 import Request from '../api/index';
 const request = new Request();
 
 export default {
   components: {
-    HomeCarousel
+    HomeCarousel,
+    HomeGrid
   },
   data() {
     return {
