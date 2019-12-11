@@ -18,7 +18,6 @@
                 img-blank-color='transparent'
             >
                 <template v-slot:img>
-                    <div class="image-overlay"></div>
                     <img
                         class="d-block img-fluid w-100"
                         width="1024"

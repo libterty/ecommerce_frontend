@@ -3,7 +3,7 @@
     <div>
       <b-card
         overlay
-        img-src="https://i.imgur.com/d4C2lls.jpg"
+        img-src="https://i.imgur.com/JUpkmDj.jpg?1"
         img-alt="EVERYTHING YOU NEED IN TIME FOR CHRISTMAS"
         text-variant="white"
         title="EVERYTHING YOU NEED IN TIME FOR CHRISTMAS"
