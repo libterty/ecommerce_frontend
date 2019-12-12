@@ -1,5 +1,5 @@
 <template>
-    <b-container fluid>
+    <b-container fluid style="max-width: 75%;">
         <div>
             <b-card no-body class="overflow-hidden">
                 <b-row no-gutters>
@@ -43,6 +43,38 @@
                                 <br />
                                 <b-list-group-item class="text-left">
                                     <strong>{{initProduct.price}} &#36;</strong>
+                                </b-list-group-item>
+                            </b-list-group>
+                            <br />
+                            <b-form>
+                                <b-form-group
+                                    class="mb-0 cartCreate"
+                                    label-for="cartCreate"
+                                >
+                                    <b-col sm="12">
+                                        <div class="row">
+                                            <b-form-input
+                                                id="cart_input_number"
+                                                type="number"
+                                                class="col-sm-3"
+                                                min="1"
+                                                v-model="form.quantity"
+                                                :value="form.quantity"
+                                            ></b-form-input>
+                                            <b-button
+                                                variant="primary"
+                                                type="submit"
+                                                class="col-sm-5 cart_input_button"
+                                                size="lg"
+                                            >Add to Cart</b-button>
+                                        </div>
+                                    </b-col>
+                                </b-form-group>
+                            </b-form>
+                            <br />
+                            <b-list-group flush>
+                                <b-list-group-item class="text-left">
+                                    <i class="material-icons">local_shipping</i>
                                 </b-list-group-item>
                             </b-list-group>
                         </b-card-body>
@@ -89,7 +121,10 @@ export default {
             Images: [],
             Colors: [],
             stars: [],
-            isHalf: false
+            isHalf: false,
+            form: {
+                quantity: 1
+            }
         }
     },
     created() {
@@ -140,5 +175,14 @@ export default {
 }
 .product_color_yellow {
     background-color: yellow;
+}
+
+.cartCreate {
+    margin-left: 1rem;
+}
+
+.cart_input_button {
+    font-size: small;
+    margin-left: 0.25rem;
 }
 </style>
