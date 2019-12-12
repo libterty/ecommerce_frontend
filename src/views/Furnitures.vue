@@ -1,19 +1,28 @@
 <template>
-    <FurnituresDashboard 
-        :initProduct="initProduct"
-        :initImages="initImages"
-        :initColors="initColors"
-    />
+    <b-container fluid style="max-width: 75%;">
+        <FurnituresDashboard 
+            :initProduct="initProduct"
+            :initImages="initImages"
+            :initColors="initColors"
+        />
+        <hr/>
+        <FurnituresDimension
+            :initProduct="initProduct"
+            :initImages="initImages"
+        />
+    </b-container>
 </template>
 
 <script>
 import Request from '../api';
 import FurnituresDashboard from '../components/FurnituresDashborad.vue';
+import FurnituresDimension from '../components/FurnituresDimension.vue';
 const request = new Request();
 
 export default {
     components: {
-        FurnituresDashboard
+        FurnituresDashboard,
+        FurnituresDimension
     },
     data() {
         return {

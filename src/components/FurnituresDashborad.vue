@@ -1,88 +1,86 @@
 <template>
-    <b-container fluid style="max-width: 75%;">
-        <div>
-            <b-card no-body class="overflow-hidden">
-                <b-row no-gutters>
-                    <b-col md="6">
-                        <b-card-img :src="initImages[0].url" :alt="initProduct.name" class="rounded-0"></b-card-img>
-                    </b-col>
-                    <b-col md="6">
-                        <b-card-body :title="initProduct.name">
-                            <b-list-group flush>
-                                <b-list-group-item class="text-left">
-                                    Rating :
-                                    <div>
-                                        <i 
-                                            class="material-icons"
-                                            v-for="star in stars"
-                                            :key="star.id"
-                                        >star</i>
-                                        <i 
-                                            v-if="isHalf"
-                                            class="material-icons"
-                                        >star_half</i>
+    <div>
+        <b-card no-body class="overflow-hidden">
+            <b-row no-gutters>
+                <b-col md="6">
+                    <b-card-img :src="initImages[0].url" :alt="initProduct.name" class="rounded-0"></b-card-img>
+                </b-col>
+                <b-col md="6">
+                    <b-card-body :title="initProduct.name">
+                        <b-list-group flush>
+                            <b-list-group-item class="text-left">
+                                Rating :
+                                <div>
+                                    <i 
+                                        class="material-icons"
+                                        v-for="star in stars"
+                                        :key="star.id"
+                                    >star</i>
+                                    <i 
+                                        v-if="isHalf"
+                                        class="material-icons"
+                                    >star_half</i>
+                                </div>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <br />
+                        <b-card-text>
+                            {{initProduct.description}}
+                        </b-card-text>
+                        <b-list-group flush>
+                            <b-list-group-item class="text-left">
+                                <strong>Color :</strong>
+                                <div class="product_color">
+                                    <div
+                                        v-for="color in initColors"
+                                        :key="color.id"
+                                        class="product_color_item"
+                                        :class="color.name | convertClass"
+                                    ></div>
+                                </div>
+                            </b-list-group-item>
+                            <br />
+                            <b-list-group-item class="text-left">
+                                <strong>{{initProduct.price}} &#36;</strong>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <br />
+                        <b-form>
+                            <b-form-group
+                                class="mb-0 cartCreate"
+                                label-for="cartCreate"
+                            >
+                                <b-col sm="12">
+                                    <div class="row">
+                                        <b-form-input
+                                            id="cart_input_number"
+                                            type="number"
+                                            class="col-sm-3"
+                                            min="1"
+                                            v-model="form.quantity"
+                                            :value="form.quantity"
+                                        ></b-form-input>
+                                        <b-button
+                                            variant="primary"
+                                            type="submit"
+                                            class="col-sm-5 cart_input_button"
+                                            size="lg"
+                                        >Add to Cart</b-button>
                                     </div>
-                                </b-list-group-item>
-                            </b-list-group>
-                            <br />
-                            <b-card-text>
-                                {{initProduct.description}}
-                            </b-card-text>
-                            <b-list-group flush>
-                                <b-list-group-item class="text-left">
-                                    <strong>Color :</strong>
-                                    <div class="product_color">
-                                        <div
-                                            v-for="color in initColors"
-                                            :key="color.id"
-                                            class="product_color_item"
-                                            :class="color.name | convertClass"
-                                        ></div>
-                                    </div>
-                                </b-list-group-item>
-                                <br />
-                                <b-list-group-item class="text-left">
-                                    <strong>{{initProduct.price}} &#36;</strong>
-                                </b-list-group-item>
-                            </b-list-group>
-                            <br />
-                            <b-form>
-                                <b-form-group
-                                    class="mb-0 cartCreate"
-                                    label-for="cartCreate"
-                                >
-                                    <b-col sm="12">
-                                        <div class="row">
-                                            <b-form-input
-                                                id="cart_input_number"
-                                                type="number"
-                                                class="col-sm-3"
-                                                min="1"
-                                                v-model="form.quantity"
-                                                :value="form.quantity"
-                                            ></b-form-input>
-                                            <b-button
-                                                variant="primary"
-                                                type="submit"
-                                                class="col-sm-5 cart_input_button"
-                                                size="lg"
-                                            >Add to Cart</b-button>
-                                        </div>
-                                    </b-col>
-                                </b-form-group>
-                            </b-form>
-                            <br />
-                            <b-list-group flush>
-                                <b-list-group-item class="text-left">
-                                    <i class="material-icons">local_shipping</i>
-                                </b-list-group-item>
-                            </b-list-group>
-                        </b-card-body>
-                    </b-col>
-                </b-row>
-            </b-card>
-        </div>
-    </b-container>
+                                </b-col>
+                            </b-form-group>
+                        </b-form>
+                        <br />
+                        <b-list-group flush>
+                            <b-list-group-item class="text-left">
+                                <i class="material-icons">local_shipping</i>
+                            </b-list-group-item>
+                        </b-list-group>
+                    </b-card-body>
+                </b-col>
+            </b-row>
+        </b-card>
+    </div>
 </template>
 
 <script>
@@ -118,6 +116,7 @@ export default {
     data() {
         return {
             nanoid: nanoid(5),
+            product: {},
             Images: [],
             Colors: [],
             stars: [],
@@ -129,18 +128,25 @@ export default {
     },
     created() {
         this.Images = this.initImages;
-        this.Colors = this.initColors
+        this.Colors = this.initColors;
+        this.product = this.initProduct;
     },
     mounted() {
-        let n = this.initProduct.rating;
+        this.generateStar();
+    },
+    methods: {
+        generateStar() {
+            setTimeout(() => {
+                let n = this.initProduct.rating;
+                while (n > 1) {
+                    this.stars.push({ id: nanoid(5), stars: 'stars' })
+                    n = n - 2;
+                }
 
-        while (n > 1) {
-            this.stars.push({ id: nanoid(5), stars: 'stars' })
-            n = n - 2;
-        }
-
-        if (n === 1) {
-            this.isHalf = true;
+                if (n === 1) {
+                    this.isHalf = true;
+                }
+            }, 500)
         }
     }
 }
