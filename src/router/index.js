@@ -12,6 +12,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/furnitures/:id',
+    name: 'furnituresItem',
+    component: () => import('../views/Furnitures.vue')
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: NotFound

@@ -12,6 +12,17 @@ class Request {
       }
     });
   }
+
+  getSpecificProduct(paramsId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + paramsId);
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 export default Request;
