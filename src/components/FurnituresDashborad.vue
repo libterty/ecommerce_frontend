@@ -29,22 +29,32 @@
                         </b-card-text>
                         <b-list-group flush>
                             <b-list-group-item class="text-left">
-                                <strong>Color :</strong>
+                                <strong>顏色風格 :</strong>
                                 <div class="product_color">
                                     <div
                                         v-for="color in initColors"
                                         :key="color.id"
                                         class="product_color_item"
                                         :class="color.name | convertClass"
+                                        title="庫存量"
+                                        v-b-popover.hover.top="color.Inventory.quantity"
                                     ></div>
                                 </div>
                             </b-list-group-item>
-                            <br />
+                            <b-list-group-item>
+                                <strong>庫存 :</strong>
+                                <small
+                                    v-for="color in Colors"
+                                    :key="color.id"
+                                >
+                                    <i class="material-icons">{{color.Inventory.quantity | showInventory}}</i>
+                                    {{color.Inventory.quantity | showResponse}}
+                                </small>
+                            </b-list-group-item>
                             <b-list-group-item class="text-left">
                                 <strong>{{initProduct.price}} &#36;</strong>
                             </b-list-group-item>
                         </b-list-group>
-                        <br />
                         <b-form>
                             <b-form-group
                                 class="mb-0 cartCreate"
@@ -89,13 +99,13 @@ import nanoid from 'nanoid';
 export default {
     props: {
         initProduct: {
-            required: true
+            type: Object
         },
         initImages: {
-            required: true
+            type: Array
         },
         initColors: {
-            required: true
+            type: Array
         }
     },
     filters: {
@@ -111,6 +121,12 @@ export default {
             } else {
                 return '';
             }
+        },
+        showInventory(number) {
+            return number === 0 ? 'close' : 'done';
+        },
+        showResponse(number) {
+            return number === 0 ? '補貨中' : '有現貨';
         }
     },
     data() {
@@ -123,16 +139,17 @@ export default {
             isHalf: false,
             form: {
                 quantity: 1
-            }
+            },
+            isShow: false
         }
-    },
-    created() {
-        this.Images = this.initImages;
-        this.Colors = this.initColors;
-        this.product = this.initProduct;
     },
     mounted() {
         this.generateStar();
+        setTimeout(() => {
+            this.Images = this.initImages;
+            this.Colors = this.initColors;
+            this.product = this.initProduct;
+        }, 500);
     },
     methods: {
         generateStar() {

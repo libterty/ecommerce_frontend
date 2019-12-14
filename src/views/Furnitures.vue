@@ -1,6 +1,6 @@
 <template>
     <b-container fluid style="max-width: 75%;">
-        <FurnituresDashboard 
+        <FurnituresDashboard
             :initProduct="initProduct"
             :initImages="initImages"
             :initColors="initColors"
