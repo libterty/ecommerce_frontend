@@ -3,19 +3,10 @@
         <b-card no-body class="overflow-hidden">
             <b-row no-gutters>
                 <b-col md="6">
-                    <b-carousel
-                        id="carousel-fade"
-                        style="text-shadow: 0px 0px 2px #000"
-                        fade
-                        indicators
-                        controls
-                    >
-                        <b-carousel-slide
-                            v-for="image in initImages"
-                            :key="image.id"
-                            :img-src="image.url"
-                        ></b-carousel-slide>
-                    </b-carousel>
+                    <b-card-img :src="initImages[0].url" :alt="initProduct.name" class="rounded-0"></b-card-img>
+                    <div class="image-information images" v-viewer="{movable: false}">
+                        <img v-for="image in initImages" :key="image.id" :src="image.url" class="image-information-item"/>
+                    </div>
                 </b-col>
                 <b-col md="6">
                     <b-card-body :title="initProduct.name">
