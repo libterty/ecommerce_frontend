@@ -3,7 +3,19 @@
         <b-card no-body class="overflow-hidden">
             <b-row no-gutters>
                 <b-col md="6">
-                    <b-card-img :src="initImages[0].url" :alt="initProduct.name" class="rounded-0"></b-card-img>
+                    <b-carousel
+                        id="carousel-fade"
+                        style="text-shadow: 0px 0px 2px #000"
+                        fade
+                        indicators
+                        controls
+                    >
+                        <b-carousel-slide
+                            v-for="image in initImages"
+                            :key="image.id"
+                            :img-src="image.url"
+                        ></b-carousel-slide>
+                    </b-carousel>
                 </b-col>
                 <b-col md="6">
                     <b-card-body :title="initProduct.name">
@@ -41,15 +53,21 @@
                                     ></div>
                                 </div>
                             </b-list-group-item>
-                            <b-list-group-item>
+                            <b-list-group-item class="text-left">
                                 <strong>庫存 :</strong>
-                                <small
+                                <div
                                     v-for="color in Colors"
                                     :key="color.id"
+                                    class="inventory-status"
                                 >
-                                    <i class="material-icons">{{color.Inventory.quantity | showInventory}}</i>
-                                    {{color.Inventory.quantity | showResponse}}
-                                </small>
+                                    <i class="material-icons ">
+                                        {{color.Inventory.quantity | showInventory}}
+                                    </i>
+                                    <p>
+                                        {{color.name | convertLanguage}}
+                                        {{color.Inventory.quantity | showResponse}}
+                                    </p>
+                                </div>
                             </b-list-group-item>
                             <b-list-group-item class="text-left">
                                 <strong>{{initProduct.price}} &#36;</strong>
@@ -99,13 +117,16 @@ import nanoid from 'nanoid';
 export default {
     props: {
         initProduct: {
-            type: Object
+            type: Object,
+            required: true
         },
         initImages: {
-            type: Array
+            type: Array,
+            required: true
         },
         initColors: {
-            type: Array
+            type: Array,
+            required: true
         }
     },
     filters: {
@@ -118,6 +139,19 @@ export default {
                 return 'product_color_white';
             } else if (string === 'yellow') {
                 return 'product_color_yellow';
+            } else {
+                return '';
+            }
+        },
+        convertLanguage(string) {
+            if (string === 'blue') {
+                return '藍色';
+            } else if (string === 'black') {
+                return '黑色';
+            } else if (string === 'white') {
+                return '白色';
+            } else if (string === 'yellow') {
+                return '黃色';
             } else {
                 return '';
             }
@@ -139,9 +173,11 @@ export default {
             isHalf: false,
             form: {
                 quantity: 1
-            },
-            isShow: false
+            }
         }
+    },
+    created() {
+        this.switchImage = this.initImages[0].url;
     },
     mounted() {
         this.generateStar();
@@ -170,6 +206,20 @@ export default {
 </script>
 
 <style scoped>
+.image-information {
+    display: flex; 
+    flex-flow: row nowrap;
+    overflow-x: scroll;
+}
+
+.image-information-item {
+    width: 25%;
+    height: auto;
+    margin-left: 0.25rem;
+    border: 1px solid #000;
+    max-height: 80px;
+}
+
 .list-group-item {
     border: none;
 }
@@ -207,5 +257,10 @@ export default {
 .cart_input_button {
     font-size: small;
     margin-left: 0.25rem;
+}
+
+.inventory-status {
+    display: flex;
+    flex-flow: row nowrap;
 }
 </style>
