@@ -5,7 +5,7 @@
                 <b-col md="6">
                     <b-card-img :src="initImages[0].url" :alt="initProduct.name" class="rounded-0"></b-card-img>
                     <div class="image-information images" v-viewer="{movable: false}">
-                        <img v-for="image in initImages" :key="image.id" :src="image.url" class="image-information-item"/>
+                        <b-img-lazy center thumbnail fluid v-for="image in initImages" :key="image.id" :src="image.url" class="image-information-item"></b-img-lazy>
                     </div>
                 </b-col>
                 <b-col md="6">

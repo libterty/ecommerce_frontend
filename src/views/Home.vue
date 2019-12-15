@@ -49,7 +49,7 @@ export default {
     const res = await request.getHomePageProduts()
     if (res.status === 'success') {
       this.initProducts = res.products
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 5; i++) {
         this.initCarousels.push(this.initProducts[i])
       }
     }
