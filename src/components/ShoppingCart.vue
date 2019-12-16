@@ -7,14 +7,14 @@
       contain
       class="btn cart-icon"
       @click="dialog = !dialog"
-    />
-
-    <v-dialog
+    />    
+    <v-dialog 
       scrollable
       v-model="dialog"
       class="dialog"
       max-width="500px"
     >
+      
       <v-card
         class="cart py-3"
         style="height: 50vh;"
@@ -22,9 +22,14 @@
         <div class="my-4 top-divider">
           <span class="cart-title">Shopping cart</span>
         </div>
-        <v-list three-line>
+       <v-card-title class="text-muted mb-5"
+         v-if="totalPrice<1">No Data</v-card-title>
+        <v-list>
           <v-list-item-group>
-            <v-list-item>
+            <v-list-item
+              v-for="item in initCart"
+              :key="item.id"
+            >
               <v-list-avatar>
                 <v-img
                   src="https://i.imgur.com/3PeyRI9.jpg"
@@ -33,101 +38,35 @@
                 ></v-img>
               </v-list-avatar>
               <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
+                <v-list-item-title>{{item.name}}</v-list-item-title>
+                <small
+                  class="text-muted"
+                >SOFA,{{item.length}} x {{item.width}} x {{item.height}}(cm)</small>
                 <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
+                  <div
+                    v-for="color in item.colors"
+                    :key="color.id"
+                    class="product_color_item"
+                    :class="color.name | convertClass"
+                  ></div>
                 </v-list-item-subtitle>
               </div>
               <v-card-text
                 class="float-right"
                 style="width: 100px;"
-              >x 1</v-card-text>
+              >x {{item.CartItem.quantity}}</v-card-text>
               <v-card-text
                 style="width: 100px;"
                 class="float-right"
-              >$ 100</v-card-text>
-            </v-list-item>
-            <v-list-item>
-              <v-list-avatar>
-                <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
-                  width="100"
-                  height="100"
-                ></v-img>
-              </v-list-avatar>
-              <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
-                <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
-                </v-list-item-subtitle>
-              </div>
-              <v-card-text
-                class="float-right"
-                style="width: 100px;"
-              >x 1</v-card-text>
-              <v-card-text
-                style="width: 100px;"
-                class="float-right"
-              >$ 100</v-card-text>
-            </v-list-item>
-            <v-list-item>
-              <v-list-avatar>
-                <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
-                  width="100"
-                  height="100"
-                ></v-img>
-              </v-list-avatar>
-              <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
-                <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
-                </v-list-item-subtitle>
-              </div>
-              <v-card-text
-                class="float-right"
-                style="width: 100px;"
-              >x 1</v-card-text>
-              <v-card-text
-                style="width: 100px;"
-                class="float-right"
-              >$ 100</v-card-text>
-            </v-list-item>
-            <v-list-item>
-              <v-list-avatar>
-                <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
-                  width="100"
-                  height="100"
-                ></v-img>
-              </v-list-avatar>
-              <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
-                <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
-                </v-list-item-subtitle>
-              </div>
-              <v-card-text
-                class="float-right"
-                style="width: 100px;"
-              >x 1</v-card-text>
-              <v-card-text
-                style="width: 100px;"
-                class="float-right"
-              >$ 100</v-card-text>
+              >$ {{item.CartItem.price}}</v-card-text>
             </v-list-item>
           </v-list-item-group>
-        </v-list>
+        </v-list>       
         <div class="my-4 bottom-divider">
-          <span class="cart-title">Total $400</span>
-        </div>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
+          <span class="cart-title">Total ${{totalPrice}}</span>
+        </div>         
+        <v-card-actions>         
+          <v-spacer></v-spacer>          
           <v-btn
             raised
             color="error"
@@ -142,12 +81,22 @@
   </v-app>
 </template>
 <script>
+import Request from '../api/index'
+import { convertClassFilter } from '../utils/mixins'
+const request = new Request()
 export default {
+  mixins: [convertClassFilter],
   data() {
     return {
       dialog: false,
-      cart: []
+      initCart: [],
+      totalPrice: 0
     }
+  },
+  async created() {
+    const res = await request.getCart()
+    this.initCart = res.cart
+    this.totalPrice = res.cart[0].totalPrice
   }
 }
 </script>
@@ -191,24 +140,35 @@ export default {
 .top-divider {
   width: 100%;
   height: 20px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #707070;
   text-align: left;
   margin-bottom: 2em;
 }
 .bottom-divider {
   width: 100%;
   height: 20px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #707070;
   text-align: right;
   margin-bottom: 2em;
 }
 .product_color_item {
   height: 25px;
   width: 25px;
-  background-color: white;
   border-radius: 99em;
   border: 1px solid rgba(0, 0, 0, 0.375);
   margin-left: 0.25rem;
+}
+.product_color_blue {
+  background-color: blue;
+}
+.product_color_black {
+  background-color: black;
+}
+.product_color_white {
+  background-color: white;
+}
+.product_color_yellow {
+  background-color: yellow;
 }
 .cart-content {
   text-align: left;

@@ -23,6 +23,16 @@ class Request {
       }
     });
   }
+  getCart() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + 'cart');
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
 }
 
 export default Request;
