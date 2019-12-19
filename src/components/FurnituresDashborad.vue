@@ -34,14 +34,14 @@
                             <b-list-group-item class="text-left">
                                 <strong>顏色風格 :</strong>
                                 <div class="product_color">
-                                    <div
+                                    <b-button
                                         v-for="color in initColors"
                                         :key="color.id"
                                         class="product_color_item"
                                         :class="color.name | convertClass"
                                         title="庫存量"
                                         v-b-popover.hover.top="color.Inventory.quantity"
-                                    ></div>
+                                    ></b-button>
                                 </div>
                             </b-list-group-item>
                             <b-list-group-item class="text-left">

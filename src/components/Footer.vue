@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" type="light" fixed="bottom" sticky class="footer-flex">
+        <b-navbar toggleable="lg" type="light" fixed="bottom" class="footer-flex">
             <b-container fluid>
                 <b-row>
                     <b-col md="12">
