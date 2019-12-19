@@ -14,6 +14,16 @@ const routes = [
     component: Home
   },
   {
+    path: '/admin',
+    exact: true,
+    redirect: '/admin/restaurants'
+  },
+  {
+    path: '/admin/products',
+    name: 'admin-products',
+    component: () => import('../views/AdminProducts.vue')
+  },
+  {
     path: '/signin',
     name: 'SignIn',
     component: SignIn
