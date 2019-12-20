@@ -76,6 +76,7 @@
 
 <script>
 export default {
+    name: 'admin-product-DashBoard',
     props: {
         initProduct: {
             type: Object
@@ -100,6 +101,11 @@ export default {
         checkQuantity(number) {
             if (number <= 5) return 'product-Quantity-danger';
             return 'product-Quantity-success'
+        }
+    },
+    watch: {
+        initProduct: function (updateData) {
+            this.initProduct = updateData;
         }
     }
 }

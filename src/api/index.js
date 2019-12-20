@@ -1,4 +1,4 @@
-import { getRequest, getAuthRequest, postRequest } from './apiHelper';
+import { getRequest, getAuthRequest, postRequest, putAuthRequest } from './apiHelper';
 import config from '../config';
 
 class Request {
@@ -68,6 +68,19 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + url);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  putAdminProduct(url, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + url, data);
         resolve (
           res
         );

@@ -47,3 +47,14 @@ export const postAuthRequest = (url, data) => {
     .then(res => { return res })
     .catch(err => console.log('fetch POST Auth err', err.message));
 }
+
+export const putAuthRequest = (url, data) => {
+  return axios({
+    method: 'PUT',
+    url: url,
+    data: data,
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+auth.token}
+  })
+    .then(res => { return res })
+    .catch(err => console.log('fetch PUT Auth err', err.message));
+}
