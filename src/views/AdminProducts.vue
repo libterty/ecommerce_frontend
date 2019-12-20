@@ -1,6 +1,11 @@
 <template>
     <b-container class="py-5">
         <h1>管理員頁面</h1>
+        <div>
+            <b-link href="/admin/products/create">建立新的產品</b-link>
+            |
+            <b-link herf="/">前往前台</b-link>
+        </div>
         <b-container class="py-5" v-if="isShow">
             <AdminProductsTable
                 :initProducts="initProducts"

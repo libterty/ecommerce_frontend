@@ -112,6 +112,10 @@ export default {
 </script>
 
 <style scoped>
+.overflow-hidden {
+    max-height: 518px;
+}
+
 .product-Quantity-danger {
     color: #f90909;
 }

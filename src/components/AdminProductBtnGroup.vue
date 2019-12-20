@@ -1,7 +1,6 @@
 <template>
     <div>
-        <b-nav pills>
-            <b-nav-item>新增產品</b-nav-item>
+        <b-nav tabs align="center">
             <b-nav-item>
                 <b-button v-b-modal.editProdut>修改產品資訊</b-button>
             </b-nav-item>
@@ -14,7 +13,6 @@
             <b-nav-item>
                 <b-button v-b-modal.editImage>新增產品圖片</b-button>
             </b-nav-item>
-            <b-nav-item >刪除產品</b-nav-item>
         </b-nav>
 
         <b-modal 
@@ -187,7 +185,7 @@
                 >
                     <b-form-select
                         id="categoryId"
-                        v-model="form.categoryId"
+                        v-model="form.CategoryId"
                         placeholder="Select Category"
                         name="categoryId"
                         required
@@ -345,7 +343,7 @@ export default {
                 length: 0,
                 weight: 0,
                 material: '',
-                categoryId: ''
+                CategoryId: ''
             },
             newColor: {
                 name: '',
@@ -447,8 +445,8 @@ export default {
         },
 
         createNewProdcutImage(e) {
-            const form = e.target
-            const formData = new FormData(form)
+            const form = e.target;
+            const formData = new FormData(form);
             this.$emit('after-submit-image', formData);
         }
     },

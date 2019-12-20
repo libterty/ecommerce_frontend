@@ -1,5 +1,5 @@
 <template>
-    <b-container class="py-5">
+    <b-container class="py-5 admin-product-container">
         <div v-if="isShow">
             <AdminProductBtnGroup
                 :initProduct="initProduct"
@@ -15,6 +15,8 @@
                 :initProduct="initProduct"
             />
         </div>
+        <br>
+        <a href="javascript:history.back()">回上一頁</a>
     </b-container>
 </template>
 
@@ -93,3 +95,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.admin-product-container {
+    padding-top: 0 !important;
+}
+</style>

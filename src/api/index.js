@@ -128,6 +128,19 @@ class Request {
       }
     })
   }
+
+  postNewProduct(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postAuthRequest(config.ROOT_URL + 'admin/products', data);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
 }
 
 export default Request;
