@@ -5,13 +5,16 @@
             <b-nav-item>
                 <b-button v-b-modal.editProdut>修改產品資訊</b-button>
             </b-nav-item>
-            <b-nav-item>刪除產品</b-nav-item>
+            <b-nav-item>
+                <b-button v-b-modal.addProductColor>修改產品資訊</b-button>
+            </b-nav-item>
+            <b-nav-item >刪除產品</b-nav-item>
         </b-nav>
 
         <b-modal 
             id="editProdut" 
             title="修改產品資訊"
-            @ok.prevent="onSubmit()"
+            @ok.prevent="editProductSubmit()"
         >
             <b-form>
                 <b-form-group
@@ -192,6 +195,51 @@
                 </b-form-group>
             </b-form>
         </b-modal>
+
+        <b-modal 
+            id="addProductColor" 
+            title="新增產品顏色"
+            @ok.prevent="createProductColors()"
+        >
+            <b-form>
+                <b-form-group
+                    label-cols-sm="3"
+                    label="新增產品顏色 :"
+                    label-align-sm="right"
+                    label-for="newColor-name"
+                    :description="'目前分類 : ' + initProduct.Category.name"
+                >
+                    <b-form-select
+                        id="newColor-name"
+                        v-model="newColor.name"
+                        placeholder="Select Category"
+                        name="newColor-name"
+                        required
+                    >
+                        <option value="black" :disabled="'black' | isColorDisabled(initColors)">黑色</option>
+                        <option value="blue" :disabled="'blue' | isColorDisabled(initColors)">藍色</option>
+                        <option value="white" :disabled="'white' | isColorDisabled(initColors)">白色</option>
+                        <option value="yellow" :disabled="'yellow' | isColorDisabled(initColors)">黃色</option>
+                    </b-form-select>
+                </b-form-group>
+                <b-form-group
+                    label-cols-sm="3"
+                    label="庫存 :"
+                    label-align-sm="right"
+                    label-for="newColor-quantity"
+                    description="數入庫存數量"
+                >
+                    <b-form-input 
+                        id="newColor-quantity"
+                        v-model="newColor.quantity"
+                        :state="newColor.quantity > 0"
+                        type="number"
+                        name="newColor-quantity"
+                        required
+                    ></b-form-input>
+                </b-form-group>
+            </b-form>
+        </b-modal>
     </div>
 </template>
 
@@ -201,23 +249,9 @@ export default {
     props: {
         initProduct: {
             type: Object
-        }
-    },
-    methods: {
-        onSubmit() {
-            if (
-                this.form.cost > 0 
-                && this.form.price > 0 
-                && this.form.height > 0 
-                && this.form.width > 0 
-                && this.form.length > 0 
-                && this.form.weight > 0
-            ) {
-                const data = JSON.stringify(this.form);
-                this.$emit('after-product-revise', data);
-            } else {
-                alert('Do you forget to input something ?');
-            }
+        },
+        initColors: {
+            type: Array
         }
     },
     data() {
@@ -233,12 +267,53 @@ export default {
                 weight: 0,
                 material: '',
                 categoryId: ''
+            },
+            newColor: {
+                name: '',
+                ProductId: this.initProduct.id,
+                quantity: 0,
+            }
+        }
+    },
+    filters: {
+        isColorDisabled(str, initColors) {
+            if (initColors.indexOf(str) === -1) {
+                return false;
+            }
+            return true;
+        }
+    },
+    methods: {
+        editProductSubmit() {
+            if (
+                this.form.cost > 0 
+                && this.form.price > 0 
+                && this.form.height > 0 
+                && this.form.width > 0 
+                && this.form.length > 0 
+                && this.form.weight > 0
+            ) {
+                const data = JSON.stringify(this.form);
+                this.$emit('after-product-revise', data);
+            } else {
+                alert('Do you forget to input something ?');
+            }
+        },
+
+        createProductColors() {
+            if (this.newColor.name.length > 0) {
+                const data = JSON.stringify(this.newColor);
+                console.log(data);
+                this.$emit('after-color-create', data);
             }
         }
     },
     watch: {
         initProduct: function (updateData) {
             this.initProduct = updateData;
+        },
+        initColors: function(updateData) {
+            this.initColors = updateData;
         }
     }
 }

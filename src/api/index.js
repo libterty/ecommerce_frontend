@@ -1,4 +1,4 @@
-import { getRequest, getAuthRequest, postRequest, putAuthRequest } from './apiHelper';
+import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest } from './apiHelper';
 import config from '../config';
 
 class Request {
@@ -81,6 +81,19 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await putAuthRequest(config.ROOT_URL + url, data);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  postNewColor(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postAuthRequest(config.ROOT_URL + 'admin/products/colors', data);
         resolve (
           res
         );
