@@ -6,7 +6,13 @@
                 <b-button v-b-modal.editProdut>修改產品資訊</b-button>
             </b-nav-item>
             <b-nav-item>
-                <b-button v-b-modal.addProductColor>修改產品資訊</b-button>
+                <b-button v-b-modal.addProductColor>新增產品顏色</b-button>
+            </b-nav-item>
+            <b-nav-item>
+                <b-button v-b-modal.editInventory>修改產品庫存</b-button>
+            </b-nav-item>
+            <b-nav-item>
+                <b-button v-b-modal.editImage>新增產品圖片</b-button>
             </b-nav-item>
             <b-nav-item >刪除產品</b-nav-item>
         </b-nav>
@@ -240,6 +246,79 @@
                 </b-form-group>
             </b-form>
         </b-modal>
+
+        <b-modal 
+            id="editInventory" 
+            title="修改產品庫存"
+            hide-footer
+        >
+            <b-list-group-item 
+                class="text-left"
+                v-for="item in initProduct.inventories"
+                :key="item.id"
+            >
+                <strong>{{item.name | convertLanguage}} : </strong>
+                <small
+                    :class="checkQuantity(item.Inventory.quantity)"
+                >{{item.Inventory.quantity}}</small>
+                <b-button 
+                    size="sm" 
+                    variant="info"
+                    style="float:right"
+                    @click.stop.prevent="isEdit(item.id, item.Inventory.quantity, item.name)"
+                >Edit</b-button>
+            </b-list-group-item>
+            <b-form v-if="editQuantity" @submit.prevent="editProductInventory()" @reset="onClose">
+                <b-form-group
+                    label-cols-sm="3"
+                    label="庫存 :"
+                    label-align-sm="right"
+                    label-for="editColor-quantity"
+                >
+                    選擇修改{{editColorQuantityName | convertLanguage}}庫存數量
+                    <b-form-input 
+                        id="editColor-quantity"
+                        v-model="editColorQuantity"
+                        :state="editColorQuantity > 0"
+                        type="number"
+                        name="editColor-quantity"
+                        required
+                    ></b-form-input>
+                </b-form-group>
+                <b-button-group>
+                    <b-button type="submit" variant="primary">Submit</b-button>
+                    <b-button type="reset" variant="warning" style="margin-left: 0.25rem">Close</b-button>
+                </b-button-group>
+            </b-form>
+        </b-modal>
+
+        <b-modal 
+            id="editImage" 
+            title="新增產品圖片"
+            hide-footer
+        >
+            <b-form @submit.stop.prevent="createNewProdcutImage">
+                <b-form-group>
+                    <label for="url">上傳照片</label>
+                    <b-img-lazy
+                        v-if="imageForm.url"
+                        :src="imageForm.url"
+                        class="d-block img-thumbnail mb-3"
+                        width="200"
+                        height="200"
+                    ></b-img-lazy>
+                    <input
+                        id="image"
+                        type="file"
+                        name="url"
+                        accept="image/*"
+                        class="form-control-file"
+                        @change="handleFileChange"
+                    >
+                    <b-button type="submit" size="sm" variant="success">Submit</b-button>
+                </b-form-group>
+            </b-form>
+        </b-modal>
     </div>
 </template>
 
@@ -272,6 +351,13 @@ export default {
                 name: '',
                 ProductId: this.initProduct.id,
                 quantity: 0,
+            },
+            editQuantity: false,
+            editColorQuantityId: 0,
+            editColorQuantity: 0,
+            editColorQuantityName: '',
+            imageForm: {
+                url: '',
             }
         }
     },
@@ -281,9 +367,33 @@ export default {
                 return false;
             }
             return true;
+        },
+        isColorEditable(str, initColors) {
+            if (initColors.indexOf(str) === -1) {
+                return true;
+            }
+            return false;
+        },
+        convertLanguage(string) {
+            if (string === 'blue') {
+                return '藍色';
+            } else if (string === 'black') {
+                return '黑色';
+            } else if (string === 'white') {
+                return '白色';
+            } else if (string === 'yellow') {
+                return '黃色';
+            } else {
+                return '';
+            }
         }
     },
     methods: {
+        checkQuantity(number) {
+            if (number <= 5) return 'product-Quantity-danger';
+            return 'product-Quantity-success'
+        },
+
         editProductSubmit() {
             if (
                 this.form.cost > 0 
@@ -303,9 +413,43 @@ export default {
         createProductColors() {
             if (this.newColor.name.length > 0) {
                 const data = JSON.stringify(this.newColor);
-                console.log(data);
                 this.$emit('after-color-create', data);
             }
+        },
+
+        editProductInventory() {
+            if (this.editColorQuantity > 0) {
+                const urlId = this.editColorQuantityId;
+                const data = JSON.stringify({ quantity: Number(this.editColorQuantity) });
+                this.$emit('after-inventory-change', urlId, data);
+            }
+        },
+
+        isEdit(id, quantity, name) {
+            this.editQuantity = true;
+            this.editColorQuantityId = id;
+            this.editColorQuantity = quantity;
+            this.editColorQuantityName = name;
+        },
+
+        onClose() {
+            this.editQuantity = false;
+            this.editColorQuantityId = 0;
+            this.editColorQuantity = 0;
+            this.editColorQuantityName = '';
+        },
+
+        handleFileChange (e) {
+            const files = e.target.files;
+            if (!files.length) return;
+            const imageURL = window.URL.createObjectURL(files[0]);
+            this.imageForm.url = imageURL;
+        },
+
+        createNewProdcutImage(e) {
+            const form = e.target
+            const formData = new FormData(form)
+            this.$emit('after-submit-image', formData);
         }
     },
     watch: {
@@ -318,3 +462,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.product-Quantity-danger {
+    color: #f90909;
+}
+.product-Quantity-success {
+    color: #094af9;
+}
+</style>

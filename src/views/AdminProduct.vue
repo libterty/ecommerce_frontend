@@ -6,6 +6,8 @@
                 :initColors="initColors"
                 @after-product-revise="afterProductRevise"
                 @after-color-create="afterColorCreate"
+                @after-inventory-change="afterInventoryChange"
+                @after-submit-image="afterSubmitImage"
             />
         </div>
         <div v-if="isShow">
@@ -60,7 +62,6 @@ export default {
 
         async afterColorCreate(data) {
             const res = await request.postNewColor(data);
-            console.log('res.status', res.status);
             if (res.status === 200) {
                 const res = await request.getAdminSpecificProduct(document.location.pathname);
                 this.initProduct = res.product;
@@ -70,6 +71,23 @@ export default {
                     result.push(temp[i].name);
                 }
                 this.initColors = result;
+            }
+        },
+
+        async afterInventoryChange(uId, data) {
+            const res = await request.putNewInventory(uId, data);
+            if (res.status === 200) {
+                const res = await request.getAdminSpecificProduct(document.location.pathname);
+                this.initProduct = res.product;
+            }
+        },
+
+        async afterSubmitImage(formData) {
+            const uId = document.location.pathname.replace(/\/admin\/products\//gi, '');
+            const res = await request.postNewImage(uId, formData);
+            if (res.status === 200) {
+                const res = await request.getAdminSpecificProduct(document.location.pathname);
+                this.initProduct = res.product;
             }
         }
     }

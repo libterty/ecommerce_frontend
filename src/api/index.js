@@ -102,6 +102,32 @@ class Request {
       }
     })
   }
+
+  putNewInventory(id, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + 'admin/products/inventories/' + id, data);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  postNewImage(id, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postAuthRequest(config.ROOT_URL + 'admin/products/images/' + id, data);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
 }
 
 export default Request;
