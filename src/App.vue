@@ -2,18 +2,20 @@
   <div id="app">
     <Navbar />
     <router-view />
+
     <ShoppingCart
       :init-cart="cart"
       :init-total-price="totalPrice"
       @click-to-get-cart="clickToGetCart"
     />
-    <Footer />
+
+    <!-- <Footer /> -->
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar.vue'
-import Footer from './components/Footer.vue'
+// import Footer from './components/Footer.vue';
 import ShoppingCart from './components/ShoppingCart'
 import Request from './api/index'
 import { Toast } from './utils/helpers.js'
@@ -28,8 +30,8 @@ export default {
   },
   components: {
     Navbar,
-    ShoppingCart,
-    Footer
+    ShoppingCart
+    // Footer
   },
   async created() {
     try {
@@ -45,7 +47,6 @@ export default {
       })
     }
   },
-
   methods: {
     async clickToGetCart() {
       try {

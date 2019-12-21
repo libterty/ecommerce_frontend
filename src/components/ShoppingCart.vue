@@ -30,9 +30,11 @@
             <v-list-item
               v-for="item in initCart"
               :key="item.id"
+              :to="{name:'furnituresItem',params:{id:item.Product.id}}"
             >
               <v-list-avatar>
                 <v-img
+                  class="mr-2"
                   :src="item.Image.url"
                   width="100"
                   height="100"
