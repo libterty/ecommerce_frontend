@@ -6,15 +6,14 @@
       height="110"
       contain
       class="btn cart-icon"
-      @click="dialog = !dialog"
-    />    
-    <v-dialog 
+      @click="getCart"
+    />
+    <v-dialog
       scrollable
       v-model="dialog"
       class="dialog"
       max-width="500px"
     >
-      
       <v-card
         class="cart py-3"
         style="height: 50vh;"
@@ -22,8 +21,10 @@
         <div class="my-4 top-divider">
           <span class="cart-title">Shopping cart</span>
         </div>
-       <v-card-title class="text-muted mb-5"
-         v-if="totalPrice<1">No Data</v-card-title>
+        <v-card-title
+          class="text-muted mb-5"
+          v-if="initTotalPrice<1"
+        >No Data</v-card-title>
         <v-list>
           <v-list-item-group>
             <v-list-item
@@ -32,41 +33,39 @@
             >
               <v-list-avatar>
                 <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
+                  :src="item.Image.url"
                   width="100"
                   height="100"
                 ></v-img>
               </v-list-avatar>
               <div class="cart-content">
-                <v-list-item-title>{{item.name}}</v-list-item-title>
+                <v-list-item-title>{{item.Product.name}}</v-list-item-title>
                 <small
                   class="text-muted"
-                >SOFA,{{item.length}} x {{item.width}} x {{item.height}}(cm)</small>
+                >SOFA,{{item.Product.length}} x {{item.Product.width}} x {{item.Product.height}}(cm)</small>
                 <v-list-item-subtitle>
                   <div
-                    v-for="color in item.colors"
-                    :key="color.id"
                     class="product_color_item"
-                    :class="color.name | convertClass"
+                    :class="item.Color.name | convertClass"
                   ></div>
                 </v-list-item-subtitle>
               </div>
               <v-card-text
                 class="float-right"
                 style="width: 100px;"
-              >x {{item.CartItem.quantity}}</v-card-text>
+              >x {{item.quantity}}</v-card-text>
               <v-card-text
                 style="width: 100px;"
                 class="float-right"
-              >$ {{item.CartItem.price}}</v-card-text>
+              >$ {{item.price}}</v-card-text>
             </v-list-item>
           </v-list-item-group>
-        </v-list>       
+        </v-list>
         <div class="my-4 bottom-divider">
-          <span class="cart-title">Total ${{totalPrice}}</span>
-        </div>         
-        <v-card-actions>         
-          <v-spacer></v-spacer>          
+          <span class="cart-title">Total ${{initTotalPrice}}</span>
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn
             raised
             color="error"
@@ -81,22 +80,40 @@
   </v-app>
 </template>
 <script>
-import Request from '../api/index'
 import { convertClassFilter } from '../utils/mixins'
-const request = new Request()
+
 export default {
+  name: 'ShoppingCart',
   mixins: [convertClassFilter],
-  data() {
-    return {
-      dialog: false,
-      initCart: [],
-      totalPrice: 0
+  props: {
+    initCart: {
+      type: Array,
+      required: true
+    },
+    initTotalPrice: {
+      type: Number,
+      required: true
     }
   },
-  async created() {
-    const res = await request.getCart()
-    this.initCart = res.cart
-    this.totalPrice = res.cart[0].totalPrice
+  data() {
+    return {
+      dialog: false
+    }
+  },
+
+  methods: {
+    getCart() {
+      this.dialog = !this.dialog
+      this.$emit('click-to-get-cart')
+    }
+  },
+  watch: {
+    initCart: function(updateData) {
+      this.initCart = updateData
+    },
+    initTotalPrice: function(updateData) {
+      this.initTotalPrice = updateData
+    }
   }
 }
 </script>

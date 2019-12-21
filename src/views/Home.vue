@@ -20,8 +20,7 @@
     </div>
     <br />
     <HomeCarousel :initCarousels="initCarousels" />
-    <br />
-    <ShoppingCart />
+    <br />    
     <HomeGrid :initProducts="initProducts" />
   </b-container>
 </template>
@@ -30,14 +29,13 @@
 import HomeCarousel from '../components/HomeCarousel.vue'
 import HomeGrid from '../components/HomeGrid'
 import Request from '../api/index'
-import ShoppingCart from '../components/ShoppingCart'
+
 const request = new Request()
 
 export default {
   components: {
     HomeCarousel,
-    HomeGrid,
-    ShoppingCart
+    HomeGrid
   },
   data() {
     return {
@@ -49,7 +47,7 @@ export default {
     const res = await request.getHomePageProduts()
     if (res.status === 'success') {
       this.initProducts = res.products
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 5; i++) {
         this.initCarousels.push(this.initProducts[i])
       }
     }

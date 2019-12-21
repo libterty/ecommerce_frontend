@@ -1,9 +1,10 @@
 <template>
     <b-container fluid style="max-width: 75%;">
-        <FurnituresDashboard 
+        <FurnituresDashboard
             :initProduct="initProduct"
             :initImages="initImages"
             :initColors="initColors"
+            @after-add-to-cart="afterAddToCart"
         />
         <hr/>
         <FurnituresDimension
@@ -18,6 +19,7 @@ import Request from '../api';
 import FurnituresDashboard from '../components/FurnituresDashborad.vue';
 import FurnituresDimension from '../components/FurnituresDimension.vue';
 const request = new Request();
+import {Toast} from '../utils/helpers.js'
 
 export default {
     components: {
@@ -43,6 +45,27 @@ export default {
         } catch (error) {
             this.error = error.message;
         }
+    },
+    methods: {
+      async afterAddToCart(data) {
+        try {
+          const res = await request.postCart(data)
+        if(res.status ==='success') {
+          console.log('success')
+          Toast.fire({
+            icon: 'success',
+            title: 'Added to cart'
+          })
+        }
+        } catch(error) {
+          console.log('error',error)
+          Toast.fire({
+            icon: 'error',
+            title: 'Fail to add to cart'
+          })
+        }
+       
+      }
     }
 }
 </script>

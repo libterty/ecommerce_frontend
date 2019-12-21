@@ -1,4 +1,4 @@
-import { getRequest } from './apiHelper';
+import { getRequest, postRequest } from './apiHelper';
 import config from '../config';
 
 class Request {
@@ -27,9 +27,21 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getRequest(config.ROOT_URL + 'cart');
+        console.log('getCart res.data', res.data)
         resolve(res.data);
       } catch (error) {
         reject(error);
+      }
+    })
+  }
+  postCart(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postRequest(config.ROOT_URL + 'cart', data);
+        console.log('postCart res.data', res.data)
+        resolve(res.data)
+      } catch (error) {
+        reject(error)
       }
     })
   }

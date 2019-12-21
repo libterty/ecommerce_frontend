@@ -2,11 +2,14 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import BootstrapVue from 'bootstrap-vue';
+import Viewer from 'v-viewer'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'viewerjs/dist/viewer.css';
 import vuetify from '@/plugins/vuetify';
 
 Vue.use(BootstrapVue);
+Vue.use(Viewer);
 Vue.config.productionTip = false;
 
 new Vue({
