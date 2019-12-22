@@ -19,19 +19,40 @@ class Request {
         const res = await getRequest(config.ROOT_URL + paramsId);
         resolve(res.data);
       } catch (error) {
+        console.log(error)
         reject(error);
       }
     });
+  }
+  getCart() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + 'cart');
+        console.log('getCart res.data', res.data)
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    })
   }
 
   postSignIn(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await postRequest(config.ROOT_URL+'/signin', data);
+        const res = await postRequest(config.ROOT_URL + '/signin', data);
         res.data.status === 'success' ? localStorage.setItem('credit', JSON.stringify(res.data)) : null;
-        resolve(
-          res.data
-        );
+        resolve(res.data)
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+  postCart(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postRequest(config.ROOT_URL + 'cart', data);
+        console.log('postCart res.data', res.data)
+        resolve(res.data)
       } catch (error) {
         reject(error);
       }
@@ -41,8 +62,8 @@ class Request {
   postSignUp(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await postRequest(config.ROOT_URL+'/signup', data);
-        resolve (
+        const res = await postRequest(config.ROOT_URL + '/signup', data);
+        resolve(
           res.data
         );
       } catch (error) {
@@ -54,8 +75,8 @@ class Request {
   getAdminHomePage() {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await getAuthRequest(config.ROOT_URL+'/admin/products');
-        resolve (
+        const res = await getAuthRequest(config.ROOT_URL + '/admin/products');
+        resolve(
           res
         );
       } catch (error) {
@@ -68,7 +89,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + url);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -81,7 +102,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await putAuthRequest(config.ROOT_URL + url, data);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -94,7 +115,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/products/colors', data);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -107,7 +128,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await putAuthRequest(config.ROOT_URL + 'admin/products/inventories/' + id, data);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -120,7 +141,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/products/images/' + id, data);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -133,7 +154,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/products', data);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {

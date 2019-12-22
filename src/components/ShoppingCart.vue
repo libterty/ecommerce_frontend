@@ -6,9 +6,8 @@
       height="110"
       contain
       class="btn cart-icon"
-      @click="dialog = !dialog"
+      @click="getCart"
     />
-
     <v-dialog
       scrollable
       v-model="dialog"
@@ -22,112 +21,53 @@
         <div class="my-4 top-divider">
           <span class="cart-title">Shopping cart</span>
         </div>
-        <v-list three-line>
+        <v-card-title
+          class="text-muted mb-5"
+          v-if="initTotalPrice<1"
+        >No Data</v-card-title>
+        <v-list>
           <v-list-item-group>
-            <v-list-item>
+            <v-list-item
+              v-for="item in initCart"
+              :key="item.id"
+              :to="{name:'furnituresItem',params:{id:item.Product.id}}"
+            >
               <v-list-avatar>
                 <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
+                  class="mr-2"
+                  :src="item.Image.url"
                   width="100"
                   height="100"
                 ></v-img>
               </v-list-avatar>
               <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
+                <v-list-item-title>{{item.Product.name}}</v-list-item-title>
+                <small
+                  class="text-muted"
+                >SOFA,{{item.Product.length}} x {{item.Product.width}} x {{item.Product.height}}(cm)</small>
                 <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
+                  <div
+                    class="product_color_item"
+                    :class="item.Color.name | convertClass"
+                  ></div>
                 </v-list-item-subtitle>
               </div>
               <v-card-text
                 class="float-right"
                 style="width: 100px;"
-              >x 1</v-card-text>
+              >x {{item.quantity}}</v-card-text>
               <v-card-text
                 style="width: 100px;"
                 class="float-right"
-              >$ 100</v-card-text>
-            </v-list-item>
-            <v-list-item>
-              <v-list-avatar>
-                <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
-                  width="100"
-                  height="100"
-                ></v-img>
-              </v-list-avatar>
-              <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
-                <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
-                </v-list-item-subtitle>
-              </div>
-              <v-card-text
-                class="float-right"
-                style="width: 100px;"
-              >x 1</v-card-text>
-              <v-card-text
-                style="width: 100px;"
-                class="float-right"
-              >$ 100</v-card-text>
-            </v-list-item>
-            <v-list-item>
-              <v-list-avatar>
-                <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
-                  width="100"
-                  height="100"
-                ></v-img>
-              </v-list-avatar>
-              <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
-                <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
-                </v-list-item-subtitle>
-              </div>
-              <v-card-text
-                class="float-right"
-                style="width: 100px;"
-              >x 1</v-card-text>
-              <v-card-text
-                style="width: 100px;"
-                class="float-right"
-              >$ 100</v-card-text>
-            </v-list-item>
-            <v-list-item>
-              <v-list-avatar>
-                <v-img
-                  src="https://i.imgur.com/3PeyRI9.jpg"
-                  width="100"
-                  height="100"
-                ></v-img>
-              </v-list-avatar>
-              <div class="cart-content">
-                <v-list-item-title>北歐溫莎床架</v-list-item-title>
-                <small class="text-muted">SOFA,100 x 100 x 100(cm)</small>
-                <v-list-item-subtitle>
-                  <div class="product_color_item"></div>
-                </v-list-item-subtitle>
-              </div>
-              <v-card-text
-                class="float-right"
-                style="width: 100px;"
-              >x 1</v-card-text>
-              <v-card-text
-                style="width: 100px;"
-                class="float-right"
-              >$ 100</v-card-text>
+              >$ {{item.price}}</v-card-text>
             </v-list-item>
           </v-list-item-group>
         </v-list>
         <div class="my-4 bottom-divider">
-          <span class="cart-title">Total $400</span>
+          <span class="cart-title">Total ${{initTotalPrice}}</span>
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
-
           <v-btn
             raised
             color="error"
@@ -142,11 +82,39 @@
   </v-app>
 </template>
 <script>
+import { convertClassFilter } from '../utils/mixins'
+
 export default {
+  name: 'ShoppingCart',
+  mixins: [convertClassFilter],
+  props: {
+    initCart: {
+      type: Array,
+      required: true
+    },
+    initTotalPrice: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
-      dialog: false,
-      cart: []
+      dialog: false
+    }
+  },
+
+  methods: {
+    getCart() {
+      this.dialog = !this.dialog
+      this.$emit('click-to-get-cart')
+    }
+  },
+  watch: {
+    initCart: function(updateData) {
+      this.initCart = updateData
+    },
+    initTotalPrice: function(updateData) {
+      this.initTotalPrice = updateData
     }
   }
 }
@@ -191,24 +159,35 @@ export default {
 .top-divider {
   width: 100%;
   height: 20px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #707070;
   text-align: left;
   margin-bottom: 2em;
 }
 .bottom-divider {
   width: 100%;
   height: 20px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #707070;
   text-align: right;
   margin-bottom: 2em;
 }
 .product_color_item {
   height: 25px;
   width: 25px;
-  background-color: white;
   border-radius: 99em;
   border: 1px solid rgba(0, 0, 0, 0.375);
   margin-left: 0.25rem;
+}
+.product_color_blue {
+  background-color: blue;
+}
+.product_color_black {
+  background-color: black;
+}
+.product_color_white {
+  background-color: white;
+}
+.product_color_yellow {
+  background-color: yellow;
 }
 .cart-content {
   text-align: left;
