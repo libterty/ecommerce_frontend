@@ -9,6 +9,7 @@
         <b-container class="py-5" v-if="isShow">
             <AdminProductsTable
                 :initProducts="initProducts"
+                @after-delete-product="afterDeleteProduct"
             />
         </b-container>
     </b-container>
@@ -34,6 +35,18 @@ export default {
         if (res.status === 'success') {
             this.initProducts = res.products.sort((a, b) => b.id - a.id);
             this.isShow = true;
+        }
+    },
+    methods: {
+        async afterDeleteProduct(id) {
+            const res = await request.deleteExistProduct(id);
+            if (res.status === 'success') {
+                const res = await request.getAdminHomePage();
+                res.status === 'success'
+                    ? this.initProducts = res.products.sort((a, b) => b.id - a.id)
+                    : null;
+                this.isShow = true;
+            }
         }
     }
 }

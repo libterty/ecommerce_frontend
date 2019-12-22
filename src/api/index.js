@@ -1,4 +1,4 @@
-import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest } from './apiHelper';
+import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest, deleteRequest } from './apiHelper';
 import config from '../config';
 
 class Request {
@@ -135,6 +135,19 @@ class Request {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/products', data);
         resolve (
           res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  deleteExistProduct(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await deleteRequest(config.ROOT_URL + `admin/products/${id}`);
+        resolve (
+          res.data
         );
       } catch (error) {
         reject(error);

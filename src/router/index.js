@@ -16,7 +16,7 @@ const routes = [
   {
     path: '/admin',
     exact: true,
-    redirect: '/admin/restaurants'
+    redirect: '/admin/products'
   },
   {
     path: '/admin/products',

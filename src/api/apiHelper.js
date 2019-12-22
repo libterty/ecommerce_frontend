@@ -58,3 +58,14 @@ export const putAuthRequest = (url, data) => {
     .then(res => { return res })
     .catch(err => console.log('fetch PUT Auth err', err.message));
 }
+
+export const deleteRequest = url => {
+  return axios.delete(url, 
+    {  headers:
+      { Authorization: 'Bearer '+ auth.token }
+    }
+  ).then(res => {
+    return res
+  })
+  .catch(err => console.log('fetch DELETE err', err.message));
+}
