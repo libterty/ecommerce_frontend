@@ -39,7 +39,8 @@ class Request {
   postSignIn(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await postRequest(config.ROOT_URL + '/signin', data);
+        const res = await postRequest(config.ROOT_URL + 'signin', data);
+        console.log('res', res);
         res.data.status === 'success' ? localStorage.setItem('credit', JSON.stringify(res.data)) : null;
         resolve(res.data)
       } catch (error) {
@@ -167,6 +168,32 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await deleteRequest(config.ROOT_URL + `admin/products/${id}`);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  getUser(path) {
+    return new Promise (async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + path);
+        resolve(
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  putUser(path) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + path);
         resolve (
           res.data
         );

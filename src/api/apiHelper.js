@@ -10,7 +10,6 @@ export const getRequest = url => {
       headers: { 'Content-Type': 'application/json' }
     })
     .then(res => {
-      console.log('res', res)
       return res;
     })
     .catch(err => console.log('fetch get err', err.message));

@@ -69,7 +69,6 @@ export default {
                 const data = JSON.stringify(this.form);
                 const res = await request.postSignIn(data);
                 if (res.status === 'success') {
-                    this.$store.commit('setCurrentUser', res.user);
                     this.$router
                         .go({ name: 'Restaurants' })
                         .catch(e => console.log(e));
