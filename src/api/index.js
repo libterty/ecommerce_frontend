@@ -190,10 +190,10 @@ class Request {
     })
   }
 
-  putUser(path) {
+  putUser(path, data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await putAuthRequest(config.ROOT_URL + path);
+        const res = await putAuthRequest(config.ROOT_URL + path, data);
         resolve (
           res.data
         );

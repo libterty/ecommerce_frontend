@@ -15,7 +15,6 @@ export const getRequest = url => {
     .catch(err => console.log('fetch get err', err.message));
 };
 
-
 export const getAuthRequest = url => {
   return axios(url, {
       headers: {
