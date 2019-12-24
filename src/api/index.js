@@ -19,7 +19,6 @@ class Request {
         const res = await getRequest(config.ROOT_URL + paramsId);
         resolve(res.data);
       } catch (error) {
-        console.log(error)
         reject(error);
       }
     });
@@ -40,7 +39,6 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postRequest(config.ROOT_URL + 'signin', data);
-        console.log('res', res);
         res.data.status === 'success' ? localStorage.setItem('credit', JSON.stringify(res.data)) : null;
         resolve(res.data)
       } catch (error) {
@@ -52,7 +50,6 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postRequest(config.ROOT_URL + 'cart', data);
-        console.log('postCart res.data', res.data)
         resolve(res.data)
       } catch (error) {
         reject(error);

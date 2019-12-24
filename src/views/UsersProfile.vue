@@ -38,7 +38,6 @@ export default {
             const res = await request.putUser(path, formData);
             if (res.status === 'success') {
                 const res = await request.getUser(path);
-                console.log('res', res);
                 this.initUser = res.user;
                 this.isShow = true;
             }
