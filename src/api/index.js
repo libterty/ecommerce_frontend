@@ -23,6 +23,7 @@ class Request {
       }
     });
   }
+
   getCart() {
     return new Promise(async (resolve, reject) => {
       try {
@@ -191,6 +192,32 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await putAuthRequest(config.ROOT_URL + path, data);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  getProducts() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + 'furnitures/pagination');
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  getSearchProducts(search) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + 'furnitures/pagination' + search);
         resolve (
           res.data
         );

@@ -70,7 +70,7 @@ export default {
                 const res = await request.postSignIn(data);
                 if (res.status === 'success') {
                     this.$router
-                        .go({ name: 'Restaurants' })
+                        .go({ name: 'home' })
                         .catch(e => console.log(e));
                 } else {
                     throw new Error(res.message);

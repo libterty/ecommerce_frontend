@@ -44,6 +44,11 @@ const routes = [
     component: SignUp
   },
   {
+    path: '/furnitures',
+    name: 'furniturePagination',
+    component: () => import('../views/FurniturePagination.vue')
+  },
+  {
     path: '/furnitures/:id',
     name: 'furnituresItem',
     component: () => import('../views/Furnitures.vue')
