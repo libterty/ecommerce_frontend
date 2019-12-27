@@ -75,7 +75,6 @@ export default {
       canvas.width = img.width
       canvas.height = img.height
       let ctx = canvas.getContext('2d')
-      console.log('ctx', canvas)
       ctx.drawImage(img, 0, 0)
 
       let dataURL = canvas.toDataURL('image/png')

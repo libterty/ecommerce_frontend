@@ -30,7 +30,7 @@
                     :title="initProduct.name" 
                     :sub-title="initProduct.Category.name"
                 >
-                    <b-card-test>
+                    <b-card-text>
                         <b-list-group flush>
                             <b-list-group-item class="text-left">
                                 <strong>成本 : </strong>
@@ -67,7 +67,7 @@
                                 >{{item.Inventory.quantity}}</small>
                             </b-list-group-item>
                         </b-list-group>
-                    </b-card-test>
+                    </b-card-text>
                 </b-card-body>
             </b-col>
         </b-row>
