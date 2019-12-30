@@ -23,7 +23,7 @@
             </b-thead>
             <b-tbody>
                 <b-tr
-                    v-for="product in this.initProducts"
+                    v-for="product in initProducts"
                     :key="product.id"
                 >
                     <b-td class="text-center">{{product.id}}</b-td>
