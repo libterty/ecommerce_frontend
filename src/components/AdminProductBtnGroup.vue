@@ -72,6 +72,7 @@
                         v-model="form.cost"
                         :state="form.cost > 0"
                         type="number"
+                        min="1"
                         name="cost"
                         required
                     ></b-form-input>
@@ -89,6 +90,7 @@
                         v-model="form.price"
                         :state="form.price > 0"
                         type="number"
+                        min="1"
                         name="price"
                         required
                     ></b-form-input>
@@ -106,6 +108,7 @@
                         v-model="form.height"
                         :state="form.height > 0"
                         type="number"
+                        min="1"
                         name="height"
                         required
                     ></b-form-input>
@@ -123,6 +126,7 @@
                         v-model="form.width"
                         :state="form.width > 0"
                         type="number"
+                        min="1"
                         name="width"
                         required
                     ></b-form-input>
@@ -140,6 +144,7 @@
                         v-model="form.length"
                         :state="form.length > 0"
                         type="number"
+                        min="1"
                         name="length"
                         required
                     ></b-form-input>
@@ -157,6 +162,7 @@
                         v-model="form.weight"
                         :state="form.weight > 0"
                         type="number"
+                        min="1"
                         name="weight"
                         required
                     ></b-form-input>
@@ -241,6 +247,7 @@
                         v-model="newColor.quantity"
                         :state="newColor.quantity > 0"
                         type="number"
+                        min="1"
                         name="newColor-quantity"
                         required
                     ></b-form-input>
@@ -325,6 +332,7 @@
                         v-model="editColorQuantity"
                         :state="editColorQuantity > 0"
                         type="number"
+                        min="1"
                         name="editColor-quantity"
                         required
                     ></b-form-input>
@@ -460,7 +468,7 @@ export default {
         },
 
         createProductColors() {
-            if (this.newColor.name.length > 0) {
+            if (this.newColor.name.length > 0 && this.newColor.quantity > 0) {
                 const data = JSON.stringify(this.newColor);
                 this.$emit('after-color-create', data);
             }
