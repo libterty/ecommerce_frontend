@@ -89,7 +89,6 @@ export default {
     },
     methods: {
         deleteProduct(id) {
-            confirm('Are you sure you want to delete the product');
             this.$emit('after-delete-product', id);
         }
     },

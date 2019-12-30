@@ -15,6 +15,7 @@
 import AdminNav from '../components/AdminNav.vue';
 import AdminProductsTable from '../components/AdminProductsTable.vue';
 import Request from '../api/index';
+import { Toast } from '../utils/helpers';
 const request = new Request();
 
 export default {
@@ -29,10 +30,17 @@ export default {
         }
     },
     async created() {
-        const res = await request.getAdminHomePage();
-        if (res.status === 'success') {
-            this.initProducts = res.products.sort((a, b) => b.id - a.id);
-            this.isShow = true;
+        try {
+            const res = await request.getAdminHomePage();
+            if (res.status === 'success') {
+                this.initProducts = res.products.sort((a, b) => b.id - a.id);
+                this.isShow = true;
+            }
+        } catch (error) {
+            Toast.fire({
+                icon: 'warning',
+                title: 'Something went wrong'
+            })
         }
     },
     methods: {
@@ -44,7 +52,15 @@ export default {
                     ? this.initProducts = res.products.sort((a, b) => b.id - a.id)
                     : null;
                 this.isShow = true;
+                return Toast.fire({
+                    icon: 'success',
+                    title: 'Delete Product success'
+                });
             }
+            return Toast.fire({
+                icon: 'error',
+                title: 'Delete Product fail'
+            });
         }
     }
 }
