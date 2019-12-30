@@ -123,6 +123,19 @@ class Request {
     })
   }
 
+  putReviseColor(pId, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + `/admin/products/colors/${pId}`, data);
+        resolve(
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
   putNewInventory(id, data) {
     return new Promise(async (resolve, reject) => {
       try {

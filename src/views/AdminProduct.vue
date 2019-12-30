@@ -6,6 +6,7 @@
                 :initColors="initColors"
                 @after-product-revise="afterProductRevise"
                 @after-color-create="afterColorCreate"
+                @after-color-revise="afterColorRevise"
                 @after-inventory-change="afterInventoryChange"
                 @after-submit-image="afterSubmitImage"
             />
@@ -64,6 +65,22 @@ export default {
 
         async afterColorCreate(data) {
             const res = await request.postNewColor(data);
+            if (res.status === 200) {
+                const res = await request.getAdminSpecificProduct(document.location.pathname);
+                this.initProduct = res.product;
+                const temp = this.initProduct.inventories;
+                let result = [];
+                for (let i=0; i<temp.length; i++) {
+                    result.push(temp[i].name);
+                }
+                this.initColors = result;
+            }
+        },
+
+        async afterColorRevise(data) {
+            const res = await request.putReviseColor(this.initProduct.id, data);
+
+            console.log('res', res);
             if (res.status === 200) {
                 const res = await request.getAdminSpecificProduct(document.location.pathname);
                 this.initProduct = res.product;

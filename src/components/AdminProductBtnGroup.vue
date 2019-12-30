@@ -8,6 +8,9 @@
                 <b-button v-b-modal.addProductColor>新增產品顏色</b-button>
             </b-nav-item>
             <b-nav-item>
+                <b-button v-b-modal.reviseProductColor>修改產品顏色</b-button>
+            </b-nav-item>
+            <b-nav-item>
                 <b-button v-b-modal.editInventory>修改產品庫存</b-button>
             </b-nav-item>
             <b-nav-item>
@@ -246,6 +249,49 @@
         </b-modal>
 
         <b-modal 
+            id="reviseProductColor" 
+            title="修改產品顏色"
+            @ok.prevent="reviseProductColors()"
+        >
+            <b-form>
+                <b-form-group
+                    label-cols-sm="3"
+                    label="修改產品顏色 :"
+                    label-align-sm="right"
+                    label-for="newColor-name"
+                    :description="'目前分類 : ' + initProduct.Category.name"
+                >
+                    <b-form-select
+                        id="reviseColor-ColorId"
+                        v-model="reviseColor.ColorId"
+                        @change="updateRevisColor"
+                        placeholder="Select Category"
+                        name="reviseColor-ColorId"
+                        required
+                    >
+                        <option
+                            v-for="inventory in initProduct.inventories"
+                            :key="inventory.id"
+                            :value="inventory.id"
+                        >{{inventory.name | convertLanguage}}</option>
+                    </b-form-select>
+                    <b-form-select
+                        id="reviseColor-name"
+                        v-model="reviseColor.name"
+                        placeholder="Select Category"
+                        name="reviseColor-name"
+                        required
+                    >
+                        <option value="black" :disabled="isColorEditable('black', tempReviseColor)">黑色</option>
+                        <option value="blue" :disabled="isColorEditable('blue', tempReviseColor)">藍色</option>
+                        <option value="white" :disabled="isColorEditable('white', tempReviseColor)">白色</option>
+                        <option value="yellow" :disabled="isColorEditable('yellow', tempReviseColor)">黃色</option>
+                    </b-form-select>
+                </b-form-group>
+            </b-form>
+        </b-modal>
+
+        <b-modal 
             id="editInventory" 
             title="修改產品庫存"
             hide-footer
@@ -350,6 +396,11 @@ export default {
                 ProductId: this.initProduct.id,
                 quantity: 0,
             },
+            tempReviseColor: '',
+            reviseColor: {
+                name: '',
+                ColorId: 0
+            },
             editQuantity: false,
             editColorQuantityId: 0,
             editColorQuantity: 0,
@@ -415,6 +466,13 @@ export default {
             }
         },
 
+        reviseProductColors() {
+            if (this.reviseColor.name.length > 0) {
+                const data = JSON.stringify(this.reviseColor);
+                this.$emit('after-color-revise', data);
+            }
+        },
+
         editProductInventory() {
             if (this.editColorQuantity > 0) {
                 const urlId = this.editColorQuantityId;
@@ -448,6 +506,16 @@ export default {
             const form = e.target;
             const formData = new FormData(form);
             this.$emit('after-submit-image', formData);
+        },
+
+        updateRevisColor(arug) {
+            const temp = this.initProduct.inventories;
+            const result = temp.filter(item => item.id === arug);
+            this.tempReviseColor = result[0].name;
+        },
+
+        isColorEditable(str, initColors) {
+            return initColors === str;
         }
     },
     watch: {
