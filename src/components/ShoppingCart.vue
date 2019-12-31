@@ -193,7 +193,4 @@ export default {
   text-align: left;
   padding-bottom: 1em;
 }
-* {
-  font-family: 'Noto Sans TC', sans-serif;
-}
 </style> 

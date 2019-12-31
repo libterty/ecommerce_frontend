@@ -28,7 +28,37 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getRequest(config.ROOT_URL + 'cart');
-        console.log('getCart res.data', res.data)
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+  deleteCartItem(cartItemId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await deleteRequest(`${config.ROOT_URL}cart/${cartItemId}`);
+        console.log('delete res.data', res.data)
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+  addCartItem(cartItemId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postRequest(`${config.ROOT_URL}cart/${cartItemId}/add`);
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+  subCartItem(cartItemId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postRequest(`${config.ROOT_URL}cart/${cartItemId}/sub`);
         resolve(res.data);
       } catch (error) {
         reject(error);
@@ -141,7 +171,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + 'admin/orders');
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -167,7 +197,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + `admin/orders/notify/${id}`);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -271,7 +301,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await deleteRequest(config.ROOT_URL + `admin/products/${id}`);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -281,7 +311,7 @@ class Request {
   }
 
   getUser(path) {
-    return new Promise (async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + path);
         resolve(
@@ -297,7 +327,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await putAuthRequest(config.ROOT_URL + path, data);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -310,7 +340,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getRequest(config.ROOT_URL + 'furnitures/pagination');
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -323,7 +353,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getRequest(config.ROOT_URL + 'furnitures/pagination' + search);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {

@@ -7,8 +7,7 @@ import SignUp from '../views/SignUp.vue';
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'home',
     component: Home
@@ -72,6 +71,11 @@ const routes = [
     path: '/users/:id',
     name: 'usersProfile',
     component: () => import('../views/UsersProfile.vue')
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import('../views/Cart.vue')
   },
   {
     path: '*',

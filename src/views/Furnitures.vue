@@ -9,6 +9,11 @@
       :initColors="initColors"
       @after-add-to-cart="afterAddToCart"
     />
+    <ShoppingCart
+      :init-cart="initCart"
+      :init-total-price="initTotalPrice"
+      @click-to-get-cart="clickToGetCart"
+    />
     <hr />
     <FurnituresDimension
       :initProduct="initProduct"
@@ -21,24 +26,40 @@
 import Request from '../api'
 import FurnituresDashboard from '../components/FurnituresDashborad.vue'
 import FurnituresDimension from '../components/FurnituresDimension.vue'
+import ShoppingCart from '../components/ShoppingCart'
 const request = new Request()
 import { Toast } from '../utils/helpers.js'
 
 export default {
   components: {
     FurnituresDashboard,
-    FurnituresDimension
+    FurnituresDimension,
+    ShoppingCart
   },
   data() {
     return {
       initProduct: {},
       initImages: [],
       initColors: [],
-      error: ''
+      error: '',
+      initCart: [],
+      initTotalPrice: 0
     }
   },
   async created() {
-    this.fetchFurniture(document.location.pathname)
+    try {
+      const res = await request.getCart()
+      this.fetchFurniture(document.location.pathname)
+      if (res.status === 'success') {
+        this.initCart = res.cart
+        this.initTotalPrice = res.totalPrice
+      }
+    } catch (error) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Fetch cart failed'
+      })
+    }
   },
   beforeRouteUpdate(to, from, next) {
     const { id } = to.params
@@ -74,6 +95,21 @@ export default {
         Toast.fire({
           icon: 'error',
           title: 'Fail to add to cart'
+        })
+      }
+    },
+    async clickToGetCart() {
+      try {
+        const res = await request.getCart()
+        if (res.status === 'success') {
+          console.log(res)
+          this.cart = res.cart
+          this.totalPrice = res.totalPrice
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Fetch cart failed'
         })
       }
     }
