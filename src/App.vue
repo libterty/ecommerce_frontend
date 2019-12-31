@@ -3,11 +3,11 @@
     <Navbar />
     <router-view />
 
-    <ShoppingCart
+    <!-- <ShoppingCart
       :init-cart="cart"
       :init-total-price="totalPrice"
       @click-to-get-cart="clickToGetCart"
-    />
+    />-->
 
     <!-- <Footer /> -->
   </div>
@@ -16,54 +16,49 @@
 <script>
 import Navbar from './components/Navbar.vue'
 // import Footer from './components/Footer.vue';
-import ShoppingCart from './components/ShoppingCart'
-import Request from './api/index'
-import { Toast } from './utils/helpers.js'
-const request = new Request()
+// import ShoppingCart from './components/ShoppingCart'
+// import Request from './api/index'
+// import { Toast } from './utils/helpers.js'
+// const request = new Request()
 
 export default {
   data() {
     return {
-      cart: [],
-      totalPrice: 0
+      // cart: [],
+      // totalPrice: 0,
+      // error: ''
     }
   },
   components: {
-    Navbar,
-    ShoppingCart
+    Navbar
+    // ShoppingCart
     // Footer
-  },
-  async created() {
-    try {
-      const res = await request.getCart()
-      if (res.status === 'success') {
-        this.cart = res.cart
-        this.totalPrice = res.totalPrice
-      }
-    } catch (error) {
-      Toast.fire({
-        icon: 'error',
-        title: 'Fetch cart failed'
-      })
-    }
-  },
-  methods: {
-    async clickToGetCart() {
-      try {
-        const res = await request.getCart()
-        if (res.status === 'success') {
-          console.log(res)
-          this.cart = res.cart
-          this.totalPrice = res.totalPrice
-        }
-      } catch (error) {
-        Toast.fire({
-          icon: 'error',
-          title: 'Fetch cart failed'
-        })
-      }
-    }
   }
+  // async created() {
+  //   try {
+  //     const res = await request.getCart()
+  //     if (res.status === 'success') {
+  //       this.cart = res.cart
+  //       this.totalPrice = res.totalPrice
+  //     }
+  //   } catch (error) {
+  //     this.error = error.message
+  //   }
+  // },
+  // methods: {
+  //   async clickToGetCart() {
+  //     try {
+  //       const res = await request.getCart()
+  //       if (res.status === 'success') {
+  //         console.log(res)
+  //         this.cart = res.cart
+  //         this.totalPrice = res.totalPrice
+  //       }
+  //     } catch (error) {
+  //       this.error = error.message
+  //     }
+  //   }
+  // }
 }
 </script>
 

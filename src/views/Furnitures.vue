@@ -40,7 +40,6 @@ export default {
   async created() {
     this.fetchFurniture(document.location.pathname)
   },
-  // TODO: page doesn't change after route changed
   beforeRouteUpdate(to, from, next) {
     const { id } = to.params
     console.log('to.params', id)
@@ -57,7 +56,6 @@ export default {
           this.initColors = res.Colors
         }
       } catch (error) {
-        console.log(error)
         this.error = error.message
       }
     },

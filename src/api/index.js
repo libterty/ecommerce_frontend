@@ -47,6 +47,7 @@ class Request {
       }
     })
   }
+
   postCart(data) {
     return new Promise(async (resolve, reject) => {
       try {
