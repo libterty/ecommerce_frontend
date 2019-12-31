@@ -2,7 +2,11 @@
     <b-container class="py-5">
         <AdminNav />
         <b-container class="py-5" v-if="isShow">
-            <AdminPayments />
+            <AdminPayments
+                :initPaid="initPaid"
+                :initUnpaid="initUnpaid"
+                :initPaymentRow="initPaymentRow"
+            />
         </b-container>
     </b-container>
 </template>
@@ -26,7 +30,7 @@ export default {
             initPayments: [],
             initPaid: 0,
             initUnpaid: 0,
-            initPaymentObject: {}
+            initPaymentRow: []
         }
     },
     async created() {
@@ -35,20 +39,18 @@ export default {
             if (res.status === 'success') {
                 this.initPayments = res.payments;
                 let payments = this.initPayments;
-                payments.filter(item => item.payment_status === '尚未付款').forEach(el => this.initUnpaid += Number(el.total_amount));
+                payments.filter(item => item.payment_status === '未付款').forEach(el => this.initUnpaid += Number(el.total_amount));
                 payments.filter(item => item.payment_status === '已付款').forEach(el => this.initPaid += Number(el.total_amount));
-                
                 let paid = payments.filter(item => item.payment_status === '已付款');
-
+                let result = [];
                 for (let i=0; i<paid.length; i++) {
-                    const temp = moment(paid[i].paid_at.split('T')[0]).month() + 1;
-                    if (!this.initPaymentObject[`${temp}月份`]) {
-                        this.initPaymentObject[`${temp}月份`] = Number(paid[i].total_amount);
-                    } else {
-                        this.initPaymentObject[`${temp}月份`] = this.initPaymentObject[`${temp}月份`] + Number(paid[i].total_amount);
-                    }
+                    let obj = {};
+                    const temp = moment(paid[i].updatedAt.split('T')[0]).month() + 1;
+                    obj['月份'] = `${temp}月份`;
+                    obj['金額'] = Number(paid[i].total_amount);
+                    result.push(obj);
                 }
-
+                this.initPaymentRow = result;
                 this.isShow = true;
             }
         } catch (error) {
