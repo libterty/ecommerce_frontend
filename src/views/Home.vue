@@ -18,9 +18,14 @@
         >Explore More</b-button>
       </b-card>
     </div>
+    <ShoppingCart
+      :init-cart="initCart"
+      :init-total-price="initTotalPrice"
+      @click-to-get-cart="clickToGetCart"
+    />
     <br />
     <HomeCarousel :initCarousels="initCarousels" />
-    <br />    
+    <br />
     <HomeGrid :initProducts="initProducts" />
   </b-container>
 </template>
@@ -28,27 +33,60 @@
 <script>
 import HomeCarousel from '../components/HomeCarousel.vue'
 import HomeGrid from '../components/HomeGrid'
+import ShoppingCart from '../components/ShoppingCart'
 import Request from '../api/index'
-
+import { Toast } from '../utils/helpers.js'
 const request = new Request()
 
 export default {
   components: {
     HomeCarousel,
-    HomeGrid
+    HomeGrid,
+    ShoppingCart
   },
   data() {
     return {
       initProducts: [],
-      initCarousels: []
+      initCarousels: [],
+      initCart: [],
+      initTotalPrice: 0
     }
   },
   async created() {
-    const res = await request.getHomePageProduts()
-    if (res.status === 'success') {
-      this.initProducts = res.products
-      for (let i = 0; i < 5; i++) {
-        this.initCarousels.push(this.initProducts[i])
+    try {
+      const resCart = await request.getCart()
+      if (resCart.status === 'success') {
+        this.initCart = resCart.cart
+        this.initTotalPrice = resCart.totalPrice
+      }
+      const res = await request.getHomePageProduts()
+      if (res.status === 'success') {
+        this.initProducts = res.products
+        for (let i = 0; i < 5; i++) {
+          this.initCarousels.push(this.initProducts[i])
+        }
+      }
+    } catch (error) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Fetch cart failed'
+      })
+    }
+  },
+  methods: {
+    async clickToGetCart() {
+      try {
+        const res = await request.getCart()
+        if (res.status === 'success') {
+          console.log(res)
+          this.cart = res.cart
+          this.totalPrice = res.totalPrice
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Fetch cart failed'
+        })
       }
     }
   }

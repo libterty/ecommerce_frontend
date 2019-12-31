@@ -7,8 +7,7 @@ import SignUp from '../views/SignUp.vue';
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'home',
     component: Home
@@ -27,6 +26,11 @@ const routes = [
     path: '/admin/orders',
     name: 'admin-orders',
     component: () => import('../views/AdminOrders.vue')
+  },
+  {
+    path: '/admin/payments',
+    name: 'admin-payments',
+    component: () => import('../views/AdminPayments.vue')
   },
   {
     path: '/admin/products/create',
@@ -62,6 +66,11 @@ const routes = [
     path: '/users/:id',
     name: 'usersProfile',
     component: () => import('../views/UsersProfile.vue')
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import('../views/Cart.vue')
   },
   {
     path: '*',
