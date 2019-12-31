@@ -61,12 +61,10 @@ export const putAuthRequest = (url, data) => {
 }
 
 export const deleteRequest = url => {
-  return axios.delete(url, 
-    {  headers:
-      { Authorization: 'Bearer '+ auth.token }
-    }
-  ).then(res => {
-    return res
-  })
-  .catch(err => console.log('fetch DELETE err', err.message));
+  return axios.delete(url, {
+      headers: { Authorization: 'Bearer ' + auth.token }
+    }).then(res => {
+      return res
+    })
+    .catch(err => console.log('fetch DELETE err', err.message));
 }
