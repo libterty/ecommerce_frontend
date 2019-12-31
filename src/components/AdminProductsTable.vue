@@ -5,7 +5,7 @@
                 <b-tr>
                     <b-th colspan="6">基本資訊</b-th>
                     <b-th colspan="3">尺寸</b-th>
-                    <b-th colspan="1">更多資訊</b-th>
+                    <b-th colspan="2">更多資訊</b-th>
                 </b-tr>
                 <b-tr>
                     <b-th colspan="1">#</b-th>
@@ -18,11 +18,12 @@
                     <b-th colspan="1">寬</b-th>
                     <b-th colspan="1">高</b-th>
                     <b-th colspan="1">前往商品頁面</b-th>
+                    <b-th colspan="1">刪除商品</b-th>
                 </b-tr>
             </b-thead>
             <b-tbody>
                 <b-tr
-                    v-for="product in this.initProducts"
+                    v-for="product in initProducts"
                     :key="product.id"
                 >
                     <b-td class="text-center">{{product.id}}</b-td>
@@ -43,6 +44,14 @@
                     <b-td class="text-center">{{product.height}}</b-td>
                     <b-td class="text-center">
                         <a :href="'/admin/products/'+product.id">More Info</a>
+                    </b-td>
+                    <b-td class="text-center">
+                        <b-button
+                            type="button"
+                            size="sm"
+                            variant="danger"
+                            @click.stop.prevent="deleteProduct(product.id)"
+                        >刪除</b-button>
                     </b-td>
                 </b-tr>
             </b-tbody>
@@ -76,6 +85,16 @@ export default {
         return {
             inventories: 0,
             isRow: false
+        }
+    },
+    methods: {
+        deleteProduct(id) {
+            this.$emit('after-delete-product', id);
+        }
+    },
+    watch: {
+        initProducts: function(updateData) {
+            this.initProducts = updateData;
         }
     }
 }

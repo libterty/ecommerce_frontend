@@ -1,4 +1,4 @@
-import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest } from './apiHelper';
+import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest, deleteRequest } from './apiHelper';
 import config from '../config';
 
 class Request {
@@ -19,11 +19,11 @@ class Request {
         const res = await getRequest(config.ROOT_URL + paramsId);
         resolve(res.data);
       } catch (error) {
-        console.log(error)
         reject(error);
       }
     });
   }
+
   getCart() {
     return new Promise(async (resolve, reject) => {
       try {
@@ -39,7 +39,7 @@ class Request {
   postSignIn(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await postRequest(config.ROOT_URL + '/signin', data);
+        const res = await postRequest(config.ROOT_URL + 'signin', data);
         res.data.status === 'success' ? localStorage.setItem('credit', JSON.stringify(res.data)) : null;
         resolve(res.data)
       } catch (error) {
@@ -52,7 +52,6 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postRequest(config.ROOT_URL + 'cart', data);
-        console.log('postCart res.data', res.data)
         resolve(res.data)
       } catch (error) {
         reject(error);
@@ -76,7 +75,7 @@ class Request {
   getAdminHomePage() {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await getAuthRequest(config.ROOT_URL + '/admin/products');
+        const res = await getAuthRequest(config.ROOT_URL + 'admin/products');
         resolve(
           res
         );
@@ -84,6 +83,32 @@ class Request {
         reject(error);
       }
     })
+  }
+
+  getAdminOrders() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'admin/orders');
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  getNotifyOrders(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `admin/orders/notify/${id}`);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   getAdminSpecificProduct(url) {
@@ -125,6 +150,19 @@ class Request {
     })
   }
 
+  putReviseColor(pId, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + `/admin/products/colors/${pId}`, data);
+        resolve(
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
   putNewInventory(id, data) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -157,6 +195,71 @@ class Request {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/products', data);
         resolve(
           res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  deleteExistProduct(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await deleteRequest(config.ROOT_URL + `admin/products/${id}`);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  getUser(path) {
+    return new Promise (async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + path);
+        resolve(
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  putUser(path, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + path, data);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  getProducts() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + 'furnitures/pagination');
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  getSearchProducts(search) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + 'furnitures/pagination' + search);
+        resolve (
+          res.data
         );
       } catch (error) {
         reject(error);

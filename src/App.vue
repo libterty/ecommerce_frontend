@@ -22,6 +22,7 @@ import Navbar from './components/Navbar.vue'
 // const request = new Request()
 
 export default {
+  name: 'App',
   data() {
     return {
       // cart: [],
@@ -42,7 +43,10 @@ export default {
   //       this.totalPrice = res.totalPrice
   //     }
   //   } catch (error) {
-  //     this.error = error.message
+  //     Toast.fire({
+  //       icon: 'error',
+  //       title: 'Fetch cart failed'
+  //     })
   //   }
   // },
   // methods: {
@@ -55,7 +59,10 @@ export default {
   //         this.totalPrice = res.totalPrice
   //       }
   //     } catch (error) {
-  //       this.error = error.message
+  //       Toast.fire({
+  //         icon: 'error',
+  //         title: 'Fetch cart failed'
+  //       })
   //     }
   //   }
   // }

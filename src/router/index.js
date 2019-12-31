@@ -16,12 +16,17 @@ const routes = [
   {
     path: '/admin',
     exact: true,
-    redirect: '/admin/restaurants'
+    redirect: '/admin/products'
   },
   {
     path: '/admin/products',
     name: 'admin-products',
     component: () => import('../views/AdminProducts.vue')
+  },
+  {
+    path: '/admin/orders',
+    name: 'admin-orders',
+    component: () => import('../views/AdminOrders.vue')
   },
   {
     path: '/admin/products/create',
@@ -44,9 +49,19 @@ const routes = [
     component: SignUp
   },
   {
+    path: '/furnitures',
+    name: 'furniturePagination',
+    component: () => import('../views/FurniturePagination.vue')
+  },
+  {
     path: '/furnitures/:id',
     name: 'furnituresItem',
     component: () => import('../views/Furnitures.vue')
+  },
+  {
+    path: '/users/:id',
+    name: 'usersProfile',
+    component: () => import('../views/UsersProfile.vue')
   },
   {
     path: '*',

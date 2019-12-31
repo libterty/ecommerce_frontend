@@ -29,7 +29,7 @@
                 <small>email</small>
               </i>
             </b-nav-item>
-            <b-nav-item href="#">
+            <b-nav-item :href="'/users/' + userId">
               <i class="material-icons">
                 <small>person</small>
               </i>
@@ -43,13 +43,20 @@
 
 <script>
 import { mdiEmailOutline, mdiAccount } from '@mdi/js';
+const auth = JSON.parse(localStorage.getItem('credit')) || null;
 
 export default {
     data() {
         return {
             emailSvg: mdiEmailOutline,
-            userSvg: mdiAccount
+            userSvg: mdiAccount,
+            userId: '' 
         }
+    },
+    created() {
+      if (auth) {
+        this.userId = auth.user.id;
+      }
     }
 }
 </script>
