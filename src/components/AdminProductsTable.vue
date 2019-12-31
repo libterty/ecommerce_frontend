@@ -23,7 +23,7 @@
             </b-thead>
             <b-tbody>
                 <b-tr
-                    v-for="product in this.initProducts"
+                    v-for="product in initProducts"
                     :key="product.id"
                 >
                     <b-td class="text-center">{{product.id}}</b-td>
@@ -89,7 +89,6 @@ export default {
     },
     methods: {
         deleteProduct(id) {
-            confirm('Are you sure you want to delete the product');
             this.$emit('after-delete-product', id);
         }
     },

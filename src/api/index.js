@@ -47,6 +47,7 @@ class Request {
       }
     })
   }
+
   postCart(data) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -74,7 +75,7 @@ class Request {
   getAdminHomePage() {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await getAuthRequest(config.ROOT_URL + '/admin/products');
+        const res = await getAuthRequest(config.ROOT_URL + 'admin/products');
         resolve(
           res
         );
@@ -82,6 +83,32 @@ class Request {
         reject(error);
       }
     })
+  }
+
+  getAdminOrders() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'admin/orders');
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  getNotifyOrders(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `admin/orders/notify/${id}`);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   getAdminSpecificProduct(url) {
@@ -114,6 +141,19 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/products/colors', data);
+        resolve(
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  putReviseColor(pId, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + `/admin/products/colors/${pId}`, data);
         resolve(
           res
         );

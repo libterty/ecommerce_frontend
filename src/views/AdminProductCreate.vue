@@ -12,6 +12,7 @@
 <script>
 import AdminProductCreate from '../components/AdminProductCreate.vue';
 import Request from '../api/index';
+import { Toast } from '../utils/helpers';
 const request = new Request();
 
 export default {
@@ -22,8 +23,15 @@ export default {
         async afterCreateProduct(formData) {
             const res = await request.postNewProduct(formData);
             if (res.status === 200) {
-                alert(res.data.message);
+                Toast.fire({
+                    icon: 'success',
+                    title: `${res.data.message}`
+                });
             }
+            Toast.fire({
+                    icon: 'warning',
+                    title: `${res.data.message}`
+            });
         }
     }
 }

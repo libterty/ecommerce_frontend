@@ -8,6 +8,9 @@
                 <b-button v-b-modal.addProductColor>新增產品顏色</b-button>
             </b-nav-item>
             <b-nav-item>
+                <b-button v-b-modal.reviseProductColor>修改產品顏色</b-button>
+            </b-nav-item>
+            <b-nav-item>
                 <b-button v-b-modal.editInventory>修改產品庫存</b-button>
             </b-nav-item>
             <b-nav-item>
@@ -69,6 +72,7 @@
                         v-model="form.cost"
                         :state="form.cost > 0"
                         type="number"
+                        min="1"
                         name="cost"
                         required
                     ></b-form-input>
@@ -86,6 +90,7 @@
                         v-model="form.price"
                         :state="form.price > 0"
                         type="number"
+                        min="1"
                         name="price"
                         required
                     ></b-form-input>
@@ -103,6 +108,7 @@
                         v-model="form.height"
                         :state="form.height > 0"
                         type="number"
+                        min="1"
                         name="height"
                         required
                     ></b-form-input>
@@ -120,6 +126,7 @@
                         v-model="form.width"
                         :state="form.width > 0"
                         type="number"
+                        min="1"
                         name="width"
                         required
                     ></b-form-input>
@@ -137,6 +144,7 @@
                         v-model="form.length"
                         :state="form.length > 0"
                         type="number"
+                        min="1"
                         name="length"
                         required
                     ></b-form-input>
@@ -154,6 +162,7 @@
                         v-model="form.weight"
                         :state="form.weight > 0"
                         type="number"
+                        min="1"
                         name="weight"
                         required
                     ></b-form-input>
@@ -238,9 +247,53 @@
                         v-model="newColor.quantity"
                         :state="newColor.quantity > 0"
                         type="number"
+                        min="1"
                         name="newColor-quantity"
                         required
                     ></b-form-input>
+                </b-form-group>
+            </b-form>
+        </b-modal>
+
+        <b-modal 
+            id="reviseProductColor" 
+            title="修改產品顏色"
+            @ok.prevent="reviseProductColors()"
+        >
+            <b-form>
+                <b-form-group
+                    label-cols-sm="3"
+                    label="修改產品顏色 :"
+                    label-align-sm="right"
+                    label-for="newColor-name"
+                    :description="'目前分類 : ' + initProduct.Category.name"
+                >
+                    <b-form-select
+                        id="reviseColor-ColorId"
+                        v-model="reviseColor.ColorId"
+                        @change="updateRevisColor"
+                        placeholder="Select Category"
+                        name="reviseColor-ColorId"
+                        required
+                    >
+                        <option
+                            v-for="inventory in initProduct.inventories"
+                            :key="inventory.id"
+                            :value="inventory.id"
+                        >{{inventory.name | convertLanguage}}</option>
+                    </b-form-select>
+                    <b-form-select
+                        id="reviseColor-name"
+                        v-model="reviseColor.name"
+                        placeholder="Select Category"
+                        name="reviseColor-name"
+                        required
+                    >
+                        <option value="black" :disabled="isColorEditable('black', tempReviseColor)">黑色</option>
+                        <option value="blue" :disabled="isColorEditable('blue', tempReviseColor)">藍色</option>
+                        <option value="white" :disabled="isColorEditable('white', tempReviseColor)">白色</option>
+                        <option value="yellow" :disabled="isColorEditable('yellow', tempReviseColor)">黃色</option>
+                    </b-form-select>
                 </b-form-group>
             </b-form>
         </b-modal>
@@ -279,6 +332,7 @@
                         v-model="editColorQuantity"
                         :state="editColorQuantity > 0"
                         type="number"
+                        min="1"
                         name="editColor-quantity"
                         required
                     ></b-form-input>
@@ -350,6 +404,11 @@ export default {
                 ProductId: this.initProduct.id,
                 quantity: 0,
             },
+            tempReviseColor: '',
+            reviseColor: {
+                name: '',
+                ColorId: 0
+            },
             editQuantity: false,
             editColorQuantityId: 0,
             editColorQuantity: 0,
@@ -409,9 +468,16 @@ export default {
         },
 
         createProductColors() {
-            if (this.newColor.name.length > 0) {
+            if (this.newColor.name.length > 0 && this.newColor.quantity > 0) {
                 const data = JSON.stringify(this.newColor);
                 this.$emit('after-color-create', data);
+            }
+        },
+
+        reviseProductColors() {
+            if (this.reviseColor.name.length > 0) {
+                const data = JSON.stringify(this.reviseColor);
+                this.$emit('after-color-revise', data);
             }
         },
 
@@ -448,6 +514,16 @@ export default {
             const form = e.target;
             const formData = new FormData(form);
             this.$emit('after-submit-image', formData);
+        },
+
+        updateRevisColor(arug) {
+            const temp = this.initProduct.inventories;
+            const result = temp.filter(item => item.id === arug);
+            this.tempReviseColor = result[0].name;
+        },
+
+        isColorEditable(str, initColors) {
+            return initColors === str;
         }
     },
     watch: {

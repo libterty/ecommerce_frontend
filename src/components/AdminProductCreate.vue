@@ -49,6 +49,7 @@
                         v-model="form.cost"
                         :state="form.cost > 0"
                         type="number"
+                        min="1"
                         name="cost"
                         required
                     ></b-form-input>
@@ -65,6 +66,7 @@
                         v-model="form.price"
                         :state="form.price > 0"
                         type="number"
+                        min="1"
                         name="price"
                         required
                     ></b-form-input>
@@ -81,6 +83,7 @@
                         v-model="form.height"
                         :state="form.height > 0"
                         type="number"
+                        min="1"
                         name="height"
                         required
                     ></b-form-input>
@@ -97,6 +100,7 @@
                         v-model="form.width"
                         :state="form.width > 0"
                         type="number"
+                        min="1"
                         name="width"
                         required
                     ></b-form-input>
@@ -113,6 +117,7 @@
                         v-model="form.length"
                         :state="form.length > 0"
                         type="number"
+                        min="1"
                         name="length"
                         required
                     ></b-form-input>
@@ -129,6 +134,7 @@
                         v-model="form.weight"
                         :state="form.weight > 0"
                         type="number"
+                        min="1"
                         name="weight"
                         required
                     ></b-form-input>
@@ -182,6 +188,7 @@
                         v-model="form.quantity"
                         :state="form.quantity > 0"
                         type="number"
+                        min="1"
                         name="quantity"
                         required
                     ></b-form-input>
@@ -234,6 +241,8 @@
 </template>
 
 <script>
+import { Toast } from '../utils/helpers';
+
 export default {
     data() {
         return {
@@ -264,7 +273,29 @@ export default {
         createNewProduct(e) {
             const form = e.target;
             const formData = new FormData(form);
-            // 要加入邏輯，等Mina的Toast設定
+            if (
+                this.form.cost <= 0 && 
+                this.form.price <= 0 &&
+                this.form.height <= 0 && 
+                this.form.width <= 0 && 
+                this.form.length <= 0 &&
+                this.form.weight <= 0 && 
+                this.form.quantity <= 0
+            ) {
+                return Toast.fire({ icon: 'warning', title: 'Wrong Input detected' });
+            }
+
+            if (
+                this.form.name.length <= 0 && 
+                this.form.description.length <= 0 &&
+                this.form.material.length <= 0 && 
+                this.form.CategoryId.length <= 0 && 
+                this.form.colorName.length <= 0 &&
+                this.form.url.length <= 0 
+            ) {
+                return Toast.fire({ icon: 'warning', title: 'Wrong Input detected' });
+            }
+
             this.$emit('after-create-product', formData);
         }
     }
