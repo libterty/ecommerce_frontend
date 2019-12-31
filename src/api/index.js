@@ -85,6 +85,32 @@ class Request {
     })
   }
 
+  getAdminCoupons() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'admin/coupons');
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  postAdminCoupon(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postAuthRequest(config.ROOT_URL + 'admin/coupons', data);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   getAdminOrders() {
     return new Promise(async (resolve, reject) => {
       try {
