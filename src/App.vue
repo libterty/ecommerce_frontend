@@ -7,7 +7,7 @@
       :init-cart="cart"
       :init-total-price="totalPrice"
       @click-to-get-cart="clickToGetCart"
-    /> -->
+    />-->
 
     <!-- <Footer /> -->
   </div>
@@ -25,15 +25,16 @@ export default {
   name: 'App',
   data() {
     return {
-      cart: [],
-      totalPrice: 0
+      // cart: [],
+      // totalPrice: 0,
+      // error: ''
     }
   },
   components: {
-    Navbar,
+    Navbar
     // ShoppingCart
     // Footer
-  },
+  }
   // async created() {
   //   try {
   //     const res = await request.getCart()
