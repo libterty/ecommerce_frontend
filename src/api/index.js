@@ -97,6 +97,19 @@ class Request {
     });
   }
 
+  getAdminPayments() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'admin/payments');
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   getNotifyOrders(id) {
     return new Promise(async (resolve, reject) => {
       try {
