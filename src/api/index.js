@@ -103,7 +103,33 @@ class Request {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/coupons', data);
         resolve (
-          res
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  putAdminCoupon(id, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + `admin/coupons/${id}`, data);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  deleteAdminCoupon(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await deleteRequest(config.ROOT_URL + `admin/coupons/${id}`);
+        resolve (
+          res.data
         );
       } catch (error) {
         reject(error);

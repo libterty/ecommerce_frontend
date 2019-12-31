@@ -6,6 +6,8 @@
             <AdminCoupons
                 :initCoupons="initCoupons"
                 @after-submit-create="afterSubmitCreate"
+                @after-submit-edit="afterSubmitEdit"
+                @after-submit-delete="afterSubmitDelete"
             />
         </b-container>
     </b-container>
@@ -52,14 +54,60 @@ export default {
                     const res = await request.getAdminCoupons();
                     this.initCoupons = res.coupons;
                     this.isShow = true;
+                    Toast.fire({
+                        title: 'Created!',
+                        text: 'Your Coupon has been Created.',
+                        icon: 'success'
+                    });
                 }
             } catch (error) {
                 Toast.fire({
-                icon: 'warning',
-                title: 'Something went wrong'
-            })
+                    icon: 'warning',
+                    title: 'Something went wrong'
+                });
             }
             
+        },
+        async afterSubmitEdit(id, data) {
+            try {
+                const res = await request.putAdminCoupon(id, data);
+                console.log('res', res);
+                if (res.status === 'success') {
+                    const res = await request.getAdminCoupons();
+                    this.initCoupons = res.coupons;
+                    this.isShow = true;
+                    Toast.fire({
+                        title: 'Edited!',
+                        text: 'Your Coupon has been Edited.',
+                        icon: 'success'
+                    });
+                }
+            } catch (error) {
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Something went wrong'
+                });
+            }
+        },
+        async afterSubmitDelete(id) {
+            try {
+                const res = await request.deleteAdminCoupon(id);
+                if (res.status === 'success') {
+                    const res = await request.getAdminCoupons();
+                    this.initCoupons = res.coupons;
+                    this.isShow = true;
+                    Toast.fire({
+                        title: 'Deleted!',
+                        text: 'Your Coupon has been deleted.',
+                        icon: 'success'
+                    });
+                }
+            } catch (error) {
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Something went wrong'
+                });
+            }
         }
     }
 }
