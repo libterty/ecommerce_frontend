@@ -63,6 +63,11 @@ const routes = [{
     component: () => import('../views/FurniturePagination.vue')
   },
   {
+    path: '/furnitures/search',
+    name: 'furnitures-Search',
+    component: () => import('../views/FurnitureSearch.vue')
+  },
+  {
     path: '/furnitures/:id',
     name: 'furnituresItem',
     component: () => import('../views/Furnitures.vue')

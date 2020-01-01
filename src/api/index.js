@@ -13,6 +13,17 @@ class Request {
     });
   }
 
+  getSearchNav(serachItem) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + `furnitures/search${serachItem}`);
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   getSpecificProduct(paramsId) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -34,6 +45,7 @@ class Request {
       }
     })
   }
+
   deleteCartItem(cartItemId) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -45,6 +57,7 @@ class Request {
       }
     })
   }
+
   addCartItem(cartItemId) {
     return new Promise(async (resolve, reject) => {
       try {
