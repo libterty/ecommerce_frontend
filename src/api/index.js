@@ -115,6 +115,58 @@ class Request {
     })
   }
 
+  getAdminCoupons() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'admin/coupons');
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  postAdminCoupon(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postAuthRequest(config.ROOT_URL + 'admin/coupons', data);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  putAdminCoupon(id, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + `admin/coupons/${id}`, data);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  deleteAdminCoupon(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await deleteRequest(config.ROOT_URL + `admin/coupons/${id}`);
+        resolve (
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   getAdminOrders() {
     return new Promise(async (resolve, reject) => {
       try {
