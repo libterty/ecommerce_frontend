@@ -32,7 +32,6 @@ export default {
   },
   created() {
     if (auth) {
-      console.log('usertabs has problem')
       this.tabs = [
         {
           id: uuid(),

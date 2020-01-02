@@ -118,8 +118,8 @@ export default {
         const res = await request.getCart()
         if (res.status === 'success') {
           console.log(res)
-          this.cart = res.cart
-          this.totalPrice = res.totalPrice
+          this.initCart = res.cart
+          this.initTotalPrice = res.totalPrice
         }
       } catch (error) {
         Toast.fire({

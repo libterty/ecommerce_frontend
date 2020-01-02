@@ -63,7 +63,6 @@ export default {
   },
   beforeRouteUpdate(to, from, next) {
     const { id } = to.params
-    console.log('to.params', id)
     this.fetchFurniture(`/furnitures/${id}`)
     next()
   },
@@ -84,7 +83,6 @@ export default {
       try {
         const res = await request.postCart(data)
         if (res.status === 'success') {
-          console.log('success')
           Toast.fire({
             icon: 'success',
             title: 'Added to cart'
@@ -103,8 +101,8 @@ export default {
         const res = await request.getCart()
         if (res.status === 'success') {
           console.log(res)
-          this.cart = res.cart
-          this.totalPrice = res.totalPrice
+          this.initCart = res.cart
+          this.initTotalPrice = res.totalPrice
         }
       } catch (error) {
         Toast.fire({

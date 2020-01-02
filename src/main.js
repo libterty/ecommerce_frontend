@@ -10,10 +10,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'viewerjs/dist/viewer.css';
 import store from './store'
 
+
 Vue.use(BootstrapVue);
 Vue.use(Viewer);
 Vue.use(VCharts);
-Vue.config.productionTip = false;
+
 
 new Vue({
   router,
