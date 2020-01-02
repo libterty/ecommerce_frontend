@@ -2,6 +2,17 @@ import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthReques
 import config from '../config';
 
 class Request {
+  getCurrentUser() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'get_current_user');
+        resolve(res);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   getHomePageProduts() {
     return new Promise(async (resolve, reject) => {
       try {

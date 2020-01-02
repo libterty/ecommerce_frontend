@@ -35,7 +35,7 @@
                 <small>email</small>
               </i>
             </b-nav-item>
-            <b-nav-item :href="'/users/' + userId">
+            <b-nav-item :href="'/users/' + currentUser.id">
               <i class="material-icons">
                 <small>person</small>
               </i>
@@ -50,7 +50,8 @@
 <script>
 import { mdiEmailOutline, mdiAccount } from '@mdi/js';
 import { Toast } from '../utils/helpers';
-const auth = JSON.parse(localStorage.getItem('credit')) || null;
+import { mapState } from 'vuex';
+// const auth = JSON.parse(localStorage.getItem('credit')) || null;
 
 export default {
     data() {
@@ -61,10 +62,8 @@ export default {
             searchItem: ''
         }
     },
-    created() {
-      if (auth) {
-        this.userId = auth.user.id;
-      }
+    computed: {
+      ...mapState(['currentUser', 'isAuthenticated'])
     },
     methods: {
       submitSearch() {
