@@ -21,8 +21,9 @@
 </template>
 
 <script>
-import uuid from 'uuid/v4'
-const auth = JSON.parse(localStorage.getItem('credit')) || null
+import uuid from 'uuid/v4';
+const auth = JSON.parse(localStorage.getItem('credit')) || null;
+
 export default {
   data() {
     return {
@@ -32,7 +33,6 @@ export default {
   },
   created() {
     if (auth) {
-      console.log('usertabs has problem')
       this.tabs = [
         {
           id: uuid(),

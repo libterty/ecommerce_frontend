@@ -19,14 +19,15 @@
       </b-card>
     </div>
     <ShoppingCart
+      v-if="showCart"
       :init-cart="initCart"
       :init-total-price="initTotalPrice"
       @click-to-get-cart="clickToGetCart"
     />
     <br />
-    <HomeCarousel :initCarousels="initCarousels" />
+    <HomeCarousel v-if="showProduct" :initCarousels="initCarousels" />
     <br />
-    <HomeGrid :initProducts="initProducts" />
+    <HomeGrid v-if="showProduct" :initProducts="initProducts" />
   </b-container>
 </template>
 
@@ -46,6 +47,8 @@ export default {
   },
   data() {
     return {
+      showProduct: false,
+      showCart: false,
       initProducts: [],
       initCarousels: [],
       initCart: [],
@@ -54,10 +57,11 @@ export default {
   },
   async created() {
     try {
-      const resCart = await request.getCart()
+      const resCart = await request.getCart();
       if (resCart.status === 'success') {
-        this.initCart = resCart.cart
-        this.initTotalPrice = resCart.totalPrice
+        this.initCart = resCart.cart;
+        this.initTotalPrice = resCart.totalPrice;
+        this.showCart = true;
       }
       const res = await request.getHomePageProduts()
       if (res.status === 'success') {
@@ -65,28 +69,28 @@ export default {
         for (let i = 0; i < 5; i++) {
           this.initCarousels.push(this.initProducts[i])
         }
+        this.showProduct = true;
       }
     } catch (error) {
       Toast.fire({
         icon: 'error',
         title: 'Fetch cart failed'
-      })
+      });
     }
   },
   methods: {
     async clickToGetCart() {
       try {
-        const res = await request.getCart()
+        const res = await request.getCart();
         if (res.status === 'success') {
-          console.log(res)
-          this.cart = res.cart
-          this.totalPrice = res.totalPrice
+          this.initCart = res.cart;
+          this.initTotalPrice = res.totalPrice;
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: 'Fetch cart failed'
-        })
+        });
       }
     }
   }

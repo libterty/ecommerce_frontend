@@ -2,10 +2,32 @@ import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthReques
 import config from '../config';
 
 class Request {
+  getCurrentUser() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'get_current_user');
+        resolve(res);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   getHomePageProduts() {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getRequest(config.ROOT_URL + 'furnitures');
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  getSearchNav(serachItem) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getRequest(config.ROOT_URL + `furnitures/search${serachItem}`);
         resolve(res.data);
       } catch (error) {
         reject(error);
@@ -34,17 +56,18 @@ class Request {
       }
     })
   }
+
   deleteCartItem(cartItemId) {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await deleteRequest(`${config.ROOT_URL}cart/${cartItemId}`);
-        console.log('delete res.data', res.data)
         resolve(res.data);
       } catch (error) {
         reject(error);
       }
     })
   }
+
   addCartItem(cartItemId) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -119,7 +142,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + 'admin/coupons');
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -132,7 +155,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/coupons', data);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -145,7 +168,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await putAuthRequest(config.ROOT_URL + `admin/coupons/${id}`, data);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -158,7 +181,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await deleteRequest(config.ROOT_URL + `admin/coupons/${id}`);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -184,7 +207,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + 'admin/payments');
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -353,6 +376,19 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getRequest(config.ROOT_URL + 'furnitures/pagination' + search);
+        resolve(
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  createOrder(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postAuthRequest(config.ROOT_URL + 'orders/create', data);
         resolve(
           res.data
         );

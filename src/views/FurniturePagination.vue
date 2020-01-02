@@ -61,71 +61,70 @@ export default {
   },
   async created() {
     try {
-      const res = await request.getProducts()
-      const resCart = await request.getCart()
+      const res = await request.getProducts();
+      const resCart = await request.getCart();
       if (res.status === 'success') {
-        this.initProducts = res.products
-        this.initCategories = res.categories
-        this.initTotalPage = res.totalPage
-        this.isShow = true
+        this.initProducts = res.products;
+        this.initCategories = res.categories;
+        this.initTotalPage = res.totalPage;
+        this.isShow = true;
       }
       if (resCart.status === 'success') {
-        this.initCart = resCart.cart
-        this.initTotalPrice = resCart.totalPrice
+        this.initCart = resCart.cart;
+        this.initTotalPrice = resCart.totalPrice;
       }
     } catch (error) {
       Toast.fire({
         icon: 'error',
         title: error.message
-      })
+      });
     }
   },
   methods: {
     async afterSubmitCategory(search) {
       try {
-        const res = await request.getSearchProducts(search)
+        const res = await request.getSearchProducts(search);
         if (res.status === 'success') {
-          this.initProducts = res.products
-          this.isCategoryChange = !this.isCategoryChange
-          this.isShow = true
+          this.initProducts = res.products;
+          this.isCategoryChange = !this.isCategoryChange;
+          this.isShow = true;
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: error.message
-        })
+        });
       }
     },
     async afterSubmitPage(pageId) {
       let page
       try {
-        pageId === 1 ? (page = '') : (page = `?page=${pageId}`)
-        const res = await request.getSearchProducts(page)
+        pageId === 1 ? (page = '') : (page = `?page=${pageId}`);
+        const res = await request.getSearchProducts(page);
         if (res.status === 'success') {
-          this.initProducts = res.products
-          this.isPageChange = !this.isPageChange
-          this.isShow = true
+          this.initProducts = res.products;
+          this.isPageChange = !this.isPageChange;
+          this.isShow = true;
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: error.message
-        })
+        });
       }
     },
     async clickToGetCart() {
       try {
-        const res = await request.getCart()
+        const res = await request.getCart();
         if (res.status === 'success') {
-          console.log(res)
-          this.cart = res.cart
-          this.totalPrice = res.totalPrice
+          this.initCart = res.cart;
+          this.initTotalPrice = res.totalPrice;
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: 'Fetch cart failed'
-        })
+        });
       }
     }
   }
