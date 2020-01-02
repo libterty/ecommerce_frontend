@@ -50,7 +50,6 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await deleteRequest(`${config.ROOT_URL}cart/${cartItemId}`);
-        console.log('delete res.data', res.data)
         resolve(res.data);
       } catch (error) {
         reject(error);
@@ -132,7 +131,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + 'admin/coupons');
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -145,7 +144,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'admin/coupons', data);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -158,7 +157,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await putAuthRequest(config.ROOT_URL + `admin/coupons/${id}`, data);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -171,7 +170,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await deleteRequest(config.ROOT_URL + `admin/coupons/${id}`);
-        resolve (
+        resolve(
           res.data
         );
       } catch (error) {
@@ -197,7 +196,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + 'admin/payments');
-        resolve (
+        resolve(
           res
         );
       } catch (error) {
@@ -366,6 +365,19 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getRequest(config.ROOT_URL + 'furnitures/pagination' + search);
+        resolve(
+          res.data
+        );
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  createOrder(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await postAuthRequest(config.ROOT_URL + 'orders/create', data);
         resolve(
           res.data
         );

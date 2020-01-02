@@ -6,7 +6,7 @@
       height="110"
       contain
       class="btn cart-icon"
-      @click="getCart"
+      @click.stop.prevent="getCart"
     />
     <v-dialog
       scrollable
@@ -75,7 +75,8 @@
             rounded
             style="padding: 0 3em;"
             @click="dialog = false"
-          >BUY NOW</v-btn>
+            :to="{name:'cart'}"
+          >GO TO CART</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
