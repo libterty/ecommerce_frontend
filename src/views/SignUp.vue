@@ -17,6 +17,7 @@
                     <b-form-input
                         id="name-input"
                         v-model="form.name"
+                        :state="form.name.length > 0"
                         type="text"
                         required
                         placeholder="Enter username"
@@ -32,6 +33,7 @@
                     <b-form-input
                         id="email-input"
                         v-model="form.email"
+                        :state="form.email.length > 0"
                         type="email"
                         required
                         placeholder="Enter email"
@@ -47,6 +49,7 @@
                     <b-form-input
                         id="password-input"
                         v-model="form.password"
+                        :state="form.password.length > 6"
                         type="password"
                         required
                         placeholder="Enter password"
@@ -62,6 +65,7 @@
                     <b-form-input
                         id="passwordCheck-input"
                         v-model="form.passwordCheck"
+                        :state="form.passwordCheck.length > 6"
                         type="password"
                         required
                         placeholder="Confirm your Password"
@@ -79,6 +83,7 @@
 
 <script>
 import Request from '../api';
+import { Toast } from '../utils/helpers';
 const request = new Request();
 
 export default {
@@ -98,16 +103,26 @@ export default {
             evt.preventDefault();
             confirm('Confirm to SignUp ?');
             if (!this.form.name || !this.form.email || !this.form.password || !this.form.passwordCheck) {
-                alert('Empty Input')
+                return Toast.fire({ icon: 'warning', title: 'empty input' });
+            } else if (this.form.password.length < 6) {
+                return Toast.fire({ icon: 'warning', title: 'Password is not strong enough' });
             } else if (this.form.password !== this.form.passwordCheck) {
-                alert('Please check if both of your password is correct');
+                return Toast.fire({ icon: 'warning', title: 'Please check if both of your password is correct' });
             } else {
-                const data = JSON.stringify(this.form);
-                const res = await request.postSignUp(data);
-                if (res.status === 'success') {
-                    this.$router
-                        .go({ name: 'SignIn' })
-                        .catch(e => console.log(e));
+                try {
+                    const data = JSON.stringify(this.form);
+                    const res = await request.postSignUp(data);
+                    if (res.status === 'success') {
+                        return Toast.fire({
+                            icon: 'success',
+                            title: 'Signup success'
+                        });
+                    }
+                } catch (error) {
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'Something went wrong'
+                    });
                 }
             }
         },

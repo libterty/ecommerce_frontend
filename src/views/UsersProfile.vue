@@ -11,10 +11,11 @@
 </template>
 
 <script>
-import UsersProfile from '../components/UsersProfile.vue'
-import UserTabs from '../components/UserTabs'
-import Request from '../api/index'
-const request = new Request()
+import UsersProfile from '../components/UsersProfile.vue';
+import UserTabs from '../components/UserTabs';
+import Request from '../api/index';
+import { Toast } from '../utils/helpers';
+const request = new Request();
 
 export default {
   components: {
@@ -28,21 +29,39 @@ export default {
     }
   },
   async created() {
-    const path = document.location.pathname.replace(/\//, '')
-    const res = await request.getUser(path)
-    if (res.status === 'success') {
-      this.initUser = res.user
-      this.isShow = true
+    try {
+      const path = document.location.pathname.replace(/\//, '');
+      const res = await request.getUser(path);
+      if (res.status === 'success') {
+        this.initUser = res.user;
+        this.isShow = true;
+      }
+    } catch (error) {
+      Toast.fire({
+        icon: 'warning',
+        title: 'Something went wrong'
+      });
     }
   },
   methods: {
     async afterSubmitProfile(formData) {
-      const path = document.location.pathname.replace(/\//, '')
-      const res = await request.putUser(path, formData)
-      if (res.status === 'success') {
-        const res = await request.getUser(path)
-        this.initUser = res.user
-        this.isShow = true
+      try {
+        const path = document.location.pathname.replace(/\//, '');
+        const res = await request.putUser(path, formData);
+        if (res.status === 'success') {
+          const res = await request.getUser(path);
+          this.initUser = res.user;
+          this.isShow = true;
+          return Toast.fire({
+            icon: 'success',
+            title: 'Upadte Profile success'
+          });
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'warning',
+          title: 'Something went wrong'
+        });
       }
     }
   }

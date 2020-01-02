@@ -111,6 +111,7 @@
           <b-form-input
             id="birthday"
             v-model="form.birthday"
+            @change="checkDate(form.birthday)"
             type="date"
             name="birthday"
             :placeholder="initUser.birthday"
@@ -182,6 +183,8 @@
 </template>
 
 <script>
+import { Toast } from '../utils/helpers';
+
 export default {
   props: {
     initUser: {
@@ -202,21 +205,36 @@ export default {
     }
   },
   methods: {
+    checkDate(chooseTime) {
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth() + 1;
+      const currentDate = new Date().getDate();
+      const unixTime = new Date(currentYear + '-' + currentMonth + '-' + currentDate).getTime();
+      const userChoose = new Date(chooseTime).getTime();
+      if (userChoose < unixTime) {
+        return true;
+      }
+      return false;
+    },
     handleFileChange(e) {
-      const files = e.target.files
-      if (!files.length) return
-      const imageURL = window.URL.createObjectURL(files[0])
-      this.form.avatar = imageURL
+      const files = e.target.files;
+      if (!files.length) return;
+      const imageURL = window.URL.createObjectURL(files[0]);
+      this.form.avatar = imageURL;
     },
     updateUserProfile(e) {
-      const form = e.target
-      const formData = new FormData(form)
-      this.$emit('after-submit-profile', formData)
+      if (!this.checkDate(this.form.birthday)) {
+        return Toast.fire({ icon: 'warning', title: 'Wrong Date Input Detected' });
+      }
+
+      const form = e.target;
+      const formData = new FormData(form);
+      this.$emit('after-submit-profile', formData);
     }
   },
   watch: {
     initUser: function(updateData) {
-      this.initUser = updateData
+      this.initUser = updateData;
     }
   }
 }

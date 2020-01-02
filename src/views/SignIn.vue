@@ -49,6 +49,7 @@
 
 <script>
 import Request from '../api';
+import { Toast } from '../utils/helpers';
 const request = new Request();
 
 export default {
@@ -66,17 +67,27 @@ export default {
             evt.preventDefault();
             confirm('Confirm to SignIn ?');
             if (this.form.email !== '' || this.form.password !== '') {
-                const data = JSON.stringify(this.form);
-                const res = await request.postSignIn(data);
-                if (res.status === 'success') {
-                    this.$router
-                        .go({ name: 'home' })
-                        .catch(e => console.log(e));
-                } else {
-                    throw new Error(res.message);
+                try {
+                    const data = JSON.stringify(this.form);
+                    const res = await request.postSignIn(data);
+                    if (res.status === 'success') {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Login Success'
+                        });
+                        return this.$router.go({ name: 'home' });
+                    }
+                } catch (error) {
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'Something went wrong'
+                    });
                 }
             } else {
-                alert('Please fill in all the Form');
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Please fill in all the required form'
+                });
             }
         },
         onReset() {

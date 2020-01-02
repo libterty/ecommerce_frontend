@@ -2,12 +2,12 @@
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info" fixed sticky>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-navbar-brand href="#">NavBar</b-navbar-brand>
+      <b-navbar-brand href="/">NavBar</b-navbar-brand>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav left>
           <b-nav-item href="#">Promotion</b-nav-item>
           <b-nav-item href="#">Space</b-nav-item>
-          <b-nav-item href="#">Furniture</b-nav-item>
+          <b-nav-item href="/furnitures">Furniture</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
@@ -40,6 +40,16 @@
                 <small>person</small>
               </i>
             </b-nav-item>
+            <b-nav-item
+              v-if="isAuthenticated"
+            >
+              <b-button
+                size="sm"
+                class="my-2 my-sm-0"
+                type="button"
+                @click="logout"
+              >Logout</b-button>
+            </b-nav-item>
           </b-navbar-nav>
         </b-navbar-nav>
       </b-collapse>
@@ -71,6 +81,11 @@ export default {
           return Toast.fire({ icon: 'warning', title: "Required Field didn't exist" });
         }
         this.$router.push({ path: '/furnitures/search', query: { items: this.searchItem }});
+      },
+      logout() {
+        this.$store.commit('revokeAuthentication');
+        localStorage.clear();
+        this.$router.go({ name: 'SignIn' });
       }
     }
 }

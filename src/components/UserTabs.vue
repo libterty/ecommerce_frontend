@@ -21,8 +21,9 @@
 </template>
 
 <script>
-import uuid from 'uuid/v4'
-const auth = JSON.parse(localStorage.getItem('credit')) || null
+import uuid from 'uuid/v4';
+const auth = JSON.parse(localStorage.getItem('credit')) || null;
+
 export default {
   data() {
     return {

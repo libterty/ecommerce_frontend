@@ -40,7 +40,7 @@ export default {
             Toast.fire({
                 icon: 'warning',
                 title: 'Something went wrong'
-            })
+            });
         }
     },
     methods: {
