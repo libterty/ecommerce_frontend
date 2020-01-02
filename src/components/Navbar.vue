@@ -84,7 +84,6 @@ export default {
       },
       logout() {
         this.$store.commit('revokeAuthentication');
-        localStorage.clear();
         this.$router.go({ name: 'SignIn' });
       }
     }

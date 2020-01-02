@@ -27,7 +27,7 @@ export default new Vuex.Store({
       state.currentUser = {}
       state.isAuthenticated = false
       state.token = ''
-      localStorage.removeItem('token')
+      localStorage.removeItem('credit')
     }
   },
   actions: {
