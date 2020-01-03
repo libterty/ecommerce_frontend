@@ -2,23 +2,15 @@
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info" fixed sticky>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-navbar-brand href="/">NavBar</b-navbar-brand>
+      <b-navbar-brand href="/">MAYNOOTH</b-navbar-brand>
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav left>
-          <b-nav-item href="#">Promotion</b-nav-item>
-          <b-nav-item href="#">Space</b-nav-item>
-          <b-nav-item href="/furnitures">Furniture</b-nav-item>
-        </b-navbar-nav>
-
         <b-navbar-nav class="ml-auto">
           <b-navbar-nav>
-            <b-nav-item href="#">Inspiration</b-nav-item>
-            <b-nav-item href="#">About</b-nav-item>
+            <b-nav-item href="/furnitures">Furniture</b-nav-item>
           </b-navbar-nav>
           <b-nav-form class="Navbar-search" @submit.stop.prevent="submitSearch">
             <b-form-input
               v-model="searchItem"
-              :state="searchItem.length > 0"
               size="sm"
               class="mr-sm-2"
               placeholder="Search"
@@ -92,11 +84,11 @@ export default {
 <style scoped>
 @media screen and (max-width: 992px) {
     .Navbar-search {
-        align-self: center;
+      align-self: center;
     }
 
     .form-inline {
-        flex-flow: row nowrap;
+      flex-flow: row nowrap;
     }
 }
 </style>

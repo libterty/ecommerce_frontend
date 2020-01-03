@@ -1,33 +1,48 @@
 <template>
-    <div>
-        <b-navbar toggleable="lg" type="light" fixed="bottom" class="footer-flex">
-            <b-container fluid>
-                <b-row>
-                    <b-col md="12">
-                        <div class="mb-5 flex-center">
-                            <a class="fb-ic"><i class="fab fa-facebook fa-lg white-text mr-md-5 mr-3 fa-2x"> </i></a>
-                            <a class="tw-ic"><i class="fab fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x"> </i></a>
-                            <a class="gplus-ic"><i class="fab fa-google-plus fa-lg white-text mr-md-5 mr-3 fa-2x"> </i></a>
-                            <a class="li-ic"><i class="fab fa-linkedin-in fa-lg white-text mr-md-5 mr-3 fa-2x"> </i></a>
-                            <a class="ins-ic"><i class="fab fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x"> </i></a>
-                            <a class="pin-ic"><i class="fab fa-pinterest fa-lg white-text fa-2x"> </i></a>
-                        </div>
-                    </b-col>
-                </b-row>
-            </b-container>
-            <div class="footer-copyright text-center py-3">
-                <b-container>
-                    &copy; 2019 Copyright: <a href="#"> e-commerce.com </a>
-                </b-container>
-            </div>
-        </b-navbar>
-    </div>
+    <v-footer color="primary lighten-1" padless fixed>
+        <v-row justify="center" no-gutters>
+            <v-btn
+                v-for="icon in icons"
+                :key="icon"
+                class="mx-4 white--text"
+                icon
+            >
+                <v-icon size="24px">{{ icon }}</v-icon>
+            </v-btn>
+            <v-col
+                class="primary lighten-2 py-4 text-center white--text"
+                cols="12"
+            >
+                © {{ new Date().getFullYear() }} — <strong>MAYNOOTH | All Rights Reserved.</strong>
+            </v-col>
+        </v-row>
+    </v-footer>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            icons: [
+                'fab fa-facebook',
+                'fab fa-twitter',
+                'fab fa-google-plus',
+                'fab fa-linkedin',
+                'fab fa-instagram',
+            ]
+        }
+    }
+}
+</script>
 
 <style scoped>
 .footer-flex {
     display: flex;
     flex-direction: column;
     background-color: #1fc8e3;
+}
+#wrapper-footer {
+    min-height: 108px;
+    max-height: 108px;
 }
 </style>
