@@ -110,6 +110,7 @@
             <b-list-group flush>
               <b-list-group-item class="text-left">
                 <i class="material-icons">local_shipping</i>
+                <p class="text-muted">黑貓宅急便</p>
               </b-list-group-item>
             </b-list-group>
           </b-card-body>

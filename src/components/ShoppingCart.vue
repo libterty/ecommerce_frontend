@@ -124,6 +124,7 @@ export default {
 <style scoped>
 #wrapper {
   height: 0;
+  position: absolute;
 }
 .cart-icon {
   position: fixed;

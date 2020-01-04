@@ -23,7 +23,7 @@ export default {
         async afterCreateProduct(formData) {
             const res = await request.postNewProduct(formData);
             if (res.status === 200) {
-                Toast.fire({
+                return Toast.fire({
                     icon: 'success',
                     title: `${res.data.message}`
                 });

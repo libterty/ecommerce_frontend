@@ -4,6 +4,8 @@ import Home from '../views/Home.vue';
 import NotFound from '../views/NotFound.vue';
 import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
+import store from '../store';
+// const credit = JSON.parse(localStorage.getItem('credit'));
 
 Vue.use(VueRouter);
 
@@ -104,5 +106,41 @@ const router = new VueRouter({
   mode: 'history',
   routes
 });
+
+router.beforeEach(async (to, from , next) => {
+  await store.dispatch('getCurrentUser');
+
+  const userState = store.state;
+  let credit = userState.isAuthenticated;
+  let isAdmin = userState.currentUser.isAdmin;
+  if(
+      !credit && 
+      to.name !=='SignIn' && 
+      to.name !=='SignUp' && 
+      to.name !== 'furniturePagination' &&
+      to.name !== 'furnitures-Search' &&
+      to.name !== 'furnituresItem' &&
+      to.name !== 'cart'
+    ) {
+    next('/signin');
+    return;
+  }
+
+  if (credit) {
+    if (to.name === 'SignIn' || to.name === 'Signup') {
+      next('/');
+      return;
+    }
+  }
+
+  if (credit && isAdmin === false) {
+    if (to.path.includes('/admin')) {
+      next('/404');
+      return;
+    }
+  }
+
+  next();
+})
 
 export default router;

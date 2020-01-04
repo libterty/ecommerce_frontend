@@ -2,6 +2,7 @@
   <b-container
     fluid
     style="max-width: 75%;"
+    v-if="isShow"
   >
     <FurnituresDashboard
       :initProduct="initProduct"
@@ -38,6 +39,7 @@ export default {
   },
   data() {
     return {
+      isShow: false,
       initProduct: {},
       initImages: [],
       initColors: [],
@@ -53,12 +55,13 @@ export default {
       if (res.status === 'success') {
         this.initCart = res.cart
         this.initTotalPrice = res.totalPrice
+        this.isShow = true;
       }
     } catch (error) {
       Toast.fire({
         icon: 'error',
         title: 'Fetch cart failed'
-      })
+      });
     }
   },
   beforeRouteUpdate(to, from, next) {
@@ -74,9 +77,13 @@ export default {
           this.initProduct = res.product
           this.initImages = res.Images
           this.initColors = res.Colors
+          this.isShow = true;
         }
       } catch (error) {
-        this.error = error.message
+        Toast.fire({
+          icon: 'error',
+          title: 'Fetch cart failed'
+        });
       }
     },
     async afterAddToCart(data) {
@@ -86,21 +93,19 @@ export default {
           Toast.fire({
             icon: 'success',
             title: 'Added to cart'
-          })
+          });
         }
       } catch (error) {
-        console.log('error', error)
         Toast.fire({
           icon: 'error',
           title: 'Fail to add to cart'
-        })
+        });
       }
     },
     async clickToGetCart() {
       try {
         const res = await request.getCart()
         if (res.status === 'success') {
-          console.log(res)
           this.initCart = res.cart
           this.initTotalPrice = res.totalPrice
         }
