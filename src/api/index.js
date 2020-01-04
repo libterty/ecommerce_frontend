@@ -386,6 +386,19 @@ class Request {
       }
     })
   }
+
+  getOrder(paramsId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `orders/${paramsId}`);
+        resolve(
+          res
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 export default Request;
