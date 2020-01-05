@@ -323,7 +323,7 @@ export default {
         tel: this.tel,
         UserId: auth.user.id,
         CartId: this.cart.length > 0 ? this.cart[0].CartId : -1,
-        address: this.zip + this.county + this.district + this.address
+        address: this.zip + this.county + this.district + this.initialAddress
       }
     }
   },
@@ -417,7 +417,10 @@ export default {
         const data = JSON.stringify(this.form)
         const res = await request.createOrder(data)
         if (res.status === 'success') {
-          this.$router.push({ name: 'order' })
+          this.$router.push({
+            name: 'order',
+            params: { userId: this.form.UserId }
+          })
         } else {
           this.$router.push({ name: 'cart' })
           this.dialog = false

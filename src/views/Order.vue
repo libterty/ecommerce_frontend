@@ -152,73 +152,60 @@
                     </v-btn>
                   </template>
                   <v-card>
-                    <v-card-title>
-                      <span class="headline text--darken-3 cyan--text">Shipping Info</span>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-text-field
-                        ref="tel"
-                        v-model="tel"
-                        :rules="[() => !!tel || 'This field is required',
-              () => (/\d/g).test(tel) || 'Must fill in phone number',
-              ()=> tel.length<10 || 'Phone must be 10 digits']"
-                        :error-messages="errorMessages"
-                        label="Phone Number"
-                        placeholder="0912345678"
-                        required
-                      ></v-text-field>
-                      <v-text-field
-                        ref="initialAddress"
-                        v-model="initialAddress"
-                        :rules="[
-              () => !!initialAddress || 'This field is required',
-              () => initialAddress.length <= 40 || 'Address must be less than 40 characters'
-            ]"
-                        label="Address Line"
-                        placeholder="Snowy Rock Pl"
-                        counter="40"
-                        required
-                      ></v-text-field>
-                      <v-text-field
-                        ref="district"
-                        v-model="district"
-                        :rules="[() => !!district || 'This field is required']"
-                        label="District / Township"
-                        required
-                        placeholder="士林區"
-                      ></v-text-field>
-                      <v-text-field
-                        ref="zip"
-                        v-model="zip"
-                        :rules="[() => !!zip || 'This field is required',
-              () => zip.length <= 3 || 'Zip must be less than 3 characters']"
-                        label="ZIP / Postal Code"
-                        required
-                        placeholder="168"
-                      ></v-text-field>
-                      <v-autocomplete
-                        ref="county"
-                        :search-input.sync="county"
-                        :rules="[() => !!county || 'This field is required']"
-                        :items="counties"
-                        label="County / City"
-                        placeholder="Select..."
-                        required
-                      ></v-autocomplete>
-                    </v-card-text>
-                    <v-divider class="mt-12"></v-divider>
-                    <v-card-actions>
-                      <v-btn
-                        text
-                        @click="dialog=false"
-                      >Cancel</v-btn>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        color="primary"
-                        text
-                        @click.stop.prevent="createOrder"
-                      >Submit</v-btn>
-                    </v-card-actions>
+                    <v-form ref="form">
+                      <v-card-title>
+                        <span class="headline text--darken-3 cyan--text">Shipping Info</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-text-field
+                          ref="name"
+                          v-model="name"
+                          :rules="nameRules"
+                          label="Full Name"
+                          placeholder="Jack Chang"
+                          required
+                        ></v-text-field>
+
+                        <v-text-field
+                          ref="email"
+                          v-model="email"
+                          :rules="emailRules"
+                          required
+                          label="Email"
+                          placeholder="abc@email.com"
+                        ></v-text-field>
+                        <v-text-field
+                          ref="tel"
+                          v-model="tel"
+                          :rules="telRules"
+                          label="Phone Number"
+                          placeholder="0912345678"
+                          required
+                        ></v-text-field>
+                        <v-text-field
+                          ref="address"
+                          v-model="address"
+                          :rules="addressRules"
+                          label="Address Line"
+                          placeholder="Snowy Rock Pl"
+                          counter="40"
+                          required
+                        ></v-text-field>
+                      </v-card-text>
+                      <v-divider class="mt-12"></v-divider>
+                      <v-card-actions>
+                        <v-btn
+                          text
+                          @click="dialog=false"
+                        >Cancel</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="primary"
+                          text
+                          @click.stop.prevent="putOrder(order.id,order.UserId)"
+                        >Submit</v-btn>
+                      </v-card-actions>
+                    </v-form>
                   </v-card>
                 </v-dialog>
               </v-row>
@@ -235,6 +222,10 @@
                 <p class="title">
                   Order Status:
                   <span class="body-1">{{order.order_status}}</span>
+                </p>
+                <p class="title">
+                  Shipping method:
+                  <span class="body-1">{{shippingMethod}}</span>
                 </p>
                 <p class="title">
                   Payment Status:
@@ -298,14 +289,108 @@
 
               <span class="display-1 mr-10 text--darken-3 cyan--text">Total ${{order.total_amount}}</span>
 
-              <v-btn
-                raised
-                color="error"
-                x-large
-                class="mt-3 red lighten-3 dialog-btn"
-                style="padding: 0 1em ; margin-right: 2.5em;"
-                :to="{name:'payment', params:{orderId: order.id,userId:UserId}}"
-              >Create Payment</v-btn>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-row justify="end">
+                  <v-dialog
+                    v-model="confirmFormDialog"
+                    persistent
+                    max-width="600px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        raised
+                        color="error"
+                        x-large
+                        class="mt-3 red lighten-3 dialog-btn"
+                        style="padding: 0 1em ; margin-right: 2.5em;"
+                        v-on="on"
+                        @click.stop.prevent="createPayment(order.id,order.UserId)"
+                      >Create Payment</v-btn>
+                    </template>
+                    <v-form>
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline text--darken-3 cyan--text">Confirm info</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-text-field
+                            ref="tel"
+                            v-model="tel"
+                            label="Phone Number"
+                            placeholder="0912345678"
+                            disabled
+                          ></v-text-field>
+                          <v-text-field
+                            ref="address"
+                            v-model="address"
+                            disabled
+                            label="Address Line"
+                            placeholder="Snowy Rock Pl"
+                          ></v-text-field>
+                          <span
+                            class="display-1 mr-10 text--darken-3 cyan--text"
+                          >Total ${{paymentInfo.total_amount}}</span>
+                          <form
+                            name="Spgateway"
+                            :action="tradeInfo.PayGateWay"
+                            method="POST"
+                          >
+                            MerchantID:
+                            <input
+                              type="text"
+                              name="MerchantID"
+                              :value="tradeInfo.MerchantID"
+                            />
+                            <br />TradeInfo:
+                            <input
+                              type="text"
+                              name="TradeInfo"
+                              :value="tradeInfo.TradeInfo"
+                            />
+                            <br />TradeSha:
+                            <input
+                              type="text"
+                              name="TradeSha"
+                              :value="tradeInfo.TradeSha"
+                            />
+                            <br />Version:
+                            <input
+                              type="text"
+                              name="Version"
+                              :value="tradeInfo.Version"
+                            />
+                            <br />
+                            <v-btn
+                              text
+                              @click="confirmFormDialog=false"
+                            >Cancel</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              color="primary"
+                              text
+                              type="submit"
+                            >Payment</v-btn>
+                          </form>
+                        </v-card-text>
+                        <v-divider class="mt-5"></v-divider>
+                        <v-card-actions>
+                          <v-btn
+                            text
+                            @click="confirmFormDialog=false"
+                          >Cancel</v-btn>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="primary"
+                            text
+                            @click.stop.prevent="spgatewayCallback"
+                          >Confirm</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
+                  </v-dialog>
+                </v-row>
+              </v-card-actions>
             </v-row>
           </v-card>
         </v-col>
@@ -320,72 +405,60 @@ import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'
 const request = new Request()
 // TODO: color & image display in template, using fake data now
-// TODO: depends on added shippingFee or not to show shipping fee or shippingFee
+
 export default {
+  name: 'Order',
   mixins: [convertClassFilter, convertLanguageFilter],
+
   data() {
     return {
       order: [],
       totalPrice: 0,
       dialog: false,
-      counties: [
-        '臺北市',
-        '新北市',
-        '基隆市',
-        '桃園市',
-        '新竹縣',
-        '新竹市',
-        '苗栗縣',
-        '臺中市',
-        '南投縣',
-        '彰化縣',
-        '雲林縣',
-        '嘉義縣',
-        '嘉義市',
-        '臺南市',
-        '高雄市',
-        '屏東縣',
-        '宜蘭縣',
-        '花蓮縣',
-        '臺東縣',
-        '澎湖縣',
-        '金門縣',
-        '連江縣'
-      ],
       errorMessages: '',
       tel: '',
-      initialAddress: '',
+      telRules: [
+        v => !!v || 'Phone Number is required',
+        v => /\d/g.test(v) || 'Must fill in phone number',
+        v => v.length <= 10 || 'Phone must be 10 digits'
+      ],
       address: '',
-      district: null,
-      zip: null,
-      county: null,
+      addressRules: [
+        v => !!v || 'Address is required',
+        v => v.length <= 40 || 'Address must be less than 40 characters'
+      ],
       formHasErrors: false,
       CartId: null,
       coupon: '',
       discount: 0,
       name: '',
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+      ],
       email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+      ],
+
       UserId: null,
-      shippingFee: null,
-      shippingMethod: null,
-      color: 'black'
+      shippingFee: 350,
+      shippingMethod: '黑貓宅急便',
+      color: 'black',
+      isPutOrder: false,
+      confirmFormDialog: false,
+      tradeInfo: {},
+      paymentInfo: []
     }
   },
   computed: {
-    beforeAttach() {
-      return {
-        initialAddress: this.initialAddress,
-        district: this.district,
-        zip: this.zip,
-        county: this.county
-      }
-    },
     form() {
       return {
         tel: this.tel,
         UserId: this.UserId,
         name: this.name,
-        address: this.zip + this.county + this.district + this.address,
+        address: this.address,
         email: this.email
       }
     },
@@ -393,7 +466,7 @@ export default {
       return {
         shippingMethod: this.shippingMethod,
         shippingStatus: this.order.shipping_status,
-        shippingFee: this.totalPrice > 3000 ? 0 : 350,
+        shippingFee: this.shippingFee,
         address: this.form.address,
         name: this.form.name,
         email: this.form.email,
@@ -409,23 +482,72 @@ export default {
     async fetchOrder(userId) {
       try {
         const res = await request.getOrder(userId)
+
         if (res.status === 'success') {
-          console.log('success')
           this.order = res.order
           this.totalPrice = res.order.total_amount
-          this.initialAddress = res.order.address
           this.address = res.order.address
           this.name = res.order.name
           this.email = res.order.email
-          this.tel = res.order.phone
+          this.tel = res.order.phone.replace(/[^0-9]/gi, '')
           this.UserId = res.order.UserId
-          this.shippingFee = res.order.total_amount > 3000 ? 0 : 350
         }
       } catch (error) {
-        console.log(error)
         Toast.fire({
           icon: 'error',
           title: 'Fetch order failed'
+        })
+      }
+    },
+    async putOrder(orderId, userId) {
+      try {
+        if (this.$refs.form.validate(true)) {
+          const data = JSON.stringify(this.putOrderForm)
+          const res = await request.putOrder(orderId, userId, data)
+          if (res.status === 'success') {
+            this.dialog = false
+            this.isPutOrder = true
+            Toast.fire({
+              icon: 'success',
+              title: res.message
+            })
+          } else {
+            Toast.fire({
+              icon: 'error',
+              title: 'Shipping info validate failed'
+            })
+          }
+        }
+      } catch (error) {
+        console.log('putOrder error', error)
+        this.isPutOrder = false
+        this.dialog = false
+        Toast.fire({
+          icon: 'error',
+          title: 'Update order failed'
+        })
+      }
+    },
+    async createPayment(orderId, userId) {
+      try {
+        await this.putOrder(orderId, userId)
+        const res = await request.createPayment(orderId, userId)
+        //TODO: hide trade info in the input and let user double check the info
+        if (res.status === 'success') {
+          this.isPutOrder = true
+          this.tradeInfo = res.tradeInfo
+          this.paymentInfo = res.paymentInfo
+          console.log('createPayment success')
+          Toast.fire({
+            icon: 'success',
+            title: res.message
+          })
+        }
+      } catch (error) {
+        console.log('createPayment failed', error)
+        Toast.fire({
+          icon: 'error',
+          title: 'create payment failed'
         })
       }
     }

@@ -410,6 +410,35 @@ class Request {
       }
     })
   }
+
+  putOrder(orderId, userId, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await putAuthRequest(config.ROOT_URL + `orders/${orderId}/users/${userId}`, data)
+        resolve(
+          res.data
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  createPayment(orderId, userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `payments/${orderId}/users/${userId}`);
+        console.log('create payment api success')
+        resolve(
+          res
+        )
+      } catch (error) {
+        console.log('create payment api failed')
+        reject(error)
+      }
+    })
+  }
+
 }
 
 export default Request;
