@@ -11,6 +11,8 @@ export default new Vuex.Store({
       id: -1,
       name: '',
       email: '',
+      address: '',
+      tel: '',
       isAdmin: false
     },
     isAuthenticated: false
@@ -41,6 +43,8 @@ export default new Vuex.Store({
           id: res.id,
           name: res.name,
           email: res.email,
+          address: res.address,
+          tel: res.tel,
           isAdmin: res.isAdmin
         });
         return true;

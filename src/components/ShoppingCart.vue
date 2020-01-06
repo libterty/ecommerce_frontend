@@ -32,14 +32,13 @@
               :key="item.id"
               :to="{name:'furnituresItem',params:{id:item.Product.id}}"
             >
-              <v-list-avatar>
-                <v-img
-                  class="mr-2"
-                  :src="item.Image.url"
-                  width="100"
-                  height="100"
-                ></v-img>
-              </v-list-avatar>
+              <v-img
+                class="mr-2"
+                :src="item.Image.url"
+                width="100"
+                height="100"
+              ></v-img>
+
               <div class="cart-content">
                 <v-list-item-title>{{item.Product.name}}</v-list-item-title>
                 <small
@@ -124,6 +123,7 @@ export default {
 <style scoped>
 #wrapper {
   height: 0;
+  position: absolute;
 }
 .cart-icon {
   position: fixed;

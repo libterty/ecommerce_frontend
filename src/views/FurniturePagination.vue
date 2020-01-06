@@ -1,5 +1,5 @@
 <template>
-  <b-container class="py-5">
+  <b-container>
     <ShoppingCart
       :init-cart="initCart"
       :init-total-price="initTotalPrice"

@@ -34,7 +34,7 @@ export default {
     filters: {
         shortenDesc(d) {
             if (!d) return 'No description yet';
-            return d.substring(0, 50);
+            return d.substring(0, 25);
         }
     },
     watch: {
@@ -44,3 +44,26 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+h4.card-title {
+  white-space: nowrap;
+  font-size: medium;
+}
+p.card-text {
+  min-height: 48px;
+}
+img.card-img-top {
+  min-height: 148px;
+  max-height: 149px;
+}
+a.btn.btn-primary {
+  white-space: nowrap;
+  font-size: x-small;
+  color: antiquewhite;
+}
+button.btn.btn-primary.disabled {
+  font-size: x-small;
+  white-space: nowrap;
+}
+</style>

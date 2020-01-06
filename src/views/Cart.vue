@@ -16,7 +16,7 @@
             >
               <span class="cart-title display-1">|Shopping cart|</span>
               <v-card-title
-                class="text-muted mb-5 display-1"
+                class="text-muted mb-5 headline"
                 v-if="totalPrice<1"
               >No Data</v-card-title>
             </v-col>
@@ -255,6 +255,9 @@ import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'
 const request = new Request()
 const auth = JSON.parse(localStorage.getItem('credit')) || null
+// TODO: if user has address info , don't show up to fill address, use auth to get user data
+// TODO: user get user info api to get address and phone number
+//  TODO: can user id get from store? check in ac course
 
 export default {
   name: 'Cart',
@@ -266,6 +269,7 @@ export default {
     return {
       cart: [],
       totalPrice: 0,
+      user: [],
       dialog: false,
       counties: [
         '臺北市',
@@ -318,8 +322,8 @@ export default {
       return {
         tel: this.tel,
         UserId: auth.user.id,
-        CartId: this.cart[0].CartId,
-        address: this.zip + this.county + this.district + this.address
+        CartId: this.cart.length > 0 ? this.cart[0].CartId : -1,
+        address: this.zip + this.county + this.district + this.initialAddress
       }
     }
   },
@@ -413,7 +417,10 @@ export default {
         const data = JSON.stringify(this.form)
         const res = await request.createOrder(data)
         if (res.status === 'success') {
-          this.$router.push({ name: 'order' })
+          this.$router.push({
+            name: 'order',
+            params: { userId: this.form.UserId }
+          })
         } else {
           this.$router.push({ name: 'cart' })
           this.dialog = false
