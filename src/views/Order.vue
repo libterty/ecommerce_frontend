@@ -492,9 +492,10 @@ export default {
           this.UserId = res.order.UserId
         }
       } catch (error) {
+        this.$router.push({ name: 'cart' })
         Toast.fire({
           icon: 'error',
-          title: 'Fetch order failed'
+          title: 'Order is not found'
         })
       }
     },
@@ -561,6 +562,26 @@ export default {
           title: 'create payment failed'
         })
       }
+    }
+  },
+  watch: {
+    order: function(updateData) {
+      this.order = updateData
+    },
+    totalPrice: function(updateData) {
+      this.totalPrice = updateData
+    },
+    tel: function(updateData) {
+      this.tel = updateData
+    },
+    address: function(updateData) {
+      this.address = updateData
+    },
+    name: function(updateData) {
+      this.name = updateData
+    },
+    email: function(updateData) {
+      this.email = updateData
     }
   }
 }
