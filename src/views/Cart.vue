@@ -16,7 +16,7 @@
             >
               <span class="cart-title display-1">|Shopping cart|</span>
               <v-card-title
-                class="text-muted mb-5 display-1"
+                class="text-muted mb-5 headline"
                 v-if="totalPrice<1"
               >No Data</v-card-title>
             </v-col>
@@ -155,7 +155,17 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-row justify="end">
+                <v-btn
+                  v-if="currentUser"
+                  raised
+                  color="error"
+                  large
+                  class="mt-3 red lighten-3"
+                  style="padding: 0 1em ; margin-right: 3em;"
+                  @click.stop.prevent="createOrder"
+                >Complete Payment</v-btn>
                 <v-dialog
+                  v-else
                   v-model="dialog"
                   persistent
                   max-width="600px"
@@ -171,73 +181,75 @@
                     >Complete Payment</v-btn>
                   </template>
                   <v-card>
-                    <v-card-title>
-                      <span class="headline text--darken-3 cyan--text">Shipping Info</span>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-text-field
-                        ref="tel"
-                        v-model="tel"
-                        :rules="[() => !!tel || 'This field is required',
+                    <v-form ref="form">
+                      <v-card-title>
+                        <span class="headline text--darken-3 cyan--text">Shipping Info</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-text-field
+                          ref="tel"
+                          v-model="tel"
+                          :rules="[() => !!tel || 'This field is required',
               () => (/\d/g).test(tel) || 'Must fill in phone number',
               ()=> tel.length<10 || 'Phone must be 10 digits']"
-                        :error-messages="errorMessages"
-                        label="Phone Number"
-                        placeholder="0912345678"
-                        required
-                      ></v-text-field>
-                      <v-text-field
-                        ref="initialAddress"
-                        v-model="initialAddress"
-                        :rules="[
+                          :error-messages="errorMessages"
+                          label="Phone Number"
+                          placeholder="0912345678"
+                          required
+                        ></v-text-field>
+                        <v-text-field
+                          ref="initialAddress"
+                          v-model="initialAddress"
+                          :rules="[
               () => !!initialAddress || 'This field is required',
               () => initialAddress.length <= 40 || 'Address must be less than 40 characters'
             ]"
-                        label="Address Line"
-                        placeholder="Snowy Rock Pl"
-                        counter="40"
-                        required
-                      ></v-text-field>
-                      <v-text-field
-                        ref="district"
-                        v-model="district"
-                        :rules="[() => !!district || 'This field is required']"
-                        label="District / Township"
-                        required
-                        placeholder="士林區"
-                      ></v-text-field>
-                      <v-text-field
-                        ref="zip"
-                        v-model="zip"
-                        :rules="[() => !!zip || 'This field is required',
+                          label="Address Line"
+                          placeholder="Snowy Rock Pl"
+                          counter="40"
+                          required
+                        ></v-text-field>
+                        <v-text-field
+                          ref="district"
+                          v-model="district"
+                          :rules="[() => !!district || 'This field is required']"
+                          label="District / Township"
+                          required
+                          placeholder="士林區"
+                        ></v-text-field>
+                        <v-text-field
+                          ref="zip"
+                          v-model="zip"
+                          :rules="[() => !!zip || 'This field is required',
               () => zip.length <= 3 || 'Zip must be less than 3 characters']"
-                        label="ZIP / Postal Code"
-                        required
-                        placeholder="168"
-                      ></v-text-field>
-                      <v-autocomplete
-                        ref="county"
-                        :search-input.sync="county"
-                        :rules="[() => !!county || 'This field is required']"
-                        :items="counties"
-                        label="County / City"
-                        placeholder="Select..."
-                        required
-                      ></v-autocomplete>
-                    </v-card-text>
-                    <v-divider class="mt-12"></v-divider>
-                    <v-card-actions>
-                      <v-btn
-                        text
-                        @click="dialog=false"
-                      >Cancel</v-btn>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        color="primary"
-                        text
-                        @click.stop.prevent="createOrder"
-                      >Submit</v-btn>
-                    </v-card-actions>
+                          label="ZIP / Postal Code"
+                          required
+                          placeholder="168"
+                        ></v-text-field>
+                        <v-autocomplete
+                          ref="county"
+                          :search-input.sync="county"
+                          :rules="[() => !!county || 'This field is required']"
+                          :items="counties"
+                          label="County / City"
+                          placeholder="Select..."
+                          required
+                        ></v-autocomplete>
+                      </v-card-text>
+                      <v-divider class="mt-12"></v-divider>
+                      <v-card-actions>
+                        <v-btn
+                          text
+                          @click="dialog=false"
+                        >Cancel</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="primary"
+                          text
+                          @click.stop.prevent="createOrder"
+                        >Submit</v-btn>
+                      </v-card-actions>
+                    </v-form>
                   </v-card>
                 </v-dialog>
               </v-row>
@@ -253,8 +265,8 @@ import UserTabs from '../components/UserTabs'
 import Request from '../api/index'
 import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'
+import { mapState } from 'vuex'
 const request = new Request()
-const auth = JSON.parse(localStorage.getItem('credit')) || null
 
 export default {
   name: 'Cart',
@@ -266,6 +278,7 @@ export default {
     return {
       cart: [],
       totalPrice: 0,
+      user: [],
       dialog: false,
       counties: [
         '臺北市',
@@ -305,6 +318,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['currentUser', 'isAuthenticated']),
     beforeAttach() {
       return {
         tel: this.tel,
@@ -316,10 +330,14 @@ export default {
     },
     form() {
       return {
-        tel: this.tel,
-        UserId: auth.user.id,
-        CartId: this.cart[0].CartId,
-        address: this.zip + this.county + this.district + this.address
+        tel: this.currentUser.tel
+          ? this.currentUser.tel.replace(/[^0-9]/gi, '')
+          : this.tel,
+        UserId: this.currentUser.id,
+        CartId: this.cart.length > 0 ? this.cart[0].CartId : -1,
+        address: this.currentUser.address
+          ? this.currentUser.address
+          : this.zip + this.county + this.district + this.initialAddress
       }
     }
   },
@@ -392,32 +410,54 @@ export default {
         })
       }
     },
-
-    async createOrder() {
-      if (this.cart.length === 0) {
-        Toast.fire({
-          icon: 'error',
-          title: 'Nothing in the cart'
+    async createOrderAPI() {
+      const data = JSON.stringify(this.form)
+      const res = await request.createOrder(data)
+      if (res.status === 'success') {
+        this.$router.push({
+          name: 'order',
+          params: { userId: this.form.UserId }
         })
+      } else {
+        this.$router.push({ name: 'cart' })
         this.dialog = false
       }
+    },
 
-      this.formHasErrors = false
-      // valid the form
-      Object.keys(this.beforeAttach).forEach(f => {
-        if (!this.beforeAttach[f]) this.formHasErrors = true
-        if (!this.$refs[f].valid) this.formHasErrors = true
-        this.$refs[f].validate(true)
-      })
-      if (!this.formHasErrors) {
-        const data = JSON.stringify(this.form)
-        const res = await request.createOrder(data)
-        if (res.status === 'success') {
-          this.$router.push({ name: 'order' })
-        } else {
-          this.$router.push({ name: 'cart' })
+    async createOrder() {
+      try {
+        if (this.cart.length === 0) {
+          Toast.fire({
+            icon: 'error',
+            title: 'Nothing in the cart'
+          })
           this.dialog = false
         }
+        if (this.currentUser) {
+          await this.createOrderAPI()
+        } else {
+          this.formHasErrors = false
+          // valid the form
+          Object.keys(this.beforeAttach).forEach(f => {
+            if (!this.beforeAttach[f]) this.formHasErrors = true
+            if (!this.$refs[f].valid) this.formHasErrors = true
+            this.$refs[f].validate(true)
+          })
+          if (!this.formHasErrors) {
+            await this.createOrderAPI()
+          }
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Submit order first before you create a new one'
+        })
+        this.$router.push({
+          name: 'order',
+          params: { userId: this.form.UserId }
+        })
+
+        console.log('createOrder error', error)
       }
     }
   },

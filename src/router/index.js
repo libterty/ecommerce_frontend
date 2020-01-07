@@ -85,6 +85,16 @@ const routes = [{
     component: () => import('../views/Cart.vue')
   },
   {
+    path: '/orders/:userId',
+    name: 'order',
+    component: () => import('../views/Order.vue')
+  },
+  {
+    path: '/orders/',
+    name: 'orders',
+    component: () => import('../views/Orders.vue')
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: NotFound
@@ -97,21 +107,21 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach(async (to, from , next) => {
+router.beforeEach(async (to, from, next) => {
   await store.dispatch('getCurrentUser');
 
   const userState = store.state;
   let credit = userState.isAuthenticated;
   let isAdmin = userState.currentUser.isAdmin;
-  if(
-      !credit && 
-      to.name !=='SignIn' && 
-      to.name !=='SignUp' && 
-      to.name !== 'furniturePagination' &&
-      to.name !== 'furnitures-Search' &&
-      to.name !== 'furnituresItem' &&
-      to.name !== 'cart'
-    ) {
+  if (
+    !credit &&
+    to.name !== 'SignIn' &&
+    to.name !== 'SignUp' &&
+    to.name !== 'furniturePagination' &&
+    to.name !== 'furnitures-Search' &&
+    to.name !== 'furnituresItem' &&
+    to.name !== 'cart'
+  ) {
     next('/signin');
     return;
   }
