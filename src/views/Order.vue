@@ -18,7 +18,6 @@
           md="7"
           class="mr-5 mb-5"
         >
-          <!--TODO: v-for in v-card -->
           <v-card
             outlined
             class="cart text--darken-3 cyan--text"
@@ -311,8 +310,9 @@
                     <v-form>
                       <v-card>
                         <v-card-title>
-                          <span class="headline text--darken-3 cyan--text">Confirm info</span>
+                          <span class="headline text--darken-3 cyan--text">Confirm Shipping Info</span>
                         </v-card-title>
+
                         <v-card-text>
                           <v-text-field
                             ref="tel"
@@ -328,64 +328,63 @@
                             label="Address Line"
                             placeholder="Snowy Rock Pl"
                           ></v-text-field>
-                          <span
-                            class="display-1 mr-10 text--darken-3 cyan--text"
-                          >Total ${{paymentInfo.total_amount}}</span>
+                          <v-text-field
+                            label="Order ID"
+                            v-model="paymentInfo.OrderId"
+                            disabled
+                          ></v-text-field>
+                          <v-text-field
+                            label="Total Amount"
+                            v-model="paymentInfo.total_amount"
+                            disabled
+                          ></v-text-field>
                           <form
                             name="Spgateway"
                             :action="tradeInfo.PayGateWay"
                             method="POST"
                           >
-                            MerchantID:
                             <input
                               type="text"
                               name="MerchantID"
                               :value="tradeInfo.MerchantID"
+                              hidden
                             />
-                            <br />TradeInfo:
+
                             <input
                               type="text"
                               name="TradeInfo"
                               :value="tradeInfo.TradeInfo"
+                              hidden
                             />
-                            <br />TradeSha:
+
                             <input
                               type="text"
                               name="TradeSha"
                               :value="tradeInfo.TradeSha"
+                              hidden
                             />
-                            <br />Version:
+
                             <input
                               type="text"
                               name="Version"
                               :value="tradeInfo.Version"
+                              hidden
                             />
-                            <br />
-                            <v-btn
-                              text
-                              @click="confirmFormDialog=false"
-                            >Cancel</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                              color="primary"
-                              text
-                              type="submit"
-                            >Payment</v-btn>
+                            <v-divider class="mt-5"></v-divider>
+                            <v-card-actions>
+                              <v-btn
+                                text
+                                @click="confirmFormDialog=false"
+                              >Cancel</v-btn>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                color="primary"
+                                text
+                                type="submit"
+                              >Payment</v-btn>
+                            </v-card-actions>
                           </form>
                         </v-card-text>
-                        <v-divider class="mt-5"></v-divider>
-                        <v-card-actions>
-                          <v-btn
-                            text
-                            @click="confirmFormDialog=false"
-                          >Cancel</v-btn>
-                          <v-spacer></v-spacer>
-                          <v-btn
-                            color="primary"
-                            text
-                            @click.stop.prevent="spgatewayCallback"
-                          >Confirm</v-btn>
-                        </v-card-actions>
                       </v-card>
                     </v-form>
                   </v-dialog>
@@ -499,24 +498,36 @@ export default {
         })
       }
     },
+    async putOrderAPI(orderId, userId) {
+      const data = JSON.stringify(this.putOrderForm)
+      const res = await request.putOrder(orderId, userId, data)
+      if (res.status === 'success') {
+        this.dialog = false
+        this.isPutOrder = true
+        Toast.fire({
+          icon: 'success',
+          title: res.message
+        })
+      } else {
+        Toast.fire({
+          icon: 'error',
+          title: 'Shipping info validate failed'
+        })
+      }
+    },
     async putOrder(orderId, userId) {
       try {
-        if (this.$refs.form.validate(true)) {
-          const data = JSON.stringify(this.putOrderForm)
-          const res = await request.putOrder(orderId, userId, data)
-          if (res.status === 'success') {
-            this.dialog = false
-            this.isPutOrder = true
-            Toast.fire({
-              icon: 'success',
-              title: res.message
-            })
+        if (this.$refs.form) {
+          if (this.$refs.form.validate(true)) {
+            await this.putOrderAPI(orderId, userId)
           } else {
             Toast.fire({
-              icon: 'error',
-              title: 'Shipping info validate failed'
+              icon: 'warning',
+              title: 'Validate failed'
             })
           }
+        } else {
+          await this.putOrderAPI(orderId, userId)
         }
       } catch (error) {
         console.log('putOrder error', error)

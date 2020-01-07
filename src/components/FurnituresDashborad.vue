@@ -197,6 +197,7 @@ export default {
           title: "Please select product's color"
         })
       }
+      // TODO: check if color inventory is 0, can't add to cart
       this.form.productId = this.initProduct.id
       this.form.price = this.initProduct.price
       const data = JSON.stringify(this.form)
@@ -207,6 +208,7 @@ export default {
       this.form.colorId = colorId
     }
   },
+
   watch: {
     initProduct: function(updateData) {
       this.initProduct = updateData
