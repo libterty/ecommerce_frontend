@@ -54,7 +54,7 @@
                   <b-button
                     v-for="color in initColors"
                     :key="color.id"
-                    @click="selectedColor(color.id)"
+                    @click="selectedColor(color.id, color.Inventory.quantity)"
                     class="product_color_item"
                     :class="color.name | convertClass"
                     title="庫存量"
@@ -197,15 +197,21 @@ export default {
           title: "Please select product's color"
         })
       }
-      // TODO: check if color inventory is 0, can't add to cart
       this.form.productId = this.initProduct.id
       this.form.price = this.initProduct.price
       const data = JSON.stringify(this.form)
       this.form.colorId = -1
       this.$emit('after-add-to-cart', data)
     },
-    selectedColor(colorId) {
-      this.form.colorId = colorId
+    selectedColor(colorId, inventory) {
+      if (inventory < 1) {
+        this.form.colorId = -1
+        return Toast.fire({
+          icon: 'warning',
+          title: 'No storage for this color'
+        })
+      }
+      return (this.form.colorId = colorId)
     }
   },
 
