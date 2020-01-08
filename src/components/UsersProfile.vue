@@ -7,7 +7,7 @@
       <b-row no-gutters>
         <b-col md="6">
           <b-card-img
-            :src="initUser.avatar"
+            :src="avoidNull(initUser.avatar)"
             :alt="initUser.name"
             class="rounded-0"
           ></b-card-img>
@@ -21,15 +21,15 @@
               </b-list-group-item>
               <b-list-group-item class="text-left">
                 <strong>生日 :</strong>
-                <small>{{initUser.birthday}}</small>
+                <small>{{avoidNull(initUser.birthday)}}</small>
               </b-list-group-item>
               <b-list-group-item class="text-left">
                 <strong>地址 :</strong>
-                <small>{{initUser.address}}</small>
+                <small>{{avoidNull(initUser.address)}}</small>
               </b-list-group-item>
               <b-list-group-item class="text-left">
                 <strong>電話 :</strong>
-                <small>{{initUser.tel}}</small>
+                <small>{{avoidNull(initUser.tel)}}</small>
               </b-list-group-item>
             </b-list-group>
             <br />
@@ -114,7 +114,7 @@
             @change="checkDate(form.birthday)"
             type="date"
             name="birthday"
-            :placeholder="initUser.birthday"
+            :placeholder="avoidNull(initUser.birthday)"
           ></b-form-input>
         </b-form-group>
 
@@ -154,7 +154,7 @@
             v-model="form.address"
             type="text"
             name="address"
-            :placeholder="initUser.address"
+            :placeholder="avoidNull(initUser.address)"
           ></b-form-input>
         </b-form-group>
 
@@ -170,7 +170,7 @@
             v-model="form.tel"
             type="tel"
             name="tel"
-            :placeholder="initUser.tel"
+            :placeholder="avoidNull(initUser.tel)"
           ></b-form-input>
         </b-form-group>
         <b-button
@@ -215,6 +215,10 @@ export default {
         return true;
       }
       return false;
+    },
+    avoidNull(input) {
+      if (!input) return '尚無資料';
+      return input;
     },
     handleFileChange(e) {
       const files = e.target.files;

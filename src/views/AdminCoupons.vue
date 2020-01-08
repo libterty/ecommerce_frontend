@@ -71,7 +71,6 @@ export default {
         async afterSubmitEdit(id, data) {
             try {
                 const res = await request.putAdminCoupon(id, data);
-                console.log('res', res);
                 if (res.status === 'success') {
                     const res = await request.getAdminCoupons();
                     this.initCoupons = res.coupons;
