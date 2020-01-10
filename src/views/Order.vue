@@ -404,7 +404,7 @@ import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'
 const request = new Request()
 // TODO: color & image display in template, using fake data now
-
+// TODO: show sn instead of order ID
 export default {
   name: 'Order',
   mixins: [convertClassFilter, convertLanguageFilter],
@@ -544,7 +544,7 @@ export default {
       try {
         await this.putOrder(orderId, userId)
         const res = await request.createPayment(orderId, userId)
-        //TODO: hide trade info in the input and let user double check the info
+
         if (res.status === 'success') {
           this.isPutOrder = true
           this.tradeInfo = res.tradeInfo
@@ -560,6 +560,24 @@ export default {
         Toast.fire({
           icon: 'error',
           title: 'create payment failed'
+        })
+      }
+    },
+    // TODO: deleteOrder in Order.vue
+    async deleteOrder(orderId, userId) {
+      try {
+        const res = await request.getOrders(orderId, userId)
+
+        if ((res.status = 'success')) {
+          Toast.fire({
+            icon: 'success',
+            title: res.message
+          })
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Not able to delete order'
         })
       }
     }

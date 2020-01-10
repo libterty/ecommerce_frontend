@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import uuid from 'uuid/v4';
-const auth = JSON.parse(localStorage.getItem('credit')) || null;
+import uuid from 'uuid/v4'
+const auth = JSON.parse(localStorage.getItem('credit')) || null
 
 export default {
   data() {
@@ -50,7 +50,7 @@ export default {
           id: uuid(),
           title: 'Orders',
           icon: 'mdi-view-list',
-          routerName: '/orders'
+          path: '/orders'
         }
       ]
     }

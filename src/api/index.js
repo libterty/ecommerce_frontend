@@ -439,6 +439,31 @@ class Request {
     })
   }
 
+  getOrders(userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `orders/users/${userId}`);
+        resolve(
+          res
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  deleteOrder(orderId, userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await deleteRequest(config.ROOT_URL + `orders/${orderId}/users/${userId}`)
+        resolve(
+          res.data
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
 }
 
 export default Request;
