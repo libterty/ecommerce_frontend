@@ -46,7 +46,7 @@
                         >
                           <v-img
                             :aspect-ratio="16/9"
-                            src="https://i.imgur.com/3PeyRI9.jpg"
+                            :src="item.Images[0].url"
                             min-width="80"
                             min-height="60"
                             class="cart-content"
@@ -68,7 +68,7 @@
                           <p class="caption float-left">Color:</p>
                           <div
                             class="product_color_item mb-1 float-left"
-                            :class="color | convertClass"
+                            :class="item.color.name | convertClass"
                           />
                         </v-col>
                         <v-col
@@ -138,6 +138,7 @@
                   v-model="dialog"
                   persistent
                   max-width="600px"
+                  v-if="order.shipping_status==='未出貨'"
                 >
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -290,13 +291,24 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-row justify="end">
+                <v-row
+                  align="center"
+                  justify="end"
+                >
                   <v-dialog
                     v-model="confirmFormDialog"
                     persistent
                     max-width="600px"
                   >
                     <template v-slot:activator="{ on }">
+                      <v-btn
+                        raised
+                        color="white"
+                        x-small
+                        class="mt-3 dialog-btn"
+                        style="padding: 0 1em ; margin-right: 2.5em;"
+                        @click.stop.prevent="deleteOrder(order.id,order.UserId)"
+                      >Cancel Order</v-btn>
                       <v-btn
                         raised
                         color="error"
@@ -307,6 +319,7 @@
                         @click.stop.prevent="createPayment(order.id,order.UserId)"
                       >Create Payment</v-btn>
                     </template>
+
                     <v-form>
                       <v-card>
                         <v-card-title>
@@ -404,7 +417,7 @@ import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'
 const request = new Request()
 // TODO: color & image display in template, using fake data now
-// TODO: show sn instead of order ID
+
 export default {
   name: 'Order',
   mixins: [convertClassFilter, convertLanguageFilter],
@@ -563,15 +576,22 @@ export default {
         })
       }
     },
-    // TODO: deleteOrder in Order.vue
     async deleteOrder(orderId, userId) {
       try {
-        const res = await request.getOrders(orderId, userId)
+        if (this.order.shipping_status === '未出貨') {
+          const res = await request.deleteOrder(orderId, userId)
 
-        if ((res.status = 'success')) {
+          if (res.status === 'success') {
+            Toast.fire({
+              icon: 'success',
+              title: res.message
+            })
+            this.$router.push({ name: 'cart' })
+          }
+        } else {
           Toast.fire({
-            icon: 'success',
-            title: res.message
+            icon: 'warning',
+            title: 'Preparing package, not able to cancel order'
           })
         }
       } catch (error) {
