@@ -389,6 +389,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'orders/create', data);
+
         resolve(
           res.data
         );

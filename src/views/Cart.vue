@@ -112,39 +112,6 @@
                 </v-list>
               </v-col>
             </v-row>
-            <v-row justify="end">
-              <div class="coupon-field">
-                <v-text-field
-                  ref="coupon"
-                  v-model="coupon"
-                  rounded
-                  outlined
-                  clearable
-                  color="blue-grey darken-1"
-                  label="Coupon"
-                  placeholder="Coupon code"
-                  style=" margin-right: 3em;"
-                ></v-text-field>
-                <div
-                  class="coupon-discount"
-                  style=" margin-left: 3em;"
-                >
-                  <v-col
-                    cols="12"
-                    lg="12"
-                  >
-                    <span>Original Price: {{totalPrice}}</span>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    lg="12"
-                  >
-                    <span>Coupon discounts: -${{discount}}</span>
-                  </v-col>
-                </div>
-              </div>
-            </v-row>
-            <v-row justify="end"></v-row>
 
             <div class="my-4 bottom-divider">
               <span
@@ -313,7 +280,6 @@ export default {
       county: null,
       formHasErrors: false,
       CartId: null,
-      coupon: '',
       discount: 0
     }
   },
@@ -411,16 +377,20 @@ export default {
       }
     },
     async createOrderAPI() {
-      const data = JSON.stringify(this.form)
-      const res = await request.createOrder(data)
-      if (res.status === 'success') {
-        this.$router.push({
-          name: 'order',
-          params: { userId: this.form.UserId }
-        })
-      } else {
-        this.$router.push({ name: 'cart' })
-        this.dialog = false
+      try {
+        let data = JSON.stringify(this.form)
+        const res = await request.createOrder(data)
+        if (res.status === 'success') {
+          this.$router.push({
+            name: 'order',
+            params: { userId: this.form.UserId }
+          })
+        } else {
+          this.$router.push({ name: 'cart' })
+          this.dialog = false
+        }
+      } catch (error) {
+        console.log('createOrderAPI error', error)
       }
     },
 
@@ -456,8 +426,6 @@ export default {
           name: 'order',
           params: { userId: this.form.UserId }
         })
-
-        console.log('createOrder error', error)
       }
     }
   },

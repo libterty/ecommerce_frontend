@@ -238,17 +238,19 @@
           <v-card class="py-5">
             <v-row justify="end">
               <div class="coupon-field">
-                <v-text-field
-                  ref="coupon"
-                  v-model="coupon"
+                <v-autocomplete
+                  ref="couponCodes"
+                  :search-input.sync="coupon"
+                  :items="couponCodes"
                   rounded
                   outlined
                   clearable
                   color="blue-grey darken-1"
-                  label="Coupon"
-                  placeholder="Coupon code"
+                  label="Available Coupons"
+                  placeholder="Select..."
                   style=" margin-right: 3em;"
-                ></v-text-field>
+                ></v-autocomplete>
+
                 <div
                   class="coupon-discount"
                   style=" margin-left: 3em;"
@@ -263,13 +265,22 @@
                     cols="12"
                     lg="12"
                   >
-                    <span>Coupon discounts: -${{discount}}</span>
+                    <span>Coupon discounts: -${{computeDiscount.discount}}</span>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    lg="12"
+                    v-if="computeDiscount.discount>0"
+                  >
+                    <span
+                      class="caption red--text text--accent-1"
+                    >{{couponInfo.discountPercent}}% off!</span>
                   </v-col>
                   <v-col
                     cols="12"
                     lg="12"
                   >
-                    <span>Shipping Fee: +${{this.shippingFee}}</span>
+                    <span>Shipping Fee: +${{this.shippingFree}}</span>
                   </v-col>
                   <v-col
                     cols="12"
@@ -287,7 +298,9 @@
                 </div>
               </div>
 
-              <span class="display-1 mr-10 text--darken-3 cyan--text">Total ${{order.total_amount}}</span>
+              <span
+                class="display-1 mr-10 text--darken-3 cyan--text"
+              >Total ${{computeTotalPrice.price}}</span>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -440,8 +453,7 @@ export default {
       ],
       formHasErrors: false,
       CartId: null,
-      coupon: '',
-      discount: 0,
+      coupon: null,
       name: '',
       nameRules: [
         v => !!v || 'Name is required',
@@ -455,12 +467,15 @@ export default {
 
       UserId: null,
       shippingFee: 350,
+      shippingFree: null,
       shippingMethod: '黑貓宅急便',
       color: 'black',
       isPutOrder: false,
       confirmFormDialog: false,
       tradeInfo: {},
-      paymentInfo: []
+      paymentInfo: [],
+      coupons: [],
+      couponCodes: []
     }
   },
   computed: {
@@ -473,6 +488,18 @@ export default {
         email: this.email
       }
     },
+    couponInfo() {
+      return {
+        index:
+          this.couponCodes.indexOf(this.coupon) > -1
+            ? this.couponCodes.indexOf(this.coupon)
+            : null,
+        discountPercent:
+          this.couponCodes.indexOf(this.coupon) > -1
+            ? this.coupons[this.couponCodes.indexOf(this.coupon)].percent
+            : null
+      }
+    },
     putOrderForm() {
       return {
         shippingMethod: this.shippingMethod,
@@ -481,13 +508,37 @@ export default {
         address: this.form.address,
         name: this.form.name,
         email: this.form.email,
-        phone: this.form.tel
+        phone: this.form.tel,
+        couponId:
+          this.couponInfo.index > -1
+            ? this.coupons[this.couponInfo.index].id
+            : null
+      }
+    },
+    computeDiscount() {
+      return {
+        discount:
+          this.couponInfo.discountPercent > 0
+            ? this.order.total_amount -
+              this.order.total_amount * (this.couponInfo.discountPercent / 100)
+            : 0
+      }
+    },
+    computeTotalPrice() {
+      return {
+        price: this.totalPrice - this.computeDiscount.discount
       }
     }
   },
   async created() {
     const { userId } = this.$route.params
     await this.fetchOrder(userId)
+    await this.getValidCoupons()
+    if (this.order.total_amount > 3000) {
+      this.shippingFree = 0
+    } else {
+      this.shippingFree = 350
+    }
   },
   methods: {
     async fetchOrder(userId) {
@@ -533,6 +584,9 @@ export default {
         if (this.$refs.form) {
           if (this.$refs.form.validate(true)) {
             await this.putOrderAPI(orderId, userId)
+            if (this.putOrderForm.couponId) {
+              await this.useValidCoupon(this.putOrderForm.couponId)
+            }
           } else {
             Toast.fire({
               icon: 'warning',
@@ -541,6 +595,9 @@ export default {
           }
         } else {
           await this.putOrderAPI(orderId, userId)
+          if (this.putOrderForm.couponId) {
+            await this.useValidCoupon(this.putOrderForm.couponId)
+          }
         }
       } catch (error) {
         console.log('putOrder error', error)
@@ -597,6 +654,40 @@ export default {
         Toast.fire({
           icon: 'error',
           title: 'Not able to delete order'
+        })
+      }
+    },
+    async getValidCoupons() {
+      try {
+        const res = await request.getValidCoupons()
+        if (res.status === 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: res.message
+          })
+          this.coupons = res.coupons
+          this.couponCodes = [...new Set(res.coupons.map(i => i.coupon_code))]
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Not able to fetch coupons'
+        })
+      }
+    },
+    async useValidCoupon(couponId) {
+      try {
+        const res = await request.useValidCoupon(couponId)
+        if (res.status === 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: res.message
+          })
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Not able to use coupon'
         })
       }
     }
