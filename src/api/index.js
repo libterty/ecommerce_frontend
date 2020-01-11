@@ -463,7 +463,30 @@ class Request {
       }
     })
   }
-
+  getValidCoupons() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'orders/coupons/');
+        resolve(
+          res
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  useValidCoupon(paramsId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `orders/coupons/${paramsId}`);
+        resolve(
+          res
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 export default Request;

@@ -416,7 +416,6 @@ import Request from '../api/index'
 import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'
 const request = new Request()
-// TODO: color & image display in template, using fake data now
 
 export default {
   name: 'Order',
