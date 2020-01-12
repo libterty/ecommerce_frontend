@@ -35,11 +35,6 @@ export default {
                 },
                 {
                     id: nanoid(5),
-                    title: '庫存資訊',
-                    path: '/admin/inventories'
-                },
-                {
-                    id: nanoid(5),
                     title: '銷售資訊',
                     path: '/admin/payments'
                 },

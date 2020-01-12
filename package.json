@@ -1,13 +1,20 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
+    "start": "node server.js",
     "serve": "vue-cli-service serve",
     "dev-build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "fix": "eslint --format table --fix ."
   },
+  "keywords": [
+    "e-commerce",
+    "frontend"
+  ],
+  "author": "11, Mina",
+  "license": "MIT",
   "dependencies": {
     "@mdi/js": "^4.7.95",
     "axios": "^0.19.0",
