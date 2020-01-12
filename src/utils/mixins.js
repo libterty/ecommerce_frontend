@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const convertClassFilter = {
   filters: {
     convertClass(string) {
@@ -31,5 +33,13 @@ export const convertLanguageFilter = {
         return '';
       }
     },
+  }
+}
+
+export const convertTimeFilter = {
+  filters: {
+    convertTime(date) {
+      return moment(date).calendar()
+    }
   }
 }

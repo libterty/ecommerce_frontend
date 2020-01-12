@@ -389,6 +389,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'orders/create', data);
+
         resolve(
           res.data
         );
@@ -439,6 +440,54 @@ class Request {
     })
   }
 
+  getOrders(userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `orders/users/${userId}`);
+        resolve(
+          res
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  deleteOrder(orderId, userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await deleteRequest(config.ROOT_URL + `orders/${orderId}/users/${userId}`)
+        resolve(
+          res.data
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  getValidCoupons() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + 'orders/coupons/');
+        resolve(
+          res
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+  useValidCoupon(paramsId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `orders/coupons/${paramsId}`);
+        resolve(
+          res
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 export default Request;

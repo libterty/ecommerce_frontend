@@ -85,6 +85,16 @@ const routes = [{
     component: () => import('../views/Cart.vue')
   },
   {
+    path: '/orders/success',
+    name: 'orderSuccess',
+    component: () => import('../views/OrderSuccess.vue')
+  },
+  {
+    path: '/orders/fails',
+    name: 'orderFailed',
+    component: () => import('../views/OrderFailed.vue')
+  },
+  {
     path: '/orders/:userId',
     name: 'order',
     component: () => import('../views/Order.vue')

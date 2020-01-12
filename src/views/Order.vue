@@ -18,7 +18,6 @@
           md="7"
           class="mr-5 mb-5"
         >
-          <!--TODO: v-for in v-card -->
           <v-card
             outlined
             class="cart text--darken-3 cyan--text"
@@ -47,7 +46,7 @@
                         >
                           <v-img
                             :aspect-ratio="16/9"
-                            src="https://i.imgur.com/3PeyRI9.jpg"
+                            :src="item.Images[0].url"
                             min-width="80"
                             min-height="60"
                             class="cart-content"
@@ -69,7 +68,7 @@
                           <p class="caption float-left">Color:</p>
                           <div
                             class="product_color_item mb-1 float-left"
-                            :class="color | convertClass"
+                            :class="item.color.name | convertClass"
                           />
                         </v-col>
                         <v-col
@@ -139,6 +138,7 @@
                   v-model="dialog"
                   persistent
                   max-width="600px"
+                  v-if="order.shipping_status==='未出貨'"
                 >
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -238,17 +238,19 @@
           <v-card class="py-5">
             <v-row justify="end">
               <div class="coupon-field">
-                <v-text-field
-                  ref="coupon"
-                  v-model="coupon"
+                <v-autocomplete
+                  ref="couponCodes"
+                  :search-input.sync="coupon"
+                  :items="couponCodes"
                   rounded
                   outlined
                   clearable
                   color="blue-grey darken-1"
-                  label="Coupon"
-                  placeholder="Coupon code"
+                  label="Available Coupons"
+                  placeholder="Select..."
                   style=" margin-right: 3em;"
-                ></v-text-field>
+                ></v-autocomplete>
+
                 <div
                   class="coupon-discount"
                   style=" margin-left: 3em;"
@@ -263,13 +265,22 @@
                     cols="12"
                     lg="12"
                   >
-                    <span>Coupon discounts: -${{discount}}</span>
+                    <span>Coupon discounts: -${{computeDiscount.discount}}</span>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    lg="12"
+                    v-if="computeDiscount.discount>0"
+                  >
+                    <span
+                      class="caption red--text text--accent-1"
+                    >{{couponInfo.discountPercent}}% off!</span>
                   </v-col>
                   <v-col
                     cols="12"
                     lg="12"
                   >
-                    <span>Shipping Fee: +${{this.shippingFee}}</span>
+                    <span>Shipping Fee: +${{this.shippingFree}}</span>
                   </v-col>
                   <v-col
                     cols="12"
@@ -287,17 +298,30 @@
                 </div>
               </div>
 
-              <span class="display-1 mr-10 text--darken-3 cyan--text">Total ${{order.total_amount}}</span>
+              <span
+                class="display-1 mr-10 text--darken-3 cyan--text"
+              >Total ${{computeTotalPrice.price}}</span>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-row justify="end">
+                <v-row
+                  align="center"
+                  justify="end"
+                >
                   <v-dialog
                     v-model="confirmFormDialog"
                     persistent
                     max-width="600px"
                   >
                     <template v-slot:activator="{ on }">
+                      <v-btn
+                        raised
+                        color="white"
+                        x-small
+                        class="mt-3 dialog-btn"
+                        style="padding: 0 1em ; margin-right: 2.5em;"
+                        @click.stop.prevent="deleteOrder(order.id,order.UserId)"
+                      >Cancel Order</v-btn>
                       <v-btn
                         raised
                         color="error"
@@ -308,11 +332,13 @@
                         @click.stop.prevent="createPayment(order.id,order.UserId)"
                       >Create Payment</v-btn>
                     </template>
+
                     <v-form>
                       <v-card>
                         <v-card-title>
-                          <span class="headline text--darken-3 cyan--text">Confirm info</span>
+                          <span class="headline text--darken-3 cyan--text">Confirm Shipping Info</span>
                         </v-card-title>
+
                         <v-card-text>
                           <v-text-field
                             ref="tel"
@@ -328,64 +354,63 @@
                             label="Address Line"
                             placeholder="Snowy Rock Pl"
                           ></v-text-field>
-                          <span
-                            class="display-1 mr-10 text--darken-3 cyan--text"
-                          >Total ${{paymentInfo.total_amount}}</span>
+                          <v-text-field
+                            label="Order ID"
+                            v-model="paymentInfo.OrderId"
+                            disabled
+                          ></v-text-field>
+                          <v-text-field
+                            label="Total Amount"
+                            v-model="paymentInfo.total_amount"
+                            disabled
+                          ></v-text-field>
                           <form
                             name="Spgateway"
                             :action="tradeInfo.PayGateWay"
                             method="POST"
                           >
-                            MerchantID:
                             <input
                               type="text"
                               name="MerchantID"
                               :value="tradeInfo.MerchantID"
+                              hidden
                             />
-                            <br />TradeInfo:
+
                             <input
                               type="text"
                               name="TradeInfo"
                               :value="tradeInfo.TradeInfo"
+                              hidden
                             />
-                            <br />TradeSha:
+
                             <input
                               type="text"
                               name="TradeSha"
                               :value="tradeInfo.TradeSha"
+                              hidden
                             />
-                            <br />Version:
+
                             <input
                               type="text"
                               name="Version"
                               :value="tradeInfo.Version"
+                              hidden
                             />
-                            <br />
-                            <v-btn
-                              text
-                              @click="confirmFormDialog=false"
-                            >Cancel</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                              color="primary"
-                              text
-                              type="submit"
-                            >Payment</v-btn>
+                            <v-divider class="mt-5"></v-divider>
+                            <v-card-actions>
+                              <v-btn
+                                text
+                                @click="confirmFormDialog=false"
+                              >Cancel</v-btn>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                color="primary"
+                                text
+                                type="submit"
+                              >Payment</v-btn>
+                            </v-card-actions>
                           </form>
                         </v-card-text>
-                        <v-divider class="mt-5"></v-divider>
-                        <v-card-actions>
-                          <v-btn
-                            text
-                            @click="confirmFormDialog=false"
-                          >Cancel</v-btn>
-                          <v-spacer></v-spacer>
-                          <v-btn
-                            color="primary"
-                            text
-                            @click.stop.prevent="spgatewayCallback"
-                          >Confirm</v-btn>
-                        </v-card-actions>
                       </v-card>
                     </v-form>
                   </v-dialog>
@@ -404,7 +429,6 @@ import Request from '../api/index'
 import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'
 const request = new Request()
-// TODO: color & image display in template, using fake data now
 
 export default {
   name: 'Order',
@@ -429,8 +453,7 @@ export default {
       ],
       formHasErrors: false,
       CartId: null,
-      coupon: '',
-      discount: 0,
+      coupon: null,
       name: '',
       nameRules: [
         v => !!v || 'Name is required',
@@ -444,12 +467,15 @@ export default {
 
       UserId: null,
       shippingFee: 350,
+      shippingFree: null,
       shippingMethod: '黑貓宅急便',
       color: 'black',
       isPutOrder: false,
       confirmFormDialog: false,
       tradeInfo: {},
-      paymentInfo: []
+      paymentInfo: [],
+      coupons: [],
+      couponCodes: []
     }
   },
   computed: {
@@ -462,6 +488,18 @@ export default {
         email: this.email
       }
     },
+    couponInfo() {
+      return {
+        index:
+          this.couponCodes.indexOf(this.coupon) > -1
+            ? this.couponCodes.indexOf(this.coupon)
+            : null,
+        discountPercent:
+          this.couponCodes.indexOf(this.coupon) > -1
+            ? this.coupons[this.couponCodes.indexOf(this.coupon)].percent
+            : null
+      }
+    },
     putOrderForm() {
       return {
         shippingMethod: this.shippingMethod,
@@ -470,13 +508,37 @@ export default {
         address: this.form.address,
         name: this.form.name,
         email: this.form.email,
-        phone: this.form.tel
+        phone: this.form.tel,
+        couponId:
+          this.couponInfo.index > -1
+            ? this.coupons[this.couponInfo.index].id
+            : null
+      }
+    },
+    computeDiscount() {
+      return {
+        discount:
+          this.couponInfo.discountPercent > 0
+            ? this.order.total_amount -
+              this.order.total_amount * (this.couponInfo.discountPercent / 100)
+            : 0
+      }
+    },
+    computeTotalPrice() {
+      return {
+        price: this.totalPrice - this.computeDiscount.discount
       }
     }
   },
   async created() {
     const { userId } = this.$route.params
     await this.fetchOrder(userId)
+    await this.getValidCoupons()
+    if (this.order.total_amount > 3000) {
+      this.shippingFree = 0
+    } else {
+      this.shippingFree = 350
+    }
   },
   methods: {
     async fetchOrder(userId) {
@@ -493,29 +555,48 @@ export default {
           this.UserId = res.order.UserId
         }
       } catch (error) {
+        this.$router.push({ name: 'cart' })
         Toast.fire({
           icon: 'error',
-          title: 'Fetch order failed'
+          title: 'Order is not found'
+        })
+      }
+    },
+    async putOrderAPI(orderId, userId) {
+      const data = JSON.stringify(this.putOrderForm)
+      const res = await request.putOrder(orderId, userId, data)
+      if (res.status === 'success') {
+        this.dialog = false
+        this.isPutOrder = true
+        Toast.fire({
+          icon: 'success',
+          title: res.message
+        })
+      } else {
+        Toast.fire({
+          icon: 'error',
+          title: 'Shipping info validate failed'
         })
       }
     },
     async putOrder(orderId, userId) {
       try {
-        if (this.$refs.form.validate(true)) {
-          const data = JSON.stringify(this.putOrderForm)
-          const res = await request.putOrder(orderId, userId, data)
-          if (res.status === 'success') {
-            this.dialog = false
-            this.isPutOrder = true
-            Toast.fire({
-              icon: 'success',
-              title: res.message
-            })
+        if (this.$refs.form) {
+          if (this.$refs.form.validate(true)) {
+            await this.putOrderAPI(orderId, userId)
+            if (this.putOrderForm.couponId) {
+              await this.useValidCoupon(this.putOrderForm.couponId)
+            }
           } else {
             Toast.fire({
-              icon: 'error',
-              title: 'Shipping info validate failed'
+              icon: 'warning',
+              title: 'Validate failed'
             })
+          }
+        } else {
+          await this.putOrderAPI(orderId, userId)
+          if (this.putOrderForm.couponId) {
+            await this.useValidCoupon(this.putOrderForm.couponId)
           }
         }
       } catch (error) {
@@ -532,7 +613,7 @@ export default {
       try {
         await this.putOrder(orderId, userId)
         const res = await request.createPayment(orderId, userId)
-        //TODO: hide trade info in the input and let user double check the info
+
         if (res.status === 'success') {
           this.isPutOrder = true
           this.tradeInfo = res.tradeInfo
@@ -550,6 +631,85 @@ export default {
           title: 'create payment failed'
         })
       }
+    },
+    async deleteOrder(orderId, userId) {
+      try {
+        if (this.order.shipping_status === '未出貨') {
+          const res = await request.deleteOrder(orderId, userId)
+
+          if (res.status === 'success') {
+            Toast.fire({
+              icon: 'success',
+              title: res.message
+            })
+            this.$router.push({ name: 'cart' })
+          }
+        } else {
+          Toast.fire({
+            icon: 'warning',
+            title: 'Preparing package, not able to cancel order'
+          })
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Not able to delete order'
+        })
+      }
+    },
+    async getValidCoupons() {
+      try {
+        const res = await request.getValidCoupons()
+        if (res.status === 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: res.message
+          })
+          this.coupons = res.coupons
+          this.couponCodes = [...new Set(res.coupons.map(i => i.coupon_code))]
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Not able to fetch coupons'
+        })
+      }
+    },
+    async useValidCoupon(couponId) {
+      try {
+        const res = await request.useValidCoupon(couponId)
+        if (res.status === 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: res.message
+          })
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: 'Not able to use coupon'
+        })
+      }
+    }
+  },
+  watch: {
+    order: function(updateData) {
+      this.order = updateData
+    },
+    totalPrice: function(updateData) {
+      this.totalPrice = updateData
+    },
+    tel: function(updateData) {
+      this.tel = updateData
+    },
+    address: function(updateData) {
+      this.address = updateData
+    },
+    name: function(updateData) {
+      this.name = updateData
+    },
+    email: function(updateData) {
+      this.email = updateData
     }
   }
 }
