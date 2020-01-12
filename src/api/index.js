@@ -115,7 +115,7 @@ class Request {
   postSignUp(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await postRequest(config.ROOT_URL + '/signup', data);
+        const res = await postRequest(config.ROOT_URL + 'signup', data);
         resolve(
           res.data
         );
@@ -271,7 +271,7 @@ class Request {
   putReviseColor(pId, data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await putAuthRequest(config.ROOT_URL + `/admin/products/colors/${pId}`, data);
+        const res = await putAuthRequest(config.ROOT_URL + `admin/products/colors/${pId}`, data);
         resolve(
           res
         );
