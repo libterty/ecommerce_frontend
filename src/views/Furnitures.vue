@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import Request from '../api'
-import FurnituresDashboard from '../components/FurnituresDashborad.vue'
-import FurnituresDimension from '../components/FurnituresDimension.vue'
-import ShoppingCart from '../components/ShoppingCart'
-const request = new Request()
-import { Toast } from '../utils/helpers.js'
+import Request from '../api';
+import FurnituresDashboard from '../components/FurnituresDashborad.vue';
+import FurnituresDimension from '../components/FurnituresDimension.vue';
+import ShoppingCart from '../components/ShoppingCart';
+const request = new Request();
+import { Toast } from '../utils/helpers.js';
 
 export default {
   components: {
@@ -50,11 +50,11 @@ export default {
   },
   async created() {
     try {
-      const res = await request.getCart()
-      this.fetchFurniture(document.location.pathname)
+      const res = await request.getCart();
+      this.fetchFurniture(document.location.pathname);
       if (res.status === 'success') {
-        this.initCart = res.cart
-        this.initTotalPrice = res.totalPrice
+        this.initCart = res.cart;
+        this.initTotalPrice = res.totalPrice;
         this.isShow = true;
       }
     } catch (error) {
@@ -65,18 +65,18 @@ export default {
     }
   },
   beforeRouteUpdate(to, from, next) {
-    const { id } = to.params
-    this.fetchFurniture(`/furnitures/${id}`)
-    next()
+    const { id } = to.params;
+    this.fetchFurniture(`furnitures/${id}`);
+    next();
   },
   methods: {
     async fetchFurniture(furnitureId) {
       try {
-        const res = await request.getSpecificProduct(furnitureId)
+        const res = await request.getSpecificProduct(furnitureId);
         if (res.status === 'success') {
-          this.initProduct = res.product
-          this.initImages = res.Images
-          this.initColors = res.Colors
+          this.initProduct = res.product;
+          this.initImages = res.Images;
+          this.initColors = res.Colors;
           this.isShow = true;
         }
       } catch (error) {
@@ -88,7 +88,7 @@ export default {
     },
     async afterAddToCart(data) {
       try {
-        const res = await request.postCart(data)
+        const res = await request.postCart(data);
         if (res.status === 'success') {
           Toast.fire({
             icon: 'success',
@@ -106,8 +106,8 @@ export default {
       try {
         const res = await request.getCart()
         if (res.status === 'success') {
-          this.initCart = res.cart
-          this.initTotalPrice = res.totalPrice
+          this.initCart = res.cart;
+          this.initTotalPrice = res.totalPrice;
         }
       } catch (error) {
         Toast.fire({

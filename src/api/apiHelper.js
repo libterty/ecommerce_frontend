@@ -12,7 +12,9 @@ export const getRequest = url => {
     .then(res => {
       return res;
     })
-    .catch(err => console.log('fetch get err', err.message));
+    .catch(err => {
+      return err
+    });
 };
 
 export const getAuthRequest = url => {

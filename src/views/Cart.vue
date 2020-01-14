@@ -313,10 +313,10 @@ export default {
   methods: {
     async fetchCart() {
       try {
-        const res = await request.getCart()
+        const res = await request.getCart();
         if (res.status === 'success') {
-          this.cart = res.cart
-          this.totalPrice = res.totalPrice
+          this.cart = res.cart;
+          this.totalPrice = res.totalPrice;
         }
       } catch (error) {
         Toast.fire({
