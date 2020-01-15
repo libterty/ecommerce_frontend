@@ -476,6 +476,7 @@ class Request {
       }
     })
   }
+
   useValidCoupon(paramsId) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -487,6 +488,19 @@ class Request {
         reject(error)
       }
     })
+  }
+
+  getLogs() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await getAuthRequest(config.ROOT_URL + `admin/logs`);
+        resolve (
+          res
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 }
 

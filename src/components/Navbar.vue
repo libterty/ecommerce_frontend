@@ -42,6 +42,16 @@
                 @click="logout"
               >Logout</b-button>
             </b-nav-item>
+            <b-nav-item
+              v-if="isAuthenticated === false"
+              href="/signin"
+            >
+              <b-button
+                size="sm"
+                class="my-2 my-sm-0"
+                type="button"
+              >Login</b-button>
+            </b-nav-item>
           </b-navbar-nav>
         </b-navbar-nav>
       </b-collapse>
@@ -53,7 +63,6 @@
 import { mdiEmailOutline, mdiAccount } from '@mdi/js';
 import { Toast } from '../utils/helpers';
 import { mapState } from 'vuex';
-// const auth = JSON.parse(localStorage.getItem('credit')) || null;
 
 export default {
     data() {

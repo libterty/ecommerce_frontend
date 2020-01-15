@@ -7,7 +7,7 @@
       <b-row no-gutters>
         <b-col md="6">
           <b-card-img
-            :src="initImages[0].url"
+            :src="initImages[0].url | avoidNull"
             :alt="initProduct.name"
             class="rounded-0"
           ></b-card-img>
@@ -147,6 +147,10 @@ export default {
     },
     showResponse(number) {
       return number === 0 ? '補貨中' : '有現貨'
+    },
+    avoidNull(url) {
+      if (!url) return '';
+      return url;
     }
   },
   data() {

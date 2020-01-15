@@ -45,6 +45,11 @@ export default {
                 },
                 {
                     id: nanoid(5),
+                    title: '系統日誌',
+                    path: '/admin/logs'
+                },
+                {
+                    id: nanoid(5),
                     title: '前往前台',
                     path: '/'
                 }
