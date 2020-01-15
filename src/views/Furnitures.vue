@@ -55,13 +55,13 @@ export default {
       if (res.status === 'success') {
         this.initCart = res.cart
         this.initTotalPrice = res.totalPrice
-        this.isShow = true;
+        this.isShow = true
       }
     } catch (error) {
       Toast.fire({
         icon: 'error',
         title: 'Fetch cart failed'
-      });
+      })
     }
   },
   beforeRouteUpdate(to, from, next) {
@@ -77,13 +77,13 @@ export default {
           this.initProduct = res.product
           this.initImages = res.Images
           this.initColors = res.Colors
-          this.isShow = true;
+          this.isShow = true
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: 'Fetch cart failed'
-        });
+        })
       }
     },
     async afterAddToCart(data) {
@@ -93,13 +93,13 @@ export default {
           Toast.fire({
             icon: 'success',
             title: 'Added to cart'
-          });
+          })
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: 'Fail to add to cart'
-        });
+        })
       }
     },
     async clickToGetCart() {
