@@ -25,7 +25,10 @@
           class="text-muted mb-5"
           v-if="initTotalPrice<1"
         >No Data</v-card-title>
-        <v-list flat>
+        <v-list
+          v-else
+          flat
+        >
           <v-list-item-group>
             <v-list-item
               v-for="item in initCart"
@@ -34,7 +37,7 @@
             >
               <v-img
                 class="mr-2"
-                :src="item.Image.url"
+                :src="item.Image.url | avoidNull"
                 width="100"
                 height="100"
               ></v-img>
@@ -102,7 +105,12 @@ export default {
       dialog: false
     }
   },
-
+  filters: {
+    avoidNull(url) {
+      if (!url) return ''
+      return url
+    }
+  },
   methods: {
     getCart() {
       this.dialog = !this.dialog

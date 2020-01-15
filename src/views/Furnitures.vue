@@ -1,8 +1,9 @@
 <template>
+  <Spinner v-if="isLoading" />
   <b-container
     fluid
     style="max-width: 75%;"
-    v-if="isShow"
+    v-else
   >
     <FurnituresDashboard
       :initProduct="initProduct"
@@ -28,6 +29,7 @@ import Request from '../api'
 import FurnituresDashboard from '../components/FurnituresDashborad.vue'
 import FurnituresDimension from '../components/FurnituresDimension.vue'
 import ShoppingCart from '../components/ShoppingCart'
+import Spinner from '../components/Spinner'
 const request = new Request()
 import { Toast } from '../utils/helpers.js'
 
@@ -35,7 +37,8 @@ export default {
   components: {
     FurnituresDashboard,
     FurnituresDimension,
-    ShoppingCart
+    ShoppingCart,
+    Spinner
   },
   data() {
     return {
@@ -45,28 +48,25 @@ export default {
       initColors: [],
       error: '',
       initCart: [],
-      initTotalPrice: 0
+      initTotalPrice: 0,
+      isLoading: true
     }
   },
   async created() {
     try {
-      const res = await request.getCart()
       this.fetchFurniture(document.location.pathname)
-      if (res.status === 'success') {
-        this.initCart = res.cart
-        this.initTotalPrice = res.totalPrice
-        this.isShow = true
-      }
+      this.isLoading = false
     } catch (error) {
+      this.isLoading = false
       Toast.fire({
         icon: 'error',
-        title: 'Fetch cart failed'
+        title: 'Fetch furniture info failed'
       })
     }
   },
   beforeRouteUpdate(to, from, next) {
     const { id } = to.params
-    this.fetchFurniture(`/furnitures/${id}`)
+    this.fetchFurniture(`furnitures/${id}`)
     next()
   },
   methods: {
@@ -77,12 +77,11 @@ export default {
           this.initProduct = res.product
           this.initImages = res.Images
           this.initColors = res.Colors
-          this.isShow = true
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
-          title: 'Fetch cart failed'
+          title: 'Fetch furniture info failed'
         })
       }
     },
@@ -112,7 +111,7 @@ export default {
       } catch (error) {
         Toast.fire({
           icon: 'error',
-          title: 'Fetch cart failed'
+          title: 'Nothing in the cart'
         })
       }
     }
