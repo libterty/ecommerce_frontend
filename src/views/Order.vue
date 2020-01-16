@@ -407,6 +407,7 @@
                                 color="primary"
                                 text
                                 type="submit"
+                                @click.once="submit"
                               >Payment</v-btn>
                             </v-card-actions>
                           </form>
@@ -493,11 +494,11 @@ export default {
         index:
           this.couponCodes.indexOf(this.coupon) > -1
             ? this.couponCodes.indexOf(this.coupon)
-            : null,
+            : -1,
         discountPercent:
           this.couponCodes.indexOf(this.coupon) > -1
             ? this.coupons[this.couponCodes.indexOf(this.coupon)].percent
-            : null
+            : -1
       }
     },
     putOrderForm() {
@@ -510,7 +511,7 @@ export default {
         email: this.form.email,
         phone: this.form.tel,
         couponId:
-          this.couponInfo.index > -1
+          this.couponInfo.index !== -1
             ? this.coupons[this.couponInfo.index].id
             : null
       }

@@ -391,6 +391,14 @@ export default {
         }
       } catch (error) {
         console.log('createOrderAPI error', error)
+        Toast.fire({
+          icon: 'error',
+          title: 'Submit order first before you create a new one'
+        })
+        this.$router.push({
+          name: 'order',
+          params: { userId: this.form.UserId }
+        })
       }
     },
 
