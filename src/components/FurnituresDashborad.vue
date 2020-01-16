@@ -3,12 +3,13 @@
     <b-card
       no-body
       class="overflow-hidden"
+      v-if="isShow"
     >
       <b-row no-gutters>
         <b-col md="6">
           <b-card-img
-            :src="initImages[0].url | avoidNull"
-            :alt="initProduct.name"
+            :src="Images[0].url | avoidNull"
+            :alt="Images.name"
             class="rounded-0"
           ></b-card-img>
           <div
@@ -19,9 +20,9 @@
               center
               thumbnail
               fluid
-              v-for="image in initImages"
+              v-for="image in Images"
               :key="image.id"
-              :src="image.url"
+              :src="image.url  | avoidNull"
               class="image-information-item"
             ></b-img-lazy>
           </div>
@@ -149,8 +150,8 @@ export default {
       return number === 0 ? '補貨中' : '有現貨'
     },
     avoidNull(url) {
-      if (!url) return '';
-      return url;
+      if (!url) return ''
+      return url
     }
   },
   data() {
@@ -166,11 +167,9 @@ export default {
         productId: -1,
         colorId: -1,
         price: -1
-      }
+      },
+      isShow: false
     }
-  },
-  created() {
-    this.switchImage = this.initImages[0].url
   },
   mounted() {
     this.generateStar()
@@ -178,6 +177,7 @@ export default {
       this.Images = this.initImages
       this.Colors = this.initColors
       this.product = this.initProduct
+      this.isShow = true
     }, 500)
   },
   methods: {

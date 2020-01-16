@@ -313,15 +313,15 @@ export default {
   methods: {
     async fetchCart() {
       try {
-        const res = await request.getCart();
+        const res = await request.getCart()
         if (res.status === 'success') {
-          this.cart = res.cart;
-          this.totalPrice = res.totalPrice;
+          this.cart = res.cart
+          this.totalPrice = res.totalPrice
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
-          title: 'Fetch cart failed'
+          title: 'Nothing in the cart'
         })
       }
     },
@@ -391,6 +391,14 @@ export default {
         }
       } catch (error) {
         console.log('createOrderAPI error', error)
+        Toast.fire({
+          icon: 'error',
+          title: 'Submit order first before you create a new one'
+        })
+        this.$router.push({
+          name: 'order',
+          params: { userId: this.form.UserId }
+        })
       }
     },
 

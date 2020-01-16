@@ -3,6 +3,7 @@
     <b-card
       no-body
       class="overflow-hidden"
+      v-if="isShow"
     >
       <b-row no-gutters>
         <b-col md="6">
@@ -61,26 +62,17 @@ export default {
   },
   data() {
     return {
-      base64: ''
+      base64: '',
+      isShow: false
     }
   },
-  mounted() {
+  created() {
     setTimeout(() => {
-      this.base64 = this.getBase64Image(this.$refs.profileId)
-    }, 1000)
+      this.Images = this.initImages
+      this.isShow = true
+    }, 500)
   },
-  methods: {
-    getBase64Image(img) {
-      let canvas = document.createElement('canvas')
-      canvas.width = img.width
-      canvas.height = img.height
-      let ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0)
 
-      let dataURL = canvas.toDataURL('image/png')
-      return dataURL
-    }
-  },
   watch: {
     initProduct: function(updateData) {
       this.initProduct = updateData

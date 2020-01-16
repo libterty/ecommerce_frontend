@@ -25,9 +25,15 @@
       @click-to-get-cart="clickToGetCart"
     />
     <br />
-    <HomeCarousel v-if="showProduct" :initCarousels="initCarousels" />
+    <HomeCarousel
+      v-if="showProduct"
+      :initCarousels="initCarousels"
+    />
     <br />
-    <HomeGrid v-if="showProduct" :initProducts="initProducts" />
+    <HomeGrid
+      v-if="showProduct"
+      :initProducts="initProducts"
+    />
   </b-container>
 </template>
 
@@ -48,7 +54,7 @@ export default {
   data() {
     return {
       showProduct: false,
-      showCart: false,
+      showCart: true,
       initProducts: [],
       initCarousels: [],
       initCart: [],
@@ -57,40 +63,34 @@ export default {
   },
   async created() {
     try {
-      const resCart = await request.getCart();
-      if (resCart.status === 'success') {
-        this.initCart = resCart.cart;
-        this.initTotalPrice = resCart.totalPrice;
-        this.showCart = true;
-      }
       const res = await request.getHomePageProduts()
       if (res.status === 'success') {
         this.initProducts = res.products
         for (let i = 0; i < 5; i++) {
           this.initCarousels.push(this.initProducts[i])
         }
-        this.showProduct = true;
+        this.showProduct = true
       }
     } catch (error) {
       Toast.fire({
         icon: 'error',
-        title: 'Fetch cart failed'
-      });
+        title: 'Fetch products failed'
+      })
     }
   },
   methods: {
     async clickToGetCart() {
       try {
-        const res = await request.getCart();
+        const res = await request.getCart()
         if (res.status === 'success') {
-          this.initCart = res.cart;
-          this.initTotalPrice = res.totalPrice;
+          this.initCart = res.cart
+          this.initTotalPrice = res.totalPrice
         }
       } catch (error) {
         Toast.fire({
           icon: 'error',
-          title: 'Fetch cart failed'
-        });
+          title: 'Nothing in the cart'
+        })
       }
     }
   }
