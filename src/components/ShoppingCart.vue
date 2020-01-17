@@ -54,9 +54,16 @@
                   ></div>
                 </v-list-item-subtitle>
               </div>
+              <v-alert
+                dense
+                type="error"
+                v-if="item.Inventories.quantity<item.quantity"
+              >Shortage</v-alert>
+
               <v-card-text
                 class="float-right"
                 style="width: 100px;"
+                v-else
               >x {{item.quantity}}</v-card-text>
               <v-card-text
                 style="width: 100px;"
