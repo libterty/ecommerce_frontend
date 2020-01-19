@@ -161,6 +161,16 @@ export default {
       }
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next(() => {
+      if (from.name === 'cart') {
+        Toast.fire({
+          icon: 'warning',
+          title: 'Must finish payment before create a new order'
+        })
+      }
+    })
+  },
   watch: {
     orders: function(updateData) {
       this.orders = updateData
