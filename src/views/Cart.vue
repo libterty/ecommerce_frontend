@@ -77,6 +77,19 @@
                           cols="12"
                           lg="3"
                           class="cart-content"
+                          v-if="item.Inventories.quantity<item.quantity"
+                        >
+                          <v-alert
+                            dense
+                            outlined
+                            type="error"
+                          >Shortage of Stock</v-alert>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          lg="3"
+                          class="cart-content"
+                          v-else
                         >
                           <v-btn
                             x-small
@@ -123,12 +136,13 @@
               <v-spacer></v-spacer>
               <v-row justify="end">
                 <v-btn
-                  v-if="currentUser"
+                  v-if="currentUser.address && currentUser.tel"
                   raised
                   color="error"
                   large
                   class="mt-3 red lighten-3"
                   style="padding: 0 1em ; margin-right: 3em;"
+                  :disabled="shortageStock"
                   @click.stop.prevent="createOrder"
                 >Complete Payment</v-btn>
                 <v-dialog
@@ -213,6 +227,7 @@
                         <v-btn
                           color="primary"
                           text
+                          :disabled="shortageStock"
                           @click.stop.prevent="createOrder"
                         >Submit</v-btn>
                       </v-card-actions>
@@ -280,7 +295,8 @@ export default {
       county: null,
       formHasErrors: false,
       CartId: null,
-      discount: 0
+      discount: 0,
+      shortageStock: false
     }
   },
   computed: {
@@ -317,6 +333,7 @@ export default {
         if (res.status === 'success') {
           this.cart = res.cart
           this.totalPrice = res.totalPrice
+          this.shortageStock = this.cart.some(this.checkIventory)
         }
       } catch (error) {
         Toast.fire({
@@ -338,7 +355,7 @@ export default {
       } catch (error) {
         Toast.fire({
           icon: 'error',
-          title: 'Add cart item failed'
+          title: 'The storage is not enough'
         })
       }
     },
@@ -378,8 +395,10 @@ export default {
     },
     async createOrderAPI() {
       try {
+        this.fetchCart()
         let data = JSON.stringify(this.form)
         const res = await request.createOrder(data)
+
         if (res.status === 'success') {
           this.$router.push({
             name: 'order',
@@ -390,10 +409,16 @@ export default {
           this.dialog = false
         }
       } catch (error) {
-        console.log('createOrderAPI error', error)
+        Toast.fire({
+          icon: 'warning',
+          title: 'Must finish order payment before create new order'
+        })
+        this.$router.push({
+          name: 'order',
+          params: { userId: this.form.UserId }
+        })
       }
     },
-
     async createOrder() {
       try {
         if (this.cart.length === 0) {
@@ -403,30 +428,55 @@ export default {
           })
           this.dialog = false
         }
-        if (this.currentUser) {
-          await this.createOrderAPI()
-        } else {
-          this.formHasErrors = false
-          // valid the form
-          Object.keys(this.beforeAttach).forEach(f => {
-            if (!this.beforeAttach[f]) this.formHasErrors = true
-            if (!this.$refs[f].valid) this.formHasErrors = true
-            this.$refs[f].validate(true)
+        if (!this.isAuthenticated) {
+          Toast.fire({
+            icon: 'warning',
+            title: 'Must sign in before create order'
           })
-          if (!this.formHasErrors) {
-            await this.createOrderAPI()
+          this.$router.push({ name: 'SignIn' })
+        }
+
+        if (this.currentUser) {
+          if (
+            this.form.UserId &&
+            this.form.CartId &&
+            this.form.address &&
+            this.form.tel
+          ) {
+            if (this.shortageStock) {
+              Toast.fire({
+                icon: 'warning',
+                title: 'Shortage of stock'
+              })
+            } else {
+              await this.createOrderAPI()
+            }
+          } else {
+            this.formHasErrors = false
+            // valid the form
+            Object.keys(this.beforeAttach).forEach(f => {
+              if (!this.beforeAttach[f]) this.formHasErrors = true
+              if (!this.$refs[f].valid) this.formHasErrors = true
+              this.$refs[f].validate(true)
+            })
+            if (!this.formHasErrors && !this.shortageStock) {
+              await this.createOrderAPI()
+            } else {
+              Toast.fire({
+                icon: 'warning',
+                title: 'Shortage of stock'
+              })
+            }
           }
         }
       } catch (error) {
-        Toast.fire({
-          icon: 'error',
-          title: 'Submit order first before you create a new one'
-        })
         this.$router.push({
-          name: 'order',
-          params: { userId: this.form.UserId }
+          name: 'orders'
         })
       }
+    },
+    checkIventory(element) {
+      return element.Inventories.quantity < element.quantity
     }
   },
   watch: {

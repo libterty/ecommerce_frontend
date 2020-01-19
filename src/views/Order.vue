@@ -407,6 +407,7 @@
                                 color="primary"
                                 text
                                 type="submit"
+                                @click.once="submit"
                               >Payment</v-btn>
                             </v-card-actions>
                           </form>
@@ -475,7 +476,8 @@ export default {
       tradeInfo: {},
       paymentInfo: [],
       coupons: [],
-      couponCodes: []
+      couponCodes: [],
+      fromCart: false
     }
   },
   computed: {
@@ -493,11 +495,11 @@ export default {
         index:
           this.couponCodes.indexOf(this.coupon) > -1
             ? this.couponCodes.indexOf(this.coupon)
-            : null,
+            : -1,
         discountPercent:
           this.couponCodes.indexOf(this.coupon) > -1
             ? this.coupons[this.couponCodes.indexOf(this.coupon)].percent
-            : null
+            : -1
       }
     },
     putOrderForm() {
@@ -510,7 +512,7 @@ export default {
         email: this.form.email,
         phone: this.form.tel,
         couponId:
-          this.couponInfo.index > -1
+          this.couponInfo.index !== -1
             ? this.coupons[this.couponInfo.index].id
             : null
       }
@@ -600,7 +602,6 @@ export default {
           }
         }
       } catch (error) {
-        console.log('putOrder error', error)
         this.isPutOrder = false
         this.dialog = false
         Toast.fire({
@@ -618,14 +619,12 @@ export default {
           this.isPutOrder = true
           this.tradeInfo = res.tradeInfo
           this.paymentInfo = res.paymentInfo
-          console.log('createPayment success')
           Toast.fire({
             icon: 'success',
             title: res.message
           })
         }
       } catch (error) {
-        console.log('createPayment failed', error)
         Toast.fire({
           icon: 'error',
           title: 'create payment failed'
@@ -661,10 +660,6 @@ export default {
       try {
         const res = await request.getValidCoupons()
         if (res.status === 'success') {
-          Toast.fire({
-            icon: 'success',
-            title: res.message
-          })
           this.coupons = res.coupons
           this.couponCodes = [...new Set(res.coupons.map(i => i.coupon_code))]
         }
@@ -692,6 +687,7 @@ export default {
       }
     }
   },
+
   watch: {
     order: function(updateData) {
       this.order = updateData
