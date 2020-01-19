@@ -389,7 +389,6 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await postAuthRequest(config.ROOT_URL + 'orders/create', data);
-
         resolve(
           res.data
         );
@@ -429,12 +428,10 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + `payments/${orderId}/users/${userId}`);
-        console.log('create payment api success')
         resolve(
           res
         )
       } catch (error) {
-        console.log('create payment api failed')
         reject(error)
       }
     })
@@ -494,7 +491,7 @@ class Request {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await getAuthRequest(config.ROOT_URL + `admin/logs`);
-        resolve (
+        resolve(
           res
         );
       } catch (error) {

@@ -476,7 +476,8 @@ export default {
       tradeInfo: {},
       paymentInfo: [],
       coupons: [],
-      couponCodes: []
+      couponCodes: [],
+      fromCart: false
     }
   },
   computed: {
@@ -601,7 +602,6 @@ export default {
           }
         }
       } catch (error) {
-        console.log('putOrder error', error)
         this.isPutOrder = false
         this.dialog = false
         Toast.fire({
@@ -619,14 +619,12 @@ export default {
           this.isPutOrder = true
           this.tradeInfo = res.tradeInfo
           this.paymentInfo = res.paymentInfo
-          console.log('createPayment success')
           Toast.fire({
             icon: 'success',
             title: res.message
           })
         }
       } catch (error) {
-        console.log('createPayment failed', error)
         Toast.fire({
           icon: 'error',
           title: 'create payment failed'
@@ -662,10 +660,6 @@ export default {
       try {
         const res = await request.getValidCoupons()
         if (res.status === 'success') {
-          Toast.fire({
-            icon: 'success',
-            title: res.message
-          })
           this.coupons = res.coupons
           this.couponCodes = [...new Set(res.coupons.map(i => i.coupon_code))]
         }
@@ -693,6 +687,7 @@ export default {
       }
     }
   },
+
   watch: {
     order: function(updateData) {
       this.order = updateData
