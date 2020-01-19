@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "start": "pm2 start -i 2 server.js",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "serve": "vue-cli-service serve",
     "dev-build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
