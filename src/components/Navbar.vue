@@ -81,7 +81,13 @@ export default {
         if (this.searchItem.length <= 0) {
           return Toast.fire({ icon: 'warning', title: "Required Field didn't exist" });
         }
-        this.$router.push({ path: '/furnitures/search', query: { items: this.searchItem }});
+        if (this.searchItem !== decodeURI(document.location.search).split('=')[1]) {
+          this.$router
+            .push({ path: '/furnitures/search', query: { items: this.searchItem }})
+            .catch(err => {
+              return Toast.fire({ icon: 'error', title: err });
+            });
+        }
       },
       logout() {
         this.$store.commit('revokeAuthentication');
