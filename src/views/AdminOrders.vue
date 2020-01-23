@@ -39,7 +39,7 @@ export default {
         } catch (error) {
             Toast.fire({
                 icon: 'warning',
-                title: "Something went wrong"
+                title: 'Fetch Orders Fail'
             })
         }
     },
@@ -54,7 +54,7 @@ export default {
             } catch (error) {
                 Toast.fire({
                     icon: 'warning',
-                    title: "Something went wrong"
+                    title: "Submit Notify Fail"
                 });
             }
         }

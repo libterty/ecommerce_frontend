@@ -56,7 +56,7 @@ export default {
         } catch (error) {
             Toast.fire({
                 icon: 'warning',
-                title: 'Something went wrong'
+                title: 'Fetch Payment Fail'
             });
         }
     }
