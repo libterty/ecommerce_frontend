@@ -70,6 +70,19 @@ export const putAuthRequest = (url, data) => {
     });
 }
 
+export const putAuthRequestWithFormData = (url, data) => {
+  return axios({
+      method: 'PUT',
+      url: url,
+      data: data,
+      headers: { 'Content-Type': 'multipart/form-data', Authorization: 'Bearer ' + auth.token }
+    })
+    .then(res => { return res })
+    .catch(err => {
+      return err;
+    });
+}
+
 export const deleteRequest = url => {
   return axios.delete(url, {
       headers: { Authorization: 'Bearer ' + auth.token }

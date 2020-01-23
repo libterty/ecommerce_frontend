@@ -1,4 +1,4 @@
-import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest, deleteRequest } from './apiHelper';
+import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest, putAuthRequestWithFormData, deleteRequest } from './apiHelper';
 import config from '../config';
 
 class Request {
@@ -349,7 +349,7 @@ class Request {
   putUser(path, data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await putAuthRequest(config.ROOT_URL + path, data);
+        const res = await putAuthRequestWithFormData(config.ROOT_URL + path, data);
         resolve(
           res.data
         );
