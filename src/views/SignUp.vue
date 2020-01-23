@@ -21,7 +21,7 @@
                         type="text"
                         required
                         placeholder="Enter username"
-                        ></b-form-input>
+                    ></b-form-input>
                 </b-form-group>
 
                 <b-form-group
@@ -37,7 +37,7 @@
                         type="email"
                         required
                         placeholder="Enter email"
-                        ></b-form-input>
+                    ></b-form-input>
                 </b-form-group>
 
                 <b-form-group
@@ -101,11 +101,10 @@ export default {
     methods: {
         async onSubmit(evt) {
             evt.preventDefault();
-            confirm('Confirm to SignUp ?');
             if (!this.form.name || !this.form.email || !this.form.password || !this.form.passwordCheck) {
                 return Toast.fire({ icon: 'warning', title: 'empty input' });
             } else if (this.form.password.length < 6) {
-                return Toast.fire({ icon: 'warning', title: 'Password is not strong enough' });
+                return Toast.fire({ icon: 'warning', title: 'Password is not strong enough', text: 'Password requires at least 6 characters' });
             } else if (this.form.password !== this.form.passwordCheck) {
                 return Toast.fire({ icon: 'warning', title: 'Please check if both of your password is correct' });
             } else {
@@ -113,15 +112,16 @@ export default {
                     const data = JSON.stringify(this.form);
                     const res = await request.postSignUp(data);
                     if (res.status === 'success') {
-                        return Toast.fire({
+                        Toast.fire({
                             icon: 'success',
                             title: 'Signup success'
                         });
+                        return this.$router.push('/signin');
                     }
                 } catch (error) {
                     Toast.fire({
                         icon: 'warning',
-                        title: 'Something went wrong'
+                        title: 'Signup fail'
                     });
                 }
             }
