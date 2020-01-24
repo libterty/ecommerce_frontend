@@ -57,7 +57,7 @@ export default {
         } catch (error) {
             Toast.fire({
                 icon: 'warning',
-                title: 'Something went wrong'
+                title: error.message
             });
         }
     },
@@ -77,7 +77,7 @@ export default {
             } catch (error) {
                 Toast.fire({
                     icon: 'warning',
-                    title: 'Something went wrong'
+                    title: error.message
                 });
             }
         },
@@ -102,7 +102,7 @@ export default {
             } catch (error) {
                 Toast.fire({
                     icon: 'warning',
-                    title: 'Something went wrong'
+                    title: error.message
                 });
             }
         },
@@ -127,7 +127,7 @@ export default {
             } catch (error) {
                 Toast.fire({
                     icon: 'warning',
-                    title: 'Something went wrong'
+                    title: error.message
                 });
             }
         },
@@ -146,7 +146,7 @@ export default {
             } catch (error) {
                 Toast.fire({
                     icon: 'warning',
-                    title: 'Something went wrong'
+                    title: error.message
                 });
             }
         },
@@ -166,7 +166,7 @@ export default {
             } catch (error) {
                 Toast.fire({
                     icon: 'warning',
-                    title: 'Something went wrong'
+                    title: error.message
                 });
             }
         }
