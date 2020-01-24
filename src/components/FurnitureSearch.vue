@@ -38,3 +38,18 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+img {
+    max-height: 203px;
+    width: auto;
+}
+p.card-text {
+    font-size: small;
+    white-space: nowrap;
+    overflow: scroll;
+}
+a.btn.btn-primary {
+    color: #cccccc;
+}
+</style>

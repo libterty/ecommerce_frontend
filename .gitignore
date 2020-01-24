@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+# Compile Version for Production, please do not comment in
 # /dist
 
 # local env files

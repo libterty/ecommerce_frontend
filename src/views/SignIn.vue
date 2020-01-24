@@ -65,7 +65,6 @@ export default {
     methods: {
         async onSubmit(evt) {
             evt.preventDefault();
-            confirm('Confirm to SignIn ?');
             if (this.form.email !== '' || this.form.password !== '') {
                 try {
                     const data = JSON.stringify(this.form);
@@ -80,7 +79,7 @@ export default {
                 } catch (error) {
                     Toast.fire({
                         icon: 'warning',
-                        title: 'Something went wrong'
+                        title: 'SignIn failure'
                     });
                 }
             } else {

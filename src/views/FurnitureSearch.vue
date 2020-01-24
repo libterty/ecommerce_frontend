@@ -31,12 +31,13 @@ export default {
         return {
             isShow: false,
             initSearchProucts: [],
-            searchResult: decodeURI(document.location.search).split('=')[1]
+            searchResult: decodeURI(document.location.search).split('=')[1],
+            searchQuery: document.location.search
         }
     },
     async created() {
         try {
-            const res = await request.getSearchNav(document.location.search);
+            const res = await request.getSearchNav(this.searchQuery);
             if (res.status === 'success') {
                 this.initSearchProucts = res.products;
                 this.isShow = true;
@@ -44,10 +45,29 @@ export default {
         } catch (error) {
             Toast.fire({
                 icon: 'warning',
-                title: 'Something went wrong'
+                title: 'Search Items fail'
             });
         }
-        
+    },
+    watch: {
+        $route: async function(to, from) {
+            if (from.query.items !== to.query.items) {
+                this.searchQuery = document.location.search;
+                this.searchResult = decodeURI(document.location.search).split('=')[1];
+                try {
+                    const res = await request.getSearchNav(this.searchQuery);
+                    if (res.status === 'success') {
+                        this.initSearchProucts = res.products;
+                        this.isShow = true;
+                    }
+                } catch (error) {
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'Search Items fail'
+                    });
+                }
+            }
+        }
     }
 }
 </script>

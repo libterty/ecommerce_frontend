@@ -2,7 +2,7 @@ module.exports = {
   apps : [{
     name: 'web',
     script: 'server.js',
-    instances: 2,
+    instances: 4,
     autorestart: true,
     watch: true,
     max_memory_restart: '500M',
