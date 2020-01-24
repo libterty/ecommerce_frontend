@@ -137,7 +137,8 @@ export default {
 
   data() {
     return {
-      orders: []
+      orders: [],
+      notCheckOutOrder: false
     }
   },
   computed: {
@@ -145,6 +146,13 @@ export default {
   },
   async created() {
     await this.fetchOrders(this.currentUser.id)
+    this.notCheckOutOrder = this.orders.some(this.checkCheckout)
+    if (this.notCheckOutOrder) {
+      Toast.fire({
+        icon: 'warning',
+        title: 'Must finish payment before create a new order'
+      })
+    }
   },
   methods: {
     async fetchOrders(userId) {
@@ -159,17 +167,10 @@ export default {
           title: 'No orders in the list'
         })
       }
+    },
+    checkCheckout(order) {
+      return order.shipping_status === '未出貨'
     }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(() => {
-      if (from.name === 'cart') {
-        Toast.fire({
-          icon: 'warning',
-          title: 'Must finish payment before create a new order'
-        })
-      }
-    })
   },
   watch: {
     orders: function(updateData) {
