@@ -155,8 +155,8 @@ export default {
         }
       } catch (error) {
         Toast.fire({
-          icon: 'error',
-          title: 'Fail to fetch orders'
+          icon: 'warning',
+          title: 'No orders in the list'
         })
       }
     }

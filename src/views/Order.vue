@@ -426,6 +426,7 @@
 </template>
 
 <script>
+// TODO: address is empty but I filled it out
 import Request from '../api/index'
 import { Toast } from '../utils/helpers.js'
 import { convertClassFilter, convertLanguageFilter } from '../utils/mixins'

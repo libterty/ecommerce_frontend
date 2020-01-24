@@ -118,7 +118,7 @@ export default {
         }
       } catch (error) {
         Toast.fire({
-          icon: 'error',
+          icon: 'warning',
           title: 'Nothing in the cart'
         })
       }
