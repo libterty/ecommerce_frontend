@@ -14,7 +14,7 @@
           ></b-card-img>
           <div
             class="image-information images"
-            v-viewer="{movable: false}"
+            v-viewer="{inline: false,movable: false,navbar: true,rotatable: false,scalable: false, fullscreen: false, keyboard: false, title:false }"
           >
             <b-img-lazy
               center
@@ -55,10 +55,11 @@
                   <b-button
                     v-for="color in initColors"
                     :key="color.id"
-                    @click="selectedColor(color.id, color.Inventory.quantity)"
+                    @click="selectedColor(color.id, color.Inventory.quantity); selectedClass($event);"
                     class="product_color_item"
                     :class="color.name | convertClass"
                     title="庫存量"
+                    :disabled="color.Inventory.quantity<1"
                     v-b-popover.hover.top="color.Inventory.quantity"
                   ></b-button>
                 </div>
@@ -168,7 +169,8 @@ export default {
         colorId: -1,
         price: -1
       },
-      isShow: false
+      isShow: false,
+      isSelected: false
     }
   },
   mounted() {
@@ -210,12 +212,29 @@ export default {
     selectedColor(colorId, inventory) {
       if (inventory < 1) {
         this.form.colorId = -1
-        return Toast.fire({
+        Toast.fire({
           icon: 'warning',
           title: 'No storage for this color'
         })
+      } else {
+        this.isSelected = !this.isSelected
+        this.form.colorId = colorId
       }
-      return (this.form.colorId = colorId)
+    },
+    selectedClass(event) {
+      const isSelect = event.target.previousElementSibling
+        ? event.target.previousElementSibling.classList.contains('selected')
+        : event.target.nextElementSibling.classList.contains('selected')
+
+      if (isSelect) {
+        const selectSibling = event.target.previousElementSibling
+          ? event.target.previousElementSibling
+          : event.target.nextElementSibling
+        selectSibling.classList.toggle('selected')
+        event.target.classList.toggle('selected')
+      } else {
+        event.target.classList.toggle('selected')
+      }
     }
   },
 
@@ -263,6 +282,20 @@ export default {
   border-radius: 99em;
   border: 1px solid rgba(0, 0, 0, 0.375);
   margin-left: 0.25rem;
+}
+.product_color_item:hover {
+  box-shadow: 0 0 3pt 2pt #f19483;
+  padding: 1em;
+}
+
+.product_color_item:active {
+  box-shadow: 0 0 3pt 2pt #f19483;
+}
+.product_color_item:focus {
+  box-shadow: 0 0 3pt 2pt #f19483;
+}
+.selected {
+  box-shadow: 0 0 3pt 2pt #f19483;
 }
 
 .product_color_blue {
