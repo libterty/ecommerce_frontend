@@ -8,8 +8,8 @@
       <b-row no-gutters>
         <b-col md="6">
           <b-card-img
-            :src="Images[0].url | avoidNull"
-            :alt="Images.name"
+            :src="initImages[0].url | avoidNull"
+            :alt="initImages.name"
             class="rounded-0"
           ></b-card-img>
           <div
@@ -20,7 +20,7 @@
               center
               thumbnail
               fluid
-              v-for="image in Images"
+              v-for="image in initImages"
               :key="image.id"
               :src="image.url  | avoidNull"
               class="image-information-item"
@@ -62,6 +62,11 @@
                     :disabled="color.Inventory.quantity<1"
                     v-b-popover.hover.top="color.Inventory.quantity"
                   ></b-button>
+                  <input
+                    type="text"
+                    hidden
+                    :v-model="selectedColorQuantity"
+                  />
                 </div>
               </b-list-group-item>
               <b-list-group-item class="text-left">
@@ -94,11 +99,28 @@
                       type="number"
                       class="col-sm-3"
                       min="1"
-                      v-model="form.quantity"
+                      v-model.number="form.quantity"
                       :value="form.quantity"
                     ></b-form-input>
+                    <v-alert
+                      dense
+                      type="error"
+                      class="m-1 caption"
+                      outlined
+                      v-if="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
+                    >Stock is not enough, please reduce buying numbers</v-alert>
+
                     <b-button
                       variant="primary"
+                      type="submit"
+                      v-if="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
+                      class="col-sm-5 cart_input_button"
+                      size="lg"
+                      :disabled="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
+                    >Stock is not enough</b-button>
+                    <b-button
+                      variant="primary"
+                      v-else
                       type="submit"
                       class="col-sm-5 cart_input_button"
                       size="lg"
@@ -141,6 +163,10 @@ export default {
     initColors: {
       type: Array,
       required: true
+    },
+    initCart: {
+      type: Array,
+      required: true
     }
   },
   filters: {
@@ -162,6 +188,7 @@ export default {
       Images: [],
       Colors: [],
       stars: [],
+      cart: [],
       isHalf: false,
       form: {
         quantity: 1,
@@ -170,7 +197,31 @@ export default {
         price: -1
       },
       isShow: false,
-      isSelected: false
+      isSelected: false,
+      selectedColorQuantity: 999,
+      productInCart: {
+        ColorId: -1,
+        ProductId: -1,
+        quantity: -1
+      },
+      productIsInCart: false
+    }
+  },
+  computed: {
+    mapCartInventory() {
+      return this.initCart.map(item => ({
+        ProductId: item.ProductId,
+        ColorId: item.ColorId,
+        quantity: item.quantity
+      }))
+    },
+    checkCartInventory() {
+      return {
+        notEnough:
+          this.productInCart.quantity + this.form.quantity >
+            this.selectedColorQuantity ||
+          this.productInCart.quantity > this.selectedColorQuantity
+      }
     }
   },
   mounted() {
@@ -179,9 +230,11 @@ export default {
       this.Images = this.initImages
       this.Colors = this.initColors
       this.product = this.initProduct
+      this.cart = this.initCart
       this.isShow = true
     }, 500)
   },
+
   methods: {
     generateStar() {
       setTimeout(() => {
@@ -196,6 +249,7 @@ export default {
         }
       }, 500)
     },
+
     addToCart() {
       if (this.form.colorId === -1) {
         return Toast.fire({
@@ -203,10 +257,23 @@ export default {
           title: "Please select product's color"
         })
       }
+      if (this.form.quantity > this.selectedColorQuantity) {
+        return Toast.fire({
+          icon: 'warning',
+          title: 'This color of stock not enough'
+        })
+      }
+      // check cart inventory with product inventory
+      if (this.checkCartInventory.notEnough) {
+        return Toast.fire({
+          icon: 'warning',
+          title: 'This color of stock not enough'
+        })
+      }
+
       this.form.productId = this.initProduct.id
       this.form.price = this.initProduct.price
       const data = JSON.stringify(this.form)
-      this.form.colorId = -1
       this.$emit('after-add-to-cart', data)
     },
     selectedColor(colorId, inventory) {
@@ -217,6 +284,18 @@ export default {
           title: 'No storage for this color'
         })
       } else {
+        // TODO: cart inventory && color is the same
+
+        this.productInCart = this.mapCartInventory.find(
+          obj => obj.ProductId == this.product.id && obj.ColorId == colorId
+        )
+        this.productIsInCart = this.mapCartInventory.find(
+          obj => obj.ProductId == this.product.id && obj.ColorId == colorId
+        )
+          ? true
+          : false
+
+        this.selectedColorQuantity = inventory
         this.isSelected = !this.isSelected
         this.form.colorId = colorId
       }
@@ -247,6 +326,12 @@ export default {
     },
     initColors: function(updateData) {
       this.initColors = updateData
+    },
+    initCart: function(updateData) {
+      this.initCart = updateData
+    },
+    cart: function(updateData) {
+      this.cart = updateData
     }
   }
 }
