@@ -70,9 +70,20 @@ export const putAuthRequest = (url, data) => {
     });
 }
 
-export const deleteRequest = url => {
+export const deleteAuthRequest = url => {
   return axios.delete(url, {
       headers: { Authorization: 'Bearer ' + auth.token }
+    }).then(res => {
+      return res
+    })
+    .catch(err => {
+      return err;
+    });
+}
+
+export const deleteRequest = url => {
+  return axios.delete(url, {
+      headers: { 'Content-Type': 'application/json' }
     }).then(res => {
       return res
     })

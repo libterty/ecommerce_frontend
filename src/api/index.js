@@ -1,4 +1,4 @@
-import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest, deleteRequest } from './apiHelper';
+import { getRequest, getAuthRequest, postRequest, postAuthRequest, putAuthRequest, deleteRequest, deleteAuthRequest } from './apiHelper';
 import config from '../config';
 
 class Request {
@@ -180,7 +180,7 @@ class Request {
   deleteAdminCoupon(id) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await deleteRequest(config.ROOT_URL + `admin/coupons/${id}`);
+        const res = await deleteAuthRequest(config.ROOT_URL + `admin/coupons/${id}`);
         resolve(
           res.data
         );
@@ -323,7 +323,7 @@ class Request {
   deleteExistProduct(id) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await deleteRequest(config.ROOT_URL + `admin/products/${id}`);
+        const res = await deleteAuthRequest(config.ROOT_URL + `admin/products/${id}`);
         resolve(
           res.data
         );
@@ -452,7 +452,7 @@ class Request {
   deleteOrder(orderId, userId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await deleteRequest(config.ROOT_URL + `orders/${orderId}/users/${userId}`)
+        const res = await deleteAuthRequest(config.ROOT_URL + `orders/${orderId}/users/${userId}`)
         resolve(
           res.data
         )

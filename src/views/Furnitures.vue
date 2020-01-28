@@ -9,6 +9,7 @@
       :initProduct="initProduct"
       :initImages="initImages"
       :initColors="initColors"
+      :init-cart="initCart"
       @after-add-to-cart="afterAddToCart"
     />
     <ShoppingCart
@@ -55,6 +56,7 @@ export default {
   async created() {
     try {
       this.fetchFurniture(document.location.pathname)
+      this.clickToGetCart()
       this.isLoading = false
     } catch (error) {
       this.isLoading = false
@@ -89,6 +91,7 @@ export default {
       try {
         const res = await request.postCart(data)
         if (res.status === 'success') {
+          this.clickToGetCart()
           Toast.fire({
             icon: 'success',
             title: 'Added to cart'
@@ -125,6 +128,9 @@ export default {
     },
     initColors: function(updateData) {
       this.initColors = updateData
+    },
+    initCart: function(updateData) {
+      this.initCart = updateData
     }
   }
 }
