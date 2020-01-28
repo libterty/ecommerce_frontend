@@ -83,7 +83,7 @@
                             dense
                             outlined
                             type="error"
-                          >Shortage of Stock</v-alert>
+                          >Stock is not enough</v-alert>
                         </v-col>
                         <v-col
                           cols="12"
@@ -96,10 +96,9 @@
                             @click.stop.prevent="subCartItem(item.id)"
                           >-</v-btn>
                           <input
-                            id="quantity"
                             v-model.number="item.quantity"
                             type="text"
-                            class="form-quantity-input text-center"
+                            class="form-quantity-input text-center quantity"
                             name="quantity"
                             size="2"
                             disabled
@@ -135,18 +134,8 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-row justify="end">
-                <v-btn
-                  v-if="currentUser.address.length>0 && currentUser.tel.length>0"
-                  raised
-                  color="error"
-                  large
-                  class="mt-3 red lighten-3"
-                  style="padding: 0 1em ; margin-right: 3em;"
-                  :disabled="disablePayment"
-                  @click.stop.prevent="createOrder"
-                >Complete Payment</v-btn>
                 <v-dialog
-                  v-else
+                  v-if="!currentUser.address || !currentUser.tel"
                   v-model="dialog"
                   persistent
                   max-width="600px"
@@ -230,6 +219,16 @@
                     </v-form>
                   </v-card>
                 </v-dialog>
+                <v-btn
+                  v-else
+                  raised
+                  color="error"
+                  large
+                  class="mt-3 red lighten-3"
+                  style="padding: 0 1em ; margin-right: 3em;"
+                  :disabled="disablePayment"
+                  @click.stop.prevent="createOrder"
+                >Complete Payment</v-btn>
               </v-row>
             </v-card-actions>
           </v-card>
@@ -303,11 +302,7 @@ export default {
         v => v.length <= 3 || 'Zip length must be less than 3'
       ],
       county: '',
-      countyRules: [
-        // TODO: county won't be combine in the address when it's empty
-        v => !!v || 'County / City is required',
-        this.countyCheck
-      ],
+      countyRules: [v => !!v || 'County / City is required', this.countyCheck],
       CartId: null,
       discount: 0,
       shortageStock: false
@@ -409,6 +404,7 @@ export default {
         }
         this.fetchCart()
       } catch (error) {
+        console.log('deleteCartItem error', error)
         Toast.fire({
           icon: 'error',
           title: 'Add cart item failed'

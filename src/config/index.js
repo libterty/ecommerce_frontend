@@ -1,3 +1,3 @@
 module.exports = {
-  ROOT_URL: 'https://secret-brushlands-82653.herokuapp.com/api/'
+  ROOT_URL: 'http://secret-brushlands-82653.herokuapp.com/api/'
 };
