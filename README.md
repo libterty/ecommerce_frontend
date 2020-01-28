@@ -26,6 +26,7 @@ E-commerce Website Front-end 是一個使用 Vue 建立的電子商務前端專�
 ## Environment SetUp - 環境建置
 
 - [Vue CLI 3](https://cli.vuejs.org/zh/guide/)
+- [pm2](https://pm2.io)
 
 ## Installing - 專案安裝流程
 

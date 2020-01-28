@@ -26,7 +26,7 @@ export default {
 
 <style>
 #app {
-  font-family: sans-serif, 'Noto Sans TC', 'Avenir', Helvetica, Arial;
+  font-family: 'Noto Sans TC', 'Avenir';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
