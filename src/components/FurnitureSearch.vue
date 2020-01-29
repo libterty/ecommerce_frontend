@@ -42,6 +42,7 @@ export default {
 <style scoped>
 img {
     max-height: 203px;
+    max-width: 246px;
     width: auto;
 }
 p.card-text {
