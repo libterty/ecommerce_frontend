@@ -404,7 +404,6 @@ export default {
         }
         this.fetchCart()
       } catch (error) {
-        console.log('deleteCartItem error', error)
         Toast.fire({
           icon: 'error',
           title: 'Add cart item failed'
