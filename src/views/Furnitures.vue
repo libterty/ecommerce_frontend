@@ -1,5 +1,8 @@
 <template>
-  <Spinner v-if="isLoading" />
+  <b-container v-if="isLoading">
+    <Spinner />
+  </b-container>
+
   <b-container
     fluid
     style="max-width: 75%;"
@@ -8,17 +11,21 @@
     <FurnituresDashboard
       :initProduct="initProduct"
       :initImages="initImages"
+      v-if="!isLoading"
       :initColors="initColors"
       :init-cart="initCart"
+      :is-loading="isLoading"
       @after-add-to-cart="afterAddToCart"
     />
     <ShoppingCart
+      v-if="!isLoading"
       :init-cart="initCart"
       :init-total-price="initTotalPrice"
       @click-to-get-cart="clickToGetCart"
     />
     <hr />
     <FurnituresDimension
+      v-if="!isLoading"
       :initProduct="initProduct"
       :initImages="initImages"
     />
@@ -57,9 +64,7 @@ export default {
     try {
       this.fetchFurniture(document.location.pathname)
       this.clickToGetCart()
-      this.isLoading = false
     } catch (error) {
-      this.isLoading = false
       Toast.fire({
         icon: 'error',
         title: 'Fetch furniture info failed'
@@ -74,13 +79,16 @@ export default {
   methods: {
     async fetchFurniture(furnitureId) {
       try {
+        this.isLoading = true
         const res = await request.getSpecificProduct(furnitureId)
         if (res.status === 'success') {
           this.initProduct = res.product
           this.initImages = res.Images
           this.initColors = res.Colors
         }
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: 'Fetch furniture info failed'
@@ -111,7 +119,9 @@ export default {
           this.initCart = res.cart
           this.initTotalPrice = res.totalPrice
         }
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'warning',
           title: 'Nothing in the cart'

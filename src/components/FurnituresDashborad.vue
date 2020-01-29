@@ -3,11 +3,17 @@
     <b-card
       no-body
       class="overflow-hidden"
-      v-if="isShow"
     >
       <b-row no-gutters>
         <b-col md="6">
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card-avatar"
+            v-if="!initImages[0]"
+          ></v-skeleton-loader>
           <b-card-img
+            v-else
             :src="initImages[0].url | avoidNull"
             :alt="initImages.name"
             class="rounded-0"
@@ -198,13 +204,7 @@ export default {
       },
       isShow: false,
       isSelected: false,
-      selectedColorQuantity: 999,
-      productInCart: {
-        ColorId: -1,
-        ProductId: -1,
-        quantity: -1
-      },
-      productIsInCart: false
+      selectedColorQuantity: 999
     }
   },
   computed: {
@@ -215,24 +215,48 @@ export default {
         quantity: item.quantity
       }))
     },
+    checkProductInCart() {
+      return {
+        productInCart: this.mapCartInventory.find(
+          obj =>
+            obj.ProductId == this.product.id && obj.ColorId == this.form.colorId
+        )
+          ? this.mapCartInventory.find(
+              obj =>
+                obj.ProductId == this.product.id &&
+                obj.ColorId == this.form.colorId
+            )
+          : {
+              ColorId: -1,
+              ProductId: -1,
+              quantity: -1
+            },
+        productISInCart: this.mapCartInventory.find(
+          obj =>
+            obj.ProductId == this.product.id && obj.ColorId == this.form.colorId
+        )
+          ? true
+          : false
+      }
+    },
     checkCartInventory() {
       return {
         notEnough:
-          this.productInCart.quantity + this.form.quantity >
+          this.checkProductInCart.productInCart.quantity + this.form.quantity >
             this.selectedColorQuantity ||
-          this.productInCart.quantity > this.selectedColorQuantity
+          this.checkProductInCart.productInCart.quantity >
+            this.selectedColorQuantity
       }
     }
   },
   mounted() {
     this.generateStar()
-    setTimeout(() => {
-      this.Images = this.initImages
-      this.Colors = this.initColors
-      this.product = this.initProduct
-      this.cart = this.initCart
-      this.isShow = true
-    }, 500)
+
+    this.Images = this.initImages
+    this.Colors = this.initColors
+    this.product = this.initProduct
+    this.cart = this.initCart
+    this.isShow = true
   },
 
   methods: {
@@ -284,17 +308,6 @@ export default {
           title: 'No storage for this color'
         })
       } else {
-        // TODO: cart inventory && color is the same
-
-        this.productInCart = this.mapCartInventory.find(
-          obj => obj.ProductId == this.product.id && obj.ColorId == colorId
-        )
-        this.productIsInCart = this.mapCartInventory.find(
-          obj => obj.ProductId == this.product.id && obj.ColorId == colorId
-        )
-          ? true
-          : false
-
         this.selectedColorQuantity = inventory
         this.isSelected = !this.isSelected
         this.form.colorId = colorId
