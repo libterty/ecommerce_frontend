@@ -308,25 +308,6 @@ export default {
           title: 'No storage for this color'
         })
       } else {
-        // TODO: cart inventory && color is the same
-
-        // this.productInCart = this.mapCartInventory.find(
-        //   obj => obj.ProductId == this.product.id && obj.ColorId == colorId
-        // )
-        //   ? this.mapCartInventory.find(
-        //       obj => obj.ProductId == this.product.id && obj.ColorId == colorId
-        //     )
-        //   : {
-        //       ColorId: -1,
-        //       ProductId: -1,
-        //       quantity: -1
-        //     }
-        // this.productIsInCart = this.mapCartInventory.find(
-        //   obj => obj.ProductId == this.product.id && obj.ColorId == colorId
-        // )
-        //   ? true
-        //   : false
-
         this.selectedColorQuantity = inventory
         this.isSelected = !this.isSelected
         this.form.colorId = colorId
