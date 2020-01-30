@@ -4,24 +4,7 @@ import Home from '../views/Home.vue';
 import NotFound from '../views/NotFound.vue';
 import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
-import FurniturePagination from '../views/FurniturePagination.vue';
-import AdminProduct from '../views/AdminProduct.vue';
-import AdminProductsCrate from '../views/AdminProductCreate.vue';
-import AdminLogs from '../views/AdminLogs.vue';
-import AdminOrders from '../views/AdminOrders.vue';
-import AdminPayments from '../views/AdminPayments.vue';
-import AdminCoupons from '../views/AdminCoupons.vue';
-import AdminProducts from '../views/AdminProducts.vue';
-import FurnituresSearch from '../views/FurnitureSearch.vue';
-import FurnituresItem from '../views/Furnitures.vue';
-import UsersProfile from '../views/UsersProfile.vue';
-import Cart from '../views/Cart.vue';
-import OrderSuccess from '../views/OrderSuccess.vue';
-import OrderFailed from '../views/OrderFailed.vue';
-import Order from '../views/Order.vue';
-import Orders from '../views/Orders.vue';
 import store from '../store';
-
 
 Vue.use(VueRouter);
 
@@ -38,37 +21,37 @@ const routes = [{
   {
     path: '/admin/products',
     name: 'admin-products',
-    component: AdminProducts
+    component: () => import('../views/AdminProducts.vue')
   },
   {
     path: '/admin/coupons',
     name: 'admin-coupons',
-    component: AdminCoupons
+    component: () => import('../views/AdminCoupons.vue')
   },
   {
     path: '/admin/orders',
     name: 'admin-orders',
-    component: AdminOrders
+    component: () => import('../views/AdminOrders.vue')
   },
   {
     path: '/admin/payments',
     name: 'admin-payments',
-    component: AdminPayments
+    component: () => import('../views/AdminPayments.vue')
   },
   {
     path: '/admin/logs',
     name: 'admin-logs',
-    component: AdminLogs
+    component: () => import('../views/AdminLogs.vue')
   },
   {
     path: '/admin/products/create',
     name: 'admin-products-create',
-    component: AdminProductsCrate
+    component: () => import('../views/AdminProductCreate.vue')
   },
   {
     path: '/admin/products/:id',
     name: 'admin-product',
-    component: AdminProduct
+    component: () => import('../views/AdminProduct.vue')
   },
   {
     path: '/signin',
@@ -83,47 +66,47 @@ const routes = [{
   {
     path: '/furnitures',
     name: 'furniturePagination',
-    component: FurniturePagination
+    component: () => import('../views/FurniturePagination.vue')
   },
   {
     path: '/furnitures/search',
     name: 'furnitures-Search',
-    component: FurnituresSearch
+    component: () => import('../views/FurnitureSearch.vue')
   },
   {
     path: '/furnitures/:id',
     name: 'furnituresItem',
-    component: FurnituresItem
+    component: () => import('../views/Furnitures.vue')
   },
   {
     path: '/users/:id',
     name: 'usersProfile',
-    component: UsersProfile
+    component: () => import('../views/UsersProfile.vue')
   },
   {
     path: '/cart',
     name: 'cart',
-    component: Cart
+    component: () => import('../views/Cart.vue')
   },
   {
     path: '/orders/success',
     name: 'orderSuccess',
-    component: OrderSuccess
+    component: () => import('../views/OrderSuccess.vue')
   },
   {
     path: '/orders/fails',
     name: 'orderFailed',
-    component: OrderFailed
+    component: () => import('../views/OrderFailed.vue')
   },
   {
     path: '/orders/:userId',
     name: 'order',
-    component: Order
+    component: () => import('../views/Order.vue')
   },
   {
     path: '/orders/',
     name: 'orders',
-    component: Orders
+    component: () => import('../views/Orders.vue')
   },
   {
     path: '*',
