@@ -1,5 +1,9 @@
 # E-commerce Website Front-end
 
+<p align="center">
+  <img src="https://i.imgur.com/QnAQhiR.png" alt="maynooth">
+</p>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/libterty/ecommerce_backend/blob/master/LICENCE)
 
 E-commerce Website Front-end 是一個使用 Vue 建立的電子商務前端專案，平台使用者主要是下列兩種身份，分別為一般消費者（Visitor）、商家管理員（Admin），搭配 [E-commerce Website Back-end Server](https://github.com/libterty/ecommerce_backend) 後端專案，打造一個全方位的可擴展性電商網站。
@@ -50,6 +54,12 @@ npm run serve
 
 ```
 npm run dev-build
+```
+
+### 運行 Compile 後的應用程式
+
+```
+npm start
 ```
 
 # Contribution
