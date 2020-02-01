@@ -1,23 +1,34 @@
 <template>
-  <b-container>
-    <div>
+  <b-container
+    class="no-padding"
+    fluid
+  >
+    <div col="12">
       <b-card
         overlay
-        img-src="https://i.imgur.com/JUpkmDj.jpg?1"
-        img-alt="EVERYTHING YOU NEED IN TIME FOR CHRISTMAS"
+        img-src="https://i.imgur.com/YZH6y6o.jpg"
+        img-alt="Everything You Need In Time For Christmas"
         text-variant="white"
-        title="EVERYTHING YOU NEED IN TIME FOR CHRISTMAS"
-        class="Home-Advertisement"
+        title
+        class="Home-Advertisement mt-5 text-left"
       >
-        <b-card-text>Christmas Sale is coming ~</b-card-text>
-        <br />
-        <b-button
-          pill
-          size="lg"
-          variant="primary"
-        >Explore More</b-button>
+        <div class="p-5 lead">
+          <b-card-title>Everything You Need In Time For Christmas</b-card-title>
+          <b-card-text>Christmas Sale is coming with discount 🎄🎄🎄</b-card-text>
+          <b-card-text>Get your decorations in time</b-card-text>
+          <br />
+          <v-btn
+            raised
+            :to="{name:'furniturePagination'}"
+            color="error"
+            large
+            class="mt-3 red lighten-3 dialog-btn"
+            style="padding: 0 1em ; margin-right: 3em;"
+          >Let Your Life Bright</v-btn>
+        </div>
       </b-card>
     </div>
+
     <ShoppingCart
       v-if="showCart"
       :init-cart="initCart"
@@ -25,15 +36,22 @@
       @click-to-get-cart="clickToGetCart"
     />
     <br />
-    <HomeCarousel
-      v-if="showProduct"
-      :initCarousels="initCarousels"
-    />
-    <br />
-    <HomeGrid
-      v-if="showProduct"
-      :initProducts="initProducts"
-    />
+    <b-row>
+      <b-col
+        md="8"
+        class="mx-auto"
+      >
+        <HomeCarousel
+          v-if="showProduct"
+          :initCarousels="initCarousels"
+        />
+        <br />
+        <HomeGrid
+          v-if="showProduct"
+          :initProducts="initProducts"
+        />
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -100,5 +118,10 @@ export default {
 <style scoped>
 .Home-Advertisement {
   border: none;
+  width: 100%;
+}
+.no-padding {
+  padding-left: 0;
+  padding-right: 0;
 }
 </style>
