@@ -8,8 +8,13 @@
 </template>
 
 <script>
+import VeLine from 'v-charts/lib/line.common';
+import VePie from 'v-charts/lib/pie.common';
+
+
 export default {
     name: 'AdminPayments',
+    components: { VeLine, VePie },
     props: {
         initPaid: {
             type: Number
