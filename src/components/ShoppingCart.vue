@@ -142,14 +142,14 @@ export default {
 }
 .cart-icon {
   position: fixed;
-  right: 10%;
+  right: 3%;
   top: 41%;
   color: white;
   z-index: 9999;
 }
 .cart {
   position: fixed;
-  right: 12%;
+  right: 5%;
   top: 45%;
   width: 535px;
   height: 50%;
