@@ -6,13 +6,13 @@
     <div col="12">
       <b-card
         overlay
+        img-height="300"
         img-src="https://i.imgur.com/YZH6y6o.jpg"
         img-alt="Everything You Need In Time For Christmas"
         text-variant="white"
-        title
         class="Home-Advertisement mt-5 text-left"
       >
-        <div class="p-5 lead">
+        <div class="p-3">
           <b-card-title>Everything You Need In Time For Christmas</b-card-title>
           <b-card-text>Christmas Sale is coming with discount 🎄🎄🎄</b-card-text>
           <b-card-text>Get your decorations in time</b-card-text>
@@ -36,7 +36,7 @@
       @click-to-get-cart="clickToGetCart"
     />
     <br />
-    <b-row>
+    <b-row class="mt-3">
       <b-col
         md="8"
         class="mx-auto"
