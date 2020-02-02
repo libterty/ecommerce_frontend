@@ -1,6 +1,6 @@
 <template>
-  <!-- TODO: use vue-carousel -->
   <b-container>
+    <h4 class="p-1 text-left mb-2 blue-grey lighten-4 teal--text text--darken-3">News in Store</h4>
     <Carousel
       autoplay
       perPage="4"
