@@ -1,6 +1,9 @@
 <template>
   <v-app class="py-5 mx-5">
-    <v-container v-if="isShow">
+    <v-container v-if="isLoading">
+      <Spinner />
+    </v-container>
+    <v-container v-else>
       <UserTabs />
       <UsersProfile
         :initUser="initUser"
@@ -11,57 +14,63 @@
 </template>
 
 <script>
-import UsersProfile from '../components/UsersProfile.vue';
-import UserTabs from '../components/UserTabs';
-import Request from '../api/index';
-import { Toast } from '../utils/helpers';
-const request = new Request();
+import UsersProfile from '../components/UsersProfile.vue'
+import UserTabs from '../components/UserTabs'
+import Spinner from '../components/Spinner'
+import Request from '../api/index'
+import { Toast } from '../utils/helpers'
+const request = new Request()
 
 export default {
   components: {
     UsersProfile,
-    UserTabs
+    UserTabs,
+    Spinner
   },
   data() {
     return {
       initUser: {},
-      isShow: false
+      isLoading: true
     }
   },
   async created() {
     try {
-      const path = document.location.pathname.replace(/\//, '');
-      const res = await request.getUser(path);
+      this.isLoading = true
+      const path = document.location.pathname.replace(/\//, '')
+      const res = await request.getUser(path)
       if (res.status === 'success') {
-        this.initUser = res.user;
-        this.isShow = true;
+        this.initUser = res.user
+        this.isLoading = false
       }
     } catch (error) {
+      this.isLoading = false
       Toast.fire({
         icon: 'warning',
         title: error.message
-      });
+      })
     }
   },
   methods: {
     async afterSubmitProfile(formData) {
       try {
-        const path = document.location.pathname.replace(/\//, '');
-        const res = await request.putUser(path, formData);
+        this.isLoading = true
+        const path = document.location.pathname.replace(/\//, '')
+        const res = await request.putUser(path, formData)
         if (res.status === 'success') {
-          const res = await request.getUser(path);
-          this.initUser = res.user;
-          this.isShow = true;
+          const res = await request.getUser(path)
+          this.initUser = res.user
+          this.isLoading = false
           return Toast.fire({
             icon: 'success',
             title: 'Upadte Profile success'
-          });
+          })
         }
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'warning',
           title: error.message
-        });
+        })
       }
     }
   }

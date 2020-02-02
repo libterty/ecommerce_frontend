@@ -1,10 +1,18 @@
 # E-commerce Website Front-end
 
+<p align="center">
+  <img src="https://i.imgur.com/QnAQhiR.png" alt="maynooth">
+</p>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/libterty/ecommerce_backend/blob/master/LICENCE)
 
 E-commerce Website Front-end 是一個使用 Vue 建立的電子商務前端專案，平台使用者主要是下列兩種身份，分別為一般消費者（Visitor）、商家管理員（Admin），搭配 [E-commerce Website Back-end Server](https://github.com/libterty/ecommerce_backend) 後端專案，打造一個全方位的可擴展性電商網站。
 
-- [商品頁面](https://blooming-bastion-52657.herokuapp.com/furnitures)
+## Explore More with Project Presentation and Demo
+
+- [Presentation](https://www.canva.com/design/DADxny2A0DQ/7XWxqou66U-VFQB351NNtA/view?utm_content=DADxny2A0DQ&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton)
+
+- [Demo](https://blooming-bastion-52657.herokuapp.com/furnitures)
 
 ## Resource - 圖片引用來源
 
@@ -13,6 +21,9 @@ E-commerce Website Front-end 是一個使用 Vue 建立的電子商務前端專�
 ## Declaration - 聲明
 
 - 本作品內圖片、內容等，純粹為個人練習前端使用，不做任何商業用途。
+
+# CopyRight
+Copyright © 2020, MAYNOOTH. Released under the MIT License.
 
 ## Features - 專案功能
 - 使用[Vuetify](https://vuetifyjs.com/en/)與[BootstrapVue](https://bootstrap-vue.js.org/)美化專案頁面
@@ -52,9 +63,13 @@ npm run serve
 npm run dev-build
 ```
 
+### 運行 Compile 後的應用程式
+
+```
+npm start
+```
+
 # Contribution
 - [11](https://github.com/libterty)
 - [Mina](https://github.com/mpragnarok)
-
-# CopyRight
-Copyright © 2020, MAYNOOTH. Released under the MIT License.
+- [CHNAG EVENA]

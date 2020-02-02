@@ -16,7 +16,7 @@ import AdminNav from '../components/AdminNav.vue';
 import AdminPayments from '../components/AdminPayments.vue';
 import Request from '../api/index';
 import { Toast } from '../utils/helpers';
-import moment from 'moment';
+import moment from 'moment/src/moment';
 const request = new Request();
 
 export default {
