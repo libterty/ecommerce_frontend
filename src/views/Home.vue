@@ -6,13 +6,13 @@
     <div col="12">
       <b-card
         overlay
+        img-height="300"
         img-src="https://i.imgur.com/YZH6y6o.jpg"
         img-alt="Everything You Need In Time For Christmas"
         text-variant="white"
-        title
         class="Home-Advertisement mt-5 text-left"
       >
-        <div class="p-5 lead">
+        <div class="p-3">
           <b-card-title>Everything You Need In Time For Christmas</b-card-title>
           <b-card-text>Christmas Sale is coming with discount 🎄🎄🎄</b-card-text>
           <b-card-text>Get your decorations in time</b-card-text>
@@ -29,14 +29,14 @@
       </b-card>
     </div>
 
-    <ShoppingCart
+    <!-- <ShoppingCart
       v-if="showCart"
       :init-cart="initCart"
       :init-total-price="initTotalPrice"
       @click-to-get-cart="clickToGetCart"
-    />
+    />-->
     <br />
-    <b-row>
+    <b-row class="mt-3">
       <b-col
         md="8"
         class="mx-auto"
@@ -58,7 +58,7 @@
 <script>
 import HomeCarousel from '../components/HomeCarousel.vue'
 import HomeGrid from '../components/HomeGrid'
-import ShoppingCart from '../components/ShoppingCart'
+// import ShoppingCart from '../components/ShoppingCart'
 import Request from '../api/index'
 import { Toast } from '../utils/helpers.js'
 const request = new Request()
@@ -66,17 +66,17 @@ const request = new Request()
 export default {
   components: {
     HomeCarousel,
-    HomeGrid,
-    ShoppingCart
+    HomeGrid
+    // ShoppingCart
   },
   data() {
     return {
       showProduct: false,
-      showCart: true,
+      // showCart: true,
       initProducts: [],
-      initCarousels: [],
-      initCart: [],
-      initTotalPrice: 0
+      initCarousels: []
+      // initCart: [],
+      // initTotalPrice: 0
     }
   },
   async created() {
@@ -97,20 +97,20 @@ export default {
     }
   },
   methods: {
-    async clickToGetCart() {
-      try {
-        const res = await request.getCart()
-        if (res.status === 'success') {
-          this.initCart = res.cart
-          this.initTotalPrice = res.totalPrice
-        }
-      } catch (error) {
-        Toast.fire({
-          icon: 'warning',
-          title: 'Nothing in the cart'
-        })
-      }
-    }
+    // async clickToGetCart() {
+    //   try {
+    //     const res = await request.getCart()
+    //     if (res.status === 'success') {
+    //       this.initCart = res.cart
+    //       this.initTotalPrice = res.totalPrice
+    //     }
+    //   } catch (error) {
+    //     Toast.fire({
+    //       icon: 'warning',
+    //       title: 'Nothing in the cart'
+    //     })
+    //   }
+    // }
   }
 }
 </script>

@@ -112,11 +112,6 @@ const routes = [{
     path: '*',
     name: 'NotFound',
     component: NotFound
-  },
-  {
-    path: '/*/*',
-    name: 'NotFound',
-    component: NotFound
   }
 ];
 
