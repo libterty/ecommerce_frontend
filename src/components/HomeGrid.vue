@@ -59,20 +59,9 @@ export default {
 </script>
 
 <style scoped>
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-.Home_Grid {
-  column-count: 4;
-  margin: 0.5em auto;
-  column-gap: 0.5em;
-}
-.item {
-  margin: 0 0 0.5rem;
-  padding: 0.5em;
-  width: 33.333%;
+.cyan--text {
+  white-space: nowrap;
+  font-size: inherit;
 }
 .remove-link {
   text-decoration: none;
