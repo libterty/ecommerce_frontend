@@ -7,11 +7,16 @@
       cols="4"
       lg="4"
     >
-      <v-card class="py-5">
+      <v-card class="pt-5">
         <p class="headline text-center">Congratulation!</p>
         <v-card-subtitle class="title">Your order is created.</v-card-subtitle>
+        <v-icon class="orderCheck animated jackInTheBox">mdi-check</v-icon>
         <v-card-action>
-          <v-icon class="orderCheck animated jackInTheBox">mdi-check</v-icon>
+          <v-btn
+            block
+            :to="{name:'orders'}"
+            class="mt-2 cyan white--text darken-4"
+          >Check orders</v-btn>
         </v-card-action>
       </v-card>
     </v-col>
