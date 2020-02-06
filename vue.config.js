@@ -2,7 +2,7 @@ const path = require("path");
 const CompressionPlugin = require("compression-webpack-plugin");
 const productionGzipExtensions = ['js', 'css'];
 // improving use
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const prerenderSpaPlugin = require("prerender-spa-plugin");
 
 module.exports = {
@@ -15,7 +15,6 @@ module.exports = {
     if (process.env.NODE_ENV === 'production') {
       return {
         plugins: [
-          new BundleAnalyzerPlugin(),
           new CompressionPlugin({
             filename: '[path].gz[query]',
             algorithm: 'gzip',
