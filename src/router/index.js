@@ -134,7 +134,8 @@ router.beforeEach(async (to, from, next) => {
     to.name !== 'furniturePagination' &&
     to.name !== 'furnitures-Search' &&
     to.name !== 'furnituresItem' &&
-    to.name !== 'cart'
+    to.name !== 'cart' &&
+    to.name !== 'home'
   ) {
     next('/signin');
     return;
