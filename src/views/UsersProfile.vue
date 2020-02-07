@@ -35,6 +35,10 @@ export default {
   },
   async created() {
     try {
+      const user = document.location.pathname.replace(/\/users\//, '')
+      if (!user || user < 1) {
+        return this.$router.push('/nonexisting');
+      }
       this.isLoading = true
       const path = document.location.pathname.replace(/\//, '')
       const res = await request.getUser(path)

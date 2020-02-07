@@ -6,7 +6,7 @@ const productionGzipExtensions = ['js', 'css'];
 const prerenderSpaPlugin = require("prerender-spa-plugin");
 
 module.exports = {
-  transpileDependencies: ['vuetify', 'echarts', 'resize-detector'],
+  transpileDependencies: ['vuetify'],
   chainWebpack: config => {
     config.plugins.delete('prefetch');
     config.plugin('CompressionPlugin').use(CompressionPlugin);
@@ -15,6 +15,7 @@ module.exports = {
     if (process.env.NODE_ENV === 'production') {
       return {
         plugins: [
+          // new BundleAnalyzerPlugin(),
           new CompressionPlugin({
             filename: '[path].gz[query]',
             algorithm: 'gzip',
