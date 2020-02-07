@@ -6,7 +6,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-navbar-nav>
-            <b-nav-item href="/furnitures">Furniture</b-nav-item>
+            <b-nav-item to="/furnitures">Furniture</b-nav-item>
           </b-navbar-nav>
           <b-nav-form class="Navbar-search" @submit.stop.prevent="submitSearch">
             <b-form-input
@@ -22,12 +22,16 @@
             >Search</b-button>
           </b-nav-form>
           <b-navbar-nav>
-            <b-nav-item href="#">
-              <i class="material-icons">
-                <small>email</small>
-              </i>
+            <b-nav-item
+              v-if="currentUser.isAdmin"
+              to="/admin/products"
+            >
+              <i class="fas fa-user-lock"></i>
             </b-nav-item>
-            <b-nav-item :href="'/users/' + currentUser.id">
+            <b-nav-item 
+              :href="'/users/' + currentUser.id"
+              :disabled="!isAuthenticated"
+            >
               <i class="material-icons">
                 <small>person</small>
               </i>
