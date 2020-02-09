@@ -87,4 +87,7 @@ p.card-text {
 a.btn.btn-primary {
   color: #cccccc;
 }
+.remove-link {
+  text-decoration: none;
+}
 </style>
