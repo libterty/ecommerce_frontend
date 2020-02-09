@@ -2,20 +2,26 @@
   <div>
     <b-card
       no-body
-      class="overflow-hidden"
+      class="overflow-hidden p-3"
       v-if="isShow"
     >
       <b-row no-gutters>
         <b-col md="6">
           <div class="wrap">
-            <div class="cube">
+            <div class="dimension p-3 caption font-weight-bold">
               <b-card-img
                 id="profileId"
                 ref="profileId"
-                :src="initImages[0].url"
-                class="rounded-0"
+                src="https://i.imgur.com/SJmpEIN.png"
+                class="p-3"
                 crossorigin
               ></b-card-img>
+
+              <span class="length">Length:</span>
+              <span class="length p-3">{{initProduct.length}}</span>
+              <span class="width">Width:</span>
+              <span class="width p-3">{{initProduct.width}}</span>
+              <span class="height">Height: {{initProduct.height}}</span>
             </div>
           </div>
         </b-col>
@@ -83,3 +89,33 @@ export default {
   }
 }
 </script>
+<style scoped>
+.dimension {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: #da9ea4;
+}
+.length {
+  position: absolute;
+  top: 81%;
+  left: 15%;
+  width: 100%;
+  transform: rotate(-8deg);
+}
+.width {
+  position: absolute;
+  top: 80%;
+  left: -30%;
+  width: 100%;
+  transform: rotate(30deg);
+}
+
+.height {
+  position: absolute;
+  top: 35%;
+  left: -45%;
+  width: 100%;
+  transform: rotate(90deg);
+}
+</style>
