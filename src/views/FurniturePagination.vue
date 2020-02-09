@@ -118,8 +118,8 @@ export default {
         }
       } catch (error) {
         Toast.fire({
-          icon: 'warning',
-          title: 'Nothing in the cart'
+          icon: 'info',
+          title: 'Get your own decorations!'
         })
       }
     }
