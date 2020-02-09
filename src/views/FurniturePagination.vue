@@ -11,16 +11,12 @@
       :isPageChange="isPageChange"
       @after-submit-category="afterSubmitCategory"
     />
-    <div
-      class="row"
+
+    <FurnituresPaginationItem
       v-if="isShow"
-    >
-      <FurnituresPaginationItem
-        v-for="initProduct in initProducts"
-        :key="initProduct.id"
-        :initProduct="initProduct"
-      />
-    </div>
+      :initProducts="initProducts"
+    />
+
     <FurnituresPagination
       v-if="isShow"
       :initTotalPage="initTotalPage"

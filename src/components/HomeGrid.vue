@@ -13,7 +13,7 @@
           :to="{name:'furnituresItem',params:{id:product.id}}"
         >
           <v-img
-            height="200px"
+            height="300px"
             :src="product.Image"
             :alt="product.name"
           ></v-img>
