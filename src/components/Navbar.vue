@@ -8,7 +8,15 @@
       sticky
     >
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-navbar-brand href="/">MAYNOOTH</b-navbar-brand>
+      <b-navbar-brand
+        href="/"
+        class="bg-white p-2 rounded"
+      >
+        <b-img
+          src="https://i.imgur.com/QnAQhiR.png?1"
+          alt="MAYNOOTH"
+        ></b-img>
+      </b-navbar-brand>
       <b-collapse
         id="nav-collapse"
         is-nav
@@ -129,6 +137,10 @@ export default {
 
   .form-inline {
     flex-flow: row nowrap;
+  }
+
+  .bg-white {
+    background: white;
   }
 }
 </style>
