@@ -26,7 +26,10 @@
           </div>
         </div>
       </b-col>
-      <b-col md="6">
+      <b-col
+        lg="5"
+        class="p-5"
+      >
         <b-card-text>
           <b-card-title class="text-left mt-2">Introduction</b-card-title>
           <b-list-group flush>
@@ -99,14 +102,14 @@ export default {
 }
 .length {
   position: absolute;
-  top: 81%;
+  top: 82%;
   left: 15%;
   width: 100%;
   transform: rotate(-8deg);
 }
 .width {
   position: absolute;
-  top: 80%;
+  top: 81%;
   left: -30%;
   width: 100%;
   transform: rotate(30deg);
