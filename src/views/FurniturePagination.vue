@@ -11,16 +11,12 @@
       :isPageChange="isPageChange"
       @after-submit-category="afterSubmitCategory"
     />
-    <div
-      class="row"
+
+    <FurnituresPaginationItem
       v-if="isShow"
-    >
-      <FurnituresPaginationItem
-        v-for="initProduct in initProducts"
-        :key="initProduct.id"
-        :initProduct="initProduct"
-      />
-    </div>
+      :initProducts="initProducts"
+    />
+
     <FurnituresPagination
       v-if="isShow"
       :initTotalPage="initTotalPage"
@@ -118,8 +114,8 @@ export default {
         }
       } catch (error) {
         Toast.fire({
-          icon: 'warning',
-          title: 'Nothing in the cart'
+          icon: 'info',
+          title: 'Get your own decorations!'
         })
       }
     }

@@ -6,6 +6,7 @@
   <b-container
     fluid
     style="max-width: 75%;"
+    class="border-0"
     v-else
   >
     <FurnituresDashboard
@@ -123,8 +124,8 @@ export default {
       } catch (error) {
         this.isLoading = false
         Toast.fire({
-          icon: 'warning',
-          title: 'Nothing in the cart'
+          icon: 'info',
+          title: 'Get your own decorations!'
         })
       }
     }

@@ -2,7 +2,8 @@
   <div>
     <b-card
       no-body
-      class="overflow-hidden"
+      class="overflow-hidden border-0 mt-5"
+      bg-variant="white"
     >
       <b-row no-gutters>
         <b-col md="6">
@@ -19,7 +20,7 @@
             class="rounded-0"
           ></b-card-img>
           <div
-            class="image-information images"
+            class="image-information images overflow-hidden mt-3"
             v-viewer="{inline: false,movable: false,navbar: true,rotatable: false,scalable: false, fullscreen: false, keyboard: false, title:false }"
           >
             <b-img-lazy
@@ -33,117 +34,115 @@
             ></b-img-lazy>
           </div>
         </b-col>
-        <b-col md="6">
-          <b-card-body :title="initProduct.name">
-            <b-list-group flush>
-              <b-list-group-item class="text-left">
-                Rating :
-                <div>
-                  <i
-                    class="material-icons"
-                    v-for="star in stars"
-                    :key="star.id"
-                  >star</i>
-                  <i
-                    v-if="isHalf"
-                    class="material-icons"
-                  >star_half</i>
-                </div>
-              </b-list-group-item>
-            </b-list-group>
-            <br />
-            <b-card-text>{{initProduct.description}}</b-card-text>
-            <b-list-group flush>
-              <b-list-group-item class="text-left">
-                <strong>顏色風格 :</strong>
 
-                <div class="product_color">
-                  <b-button
-                    v-for="color in initColors"
-                    :key="color.id"
-                    @click="selectedColor(color.id, color.Inventory.quantity); selectedClass($event);"
-                    class="product_color_item"
-                    :class="color.name | convertClass"
-                    title="庫存量"
-                    :disabled="color.Inventory.quantity<1"
-                    v-b-popover.hover.top="color.Inventory.quantity"
-                  ></b-button>
-                  <input
-                    type="text"
-                    hidden
-                    :v-model="selectedColorQuantity"
-                  />
-                </div>
-              </b-list-group-item>
-              <b-list-group-item class="text-left">
-                <strong>庫存 :</strong>
-                <div
-                  v-for="color in Colors"
-                  :key="color.id"
-                  class="inventory-status"
-                >
-                  <i class="material-icons">{{color.Inventory.quantity | showInventory}}</i>
-                  <p>
-                    {{color.name | convertLanguage}}
-                    {{color.Inventory.quantity | showResponse}}
-                  </p>
-                </div>
-              </b-list-group-item>
-              <b-list-group-item class="text-left">
-                <strong>{{initProduct.price}} &#36;</strong>
-              </b-list-group-item>
-            </b-list-group>
-            <b-form>
-              <b-form-group
-                class="mb-0 cartCreate"
-                label-for="cartCreate"
-              >
-                <b-col sm="12">
-                  <div class="row">
-                    <b-form-input
-                      id="cart_input_number"
-                      type="number"
-                      class="col-sm-3"
-                      min="1"
-                      v-model.number="form.quantity"
-                      :value="form.quantity"
-                    ></b-form-input>
-                    <v-alert
-                      dense
-                      type="error"
-                      class="m-1 caption"
-                      outlined
-                      v-if="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
-                    >Stock is not enough, please reduce buying numbers</v-alert>
+        <b-col
+          md="5"
+          class="m-auto my-3"
+        >
+          <b-card bg-variant="light">
+            <b-card-body>
+              <b-card-text class="text-left h4 pl-3">{{initProduct.name}}</b-card-text>
+              <v-rating
+                class="text-left pl-1"
+                color="blue-grey darken-1"
+                background-color="blue-grey darken-1"
+                half-increments
+                :value="initProduct.rating/2"
+                readonly
+              ></v-rating>
+              <br />
+              <b-card-text class="text-left pl-5">{{initProduct.description}}</b-card-text>
+              <b-list-group flush>
+                <b-list-group-item class="text-left light-theme">
+                  <strong>顏色風格 :</strong>
 
+                  <div class="product_color">
                     <b-button
-                      variant="primary"
-                      type="submit"
-                      v-if="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
-                      class="col-sm-5 cart_input_button"
-                      size="lg"
-                      :disabled="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
-                    >Stock is not enough</b-button>
-                    <b-button
-                      variant="primary"
-                      v-else
-                      type="submit"
-                      class="col-sm-5 cart_input_button"
-                      size="lg"
-                      @click.stop.prevent="addToCart"
-                    >Add to Cart</b-button>
+                      v-for="color in initColors"
+                      :key="color.id"
+                      @click="selectedColor(color.id, color.Inventory.quantity); selectedClass($event);"
+                      class="product_color_item"
+                      :class="color.name | convertClass"
+                      title="庫存量"
+                      :disabled="color.Inventory.quantity<1"
+                      v-b-popover.hover.top="color.Inventory.quantity"
+                    ></b-button>
+                    <input
+                      type="text"
+                      hidden
+                      :v-model="selectedColorQuantity"
+                    />
                   </div>
-                </b-col>
-              </b-form-group>
-            </b-form>
-            <br />
-            <b-list-group flush>
-              <b-list-group-item class="text-left">
-                <i class="material-icons">local_shipping</i>
-                <p class="text-muted">黑貓宅急便</p>
-              </b-list-group-item>
-            </b-list-group>
-          </b-card-body>
+                </b-list-group-item>
+                <b-list-group-item class="text-left light-theme">
+                  <strong>庫存 :</strong>
+                  <div
+                    v-for="color in Colors"
+                    :key="color.id"
+                    class="inventory-status"
+                  >
+                    <i class="material-icons">{{color.Inventory.quantity | showInventory}}</i>
+                    <p>
+                      {{color.name | convertLanguage}}
+                      {{color.Inventory.quantity | showResponse}}
+                    </p>
+                  </div>
+                </b-list-group-item>
+                <b-list-group-item class="text-left light-theme">
+                  <strong>{{initProduct.price}} &#36;</strong>
+                </b-list-group-item>
+              </b-list-group>
+              <b-form>
+                <b-form-group
+                  class="mb-0 cartCreate"
+                  label-for="cartCreate"
+                >
+                  <b-col sm="12">
+                    <div class="row">
+                      <b-form-input
+                        id="cart_input_number"
+                        type="number"
+                        class="col-sm-4 my-1"
+                        min="1"
+                        v-model.number="form.quantity"
+                        :value="form.quantity"
+                      ></b-form-input>
+                      <v-alert
+                        dense
+                        type="error"
+                        class="m-1 caption"
+                        outlined
+                        v-if="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
+                      >Stock is not enough, please reduce buying numbers</v-alert>
+
+                      <b-button
+                        variant="primary"
+                        type="submit"
+                        v-if="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
+                        class="col-sm-5 cart_input_button cyan darken-3 my-1"
+                        size="lg"
+                        :disabled="form.quantity>selectedColorQuantity || checkCartInventory.notEnough"
+                      >Stock is not enough</b-button>
+                      <b-button
+                        v-else
+                        type="submit"
+                        class="col-sm-5 cart_input_button cyan darken-3 my-1"
+                        size="lg"
+                        @click.stop.prevent="addToCart"
+                      >Add to Cart</b-button>
+                    </div>
+                  </b-col>
+                </b-form-group>
+              </b-form>
+              <br />
+              <b-list-group flush>
+                <b-list-group-item class="text-left light-theme">
+                  <i class="material-icons">local_shipping</i>
+                  <p class="text-muted">黑貓宅急便</p>
+                </b-list-group-item>
+              </b-list-group>
+            </b-card-body>
+          </b-card>
         </b-col>
       </b-row>
     </b-card>
@@ -193,9 +192,7 @@ export default {
       product: {},
       Images: [],
       Colors: [],
-      stars: [],
       cart: [],
-      isHalf: false,
       form: {
         quantity: 1,
         productId: -1,
@@ -250,8 +247,6 @@ export default {
     }
   },
   mounted() {
-    this.generateStar()
-
     this.Images = this.initImages
     this.Colors = this.initColors
     this.product = this.initProduct
@@ -260,20 +255,6 @@ export default {
   },
 
   methods: {
-    generateStar() {
-      setTimeout(() => {
-        let n = this.initProduct.rating
-        while (n > 1) {
-          this.stars.push({ id: nanoid(5), stars: 'stars' })
-          n = n - 2
-        }
-
-        if (n === 1) {
-          this.isHalf = true
-        }
-      }, 500)
-    },
-
     addToCart() {
       if (this.form.colorId === -1) {
         return Toast.fire({
@@ -421,5 +402,8 @@ export default {
 .inventory-status {
   display: flex;
   flex-flow: row nowrap;
+}
+.light-theme {
+  background: #f8f9fa;
 }
 </style>

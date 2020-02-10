@@ -1,21 +1,36 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info" fixed sticky>
+    <b-navbar
+      toggleable="lg"
+      type="dark"
+      class="blue-grey lighten-1"
+      fixed
+      sticky
+    >
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-navbar-brand href="/">MAYNOOTH</b-navbar-brand>
-      <b-collapse id="nav-collapse" is-nav>
+      <b-collapse
+        id="nav-collapse"
+        is-nav
+      >
         <b-navbar-nav class="ml-auto">
           <b-navbar-nav>
-            <b-nav-item to="/furnitures">Furniture</b-nav-item>
+            <b-nav-item
+              class="white--text"
+              to="/furnitures"
+            >Furniture</b-nav-item>
           </b-navbar-nav>
-          <b-nav-form class="Navbar-search" @submit.stop.prevent="submitSearch">
+          <b-nav-form
+            class="Navbar-search"
+            @submit.stop.prevent="submitSearch"
+          >
             <b-form-input
               v-model="searchItem"
               size="sm"
               class="mr-sm-2"
               placeholder="Search"
             ></b-form-input>
-            <b-button 
+            <b-button
               size="sm"
               class="my-2 my-sm-0"
               type="submit"
@@ -28,7 +43,7 @@
             >
               <i class="fas fa-user-lock"></i>
             </b-nav-item>
-            <b-nav-item 
+            <b-nav-item
               :href="'/users/' + currentUser.id"
               :disabled="!isAuthenticated"
             >
@@ -36,9 +51,7 @@
                 <small>person</small>
               </i>
             </b-nav-item>
-            <b-nav-item
-              v-if="isAuthenticated"
-            >
+            <b-nav-item v-if="isAuthenticated">
               <b-button
                 size="sm"
                 class="my-2 my-sm-0"
@@ -64,50 +77,58 @@
 </template>
 
 <script>
-import { mdiEmailOutline, mdiAccount } from '@mdi/js';
-import { Toast } from '../utils/helpers';
-import { mapState } from 'vuex';
+import { mdiEmailOutline, mdiAccount } from '@mdi/js'
+import { Toast } from '../utils/helpers'
+import { mapState } from 'vuex'
 
 export default {
-    data() {
-        return {
-            emailSvg: mdiEmailOutline,
-            userSvg: mdiAccount,
-            userId: '' ,
-            searchItem: ''
-        }
-    },
-    computed: {
-      ...mapState(['currentUser', 'isAuthenticated'])
-    },
-    methods: {
-      submitSearch() {
-        if (this.searchItem.length <= 0) {
-          return Toast.fire({ icon: 'warning', title: "Required Field didn't exist" });
-        }
-        if (this.searchItem !== decodeURI(document.location.search).split('=')[1]) {
-          this.$router
-            .push({ path: '/furnitures/search', query: { items: this.searchItem }})
-            .catch(err => {
-              return Toast.fire({ icon: 'error', title: err });
-            });
-        }
-      },
-      logout() {
-        this.$store.commit('revokeAuthentication');
-        this.$router.go({ name: 'SignIn' });
-      }
+  data() {
+    return {
+      emailSvg: mdiEmailOutline,
+      userSvg: mdiAccount,
+      userId: '',
+      searchItem: ''
     }
+  },
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated'])
+  },
+  methods: {
+    submitSearch() {
+      if (this.searchItem.length <= 0) {
+        return Toast.fire({
+          icon: 'warning',
+          title: "Required Field didn't exist"
+        })
+      }
+      if (
+        this.searchItem !== decodeURI(document.location.search).split('=')[1]
+      ) {
+        this.$router
+          .push({
+            path: '/furnitures/search',
+            query: { items: this.searchItem }
+          })
+          .catch(err => {
+            return Toast.fire({ icon: 'error', title: err })
+          })
+      }
+    },
+    logout() {
+      this.$store.commit('revokeAuthentication')
+      this.$router.go({ name: 'SignIn' })
+    }
+  }
 }
 </script>
 <style scoped>
 @media screen and (max-width: 992px) {
-    .Navbar-search {
-      align-self: center;
-    }
+  .Navbar-search {
+    align-self: center;
+  }
 
-    .form-inline {
-      flex-flow: row nowrap;
-    }
+  .form-inline {
+    flex-flow: row nowrap;
+  }
 }
 </style>
