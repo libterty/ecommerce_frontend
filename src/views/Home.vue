@@ -8,12 +8,14 @@
         overlay
         img-height="300"
         img-src="https://i.imgur.com/YZH6y6o.jpg"
-        img-alt="Everything You Need In Time For Christmas"
+        img-alt="MAYNOOTH has everything You Need In Time For Christmas"
         text-variant="white"
         class="Home-Advertisement mt-5 text-left"
       >
         <div class="p-3">
-          <b-card-title>Everything You Need In Time For Christmas</b-card-title>
+          <b-card-title>
+            <span class="teal--text text--lighten-3">MAYNOOTH</span> has everything You Need In Time For Christmas
+          </b-card-title>
           <b-card-text>Christmas Sale is coming with discount 🎄🎄🎄</b-card-text>
           <b-card-text>Get your decorations in time</b-card-text>
           <br />

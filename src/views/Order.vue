@@ -408,6 +408,7 @@
                                 text
                                 type="submit"
                                 @click.once="submit"
+                                :disabled="isCreating"
                               >Payment</v-btn>
                             </v-card-actions>
                           </form>
@@ -478,7 +479,8 @@ export default {
       paymentInfo: [],
       coupons: [],
       couponCodes: [],
-      fromCart: false
+      fromCart: false,
+      isCreating: true
     }
   },
   computed: {
@@ -613,6 +615,7 @@ export default {
     },
     async createPayment(orderId, userId) {
       try {
+        this.isCreating = true
         await this.putOrder(orderId, userId)
         const res = await request.createPayment(orderId, userId)
 
@@ -624,8 +627,10 @@ export default {
             icon: 'success',
             title: res.message
           })
+          this.isCreating = false
         }
       } catch (error) {
+        this.isCreating = true
         Toast.fire({
           icon: 'error',
           title: 'create payment failed'
