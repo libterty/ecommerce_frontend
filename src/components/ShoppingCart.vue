@@ -136,6 +136,7 @@ export default {
 </script>
 
 <style scoped>
+
 #wrapper {
   height: 0;
   position: absolute;
