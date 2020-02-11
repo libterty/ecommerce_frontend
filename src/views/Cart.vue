@@ -555,7 +555,7 @@ a {
   width: 25px;
   border-radius: 99em;
   border: 1px solid rgba(0, 0, 0, 0.375);
-  margin-left: 0.25rem;
+  margin-inline-start: auto;
 }
 .product_color_blue {
   background-color: blue;
@@ -570,7 +570,7 @@ a {
   background-color: yellow;
 }
 .cart-content {
-  text-align: left;
+  text-align: right;
   padding: 0;
 }
 * {
@@ -594,5 +594,13 @@ v-list-item-title {
 .coupon-discount {
   font: Thin 1em/1em 'Roboto';
   letter-spacing: 0;
+}
+@media screen and (max-width: 992px) {
+  .product_color_item {
+    margin-inline-end: auto;
+  }
+  .cart-content {
+    text-align: center;
+  }
 }
 </style> 
