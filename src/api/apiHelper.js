@@ -7,6 +7,7 @@ axios.defaults.withCredentials = true;
 
 export const getRequest = url => {
   return axios(url, {
+      withCredentials: true,
       headers: { 'Content-Type': 'application/json' }
     })
     .then(res => {
@@ -34,6 +35,7 @@ export const getAuthRequest = url => {
 export const postRequest = (url, data) => {
   return axios({
       method: 'POST',
+      withCredentials: true,
       url: url,
       data: data,
       headers: { 'Content-Type': 'application/json' }
@@ -83,6 +85,7 @@ export const deleteAuthRequest = url => {
 
 export const deleteRequest = url => {
   return axios.delete(url, {
+      withCredentials: true,
       headers: { 'Content-Type': 'application/json' }
     }).then(res => {
       return res
