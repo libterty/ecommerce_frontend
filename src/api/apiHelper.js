@@ -2,8 +2,7 @@ import axios from 'axios';
 
 const auth = JSON.parse(localStorage.getItem('credit')) || null;
 // cors request
-axios.defaults.withCredentials = true;
-
+axios.create({ withCredentials: true });
 
 export const getRequest = url => {
   return axios(url, {
